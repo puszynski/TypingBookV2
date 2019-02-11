@@ -1,0 +1,18 @@
+﻿@model TypingBook.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form>
+    Szukaj: <input type="text" id="book-search" name="bookOrCompanySearchString" />
+    <input type="submit" value="Refreash" />
+</form>
+
+
+@foreach (var item in Model)
+{
+    <h1>@item.Title</h1>
+    <b>@item.Authors - <a href="@Url.Action("Edit", new { id = item.ID })">Edit</a></b>
+    <p>@item.Content</p>
+    
+}

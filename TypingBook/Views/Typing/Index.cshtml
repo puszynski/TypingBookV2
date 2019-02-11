@@ -1,0 +1,17 @@
+﻿@model TypingBook.ViewModels.Book.BookViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*<h1>
+    <span class="text-dark" id="typed_content"></span><span class="blink_text">|</span><span id="book_content">@Model.BookPages[@Model.CurrentBookPage]</span>
+</h1>
+<h6 class="text-dark">
+    <br />@Model.BookTitle.ToUpper() by @Model.BookAuthors
+</h6>
+
+<partial name="_StatisticsContainer" model="new List<int> { 99, 33, 66 }" />
+
+<script type="text/javascript">
+    typingBook(@Model.CurrentBookPage, @bookPages, @isIntroduction);
+</script>*@

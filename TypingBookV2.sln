@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28531.58
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypingBook", "TypingBook\TypingBook.csproj", "{2F12F59D-7667-48DA-A4FE-06848CAEFC53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypingBook", "TypingBook\TypingBook.csproj", "{2F12F59D-7667-48DA-A4FE-06848CAEFC53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
