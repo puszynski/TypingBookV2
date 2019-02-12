@@ -36,7 +36,7 @@ namespace TypingBook.Data
         #endregion
 
         #region get from db
-        public IEnumerable<Book> GetAll()
+        public IEnumerable<Book> GetAllBooks()
         {
             using (IDbConnection cnn = new SQLiteConnection(_connectionString))
             {
@@ -45,7 +45,7 @@ namespace TypingBook.Data
             }
         }
 
-        public Book GetByID(int id)
+        public Book GetBookByID(int id)
         {
             using (IDbConnection cnn = new SQLiteConnection(_connectionString))
             {
@@ -63,5 +63,42 @@ namespace TypingBook.Data
             }
         }
         #endregion
+
+
+
+
+        // troche niżej: https://stackoverflow.com/questions/5957774/performing-inserts-and-updates-with-dapper
+        //public int Insert(IEnumerable<Book> yourClass)
+        //{
+        //    using (IDbConnection cnn = new SQLiteConnection(_connectionString))
+        //    {
+        //        cnn.Open();
+        //        return cnn.Insert(yourClass);
+        //    }
+        //}
+        //public int Insert(Book yourClass)
+        //{
+        //    using (SqlConnection conn = new SqlConnection(ConnectionString))
+        //    {
+        //        conn.Open();
+        //        return conn.Insert(yourClass);
+        //    }
+        //}
+        //public bool Update(IEnumerable<YourClass> yourClass)
+        //{
+        //    using (SqlConnection conn = new SqlConnection(ConnectionString))
+        //    {
+        //        conn.Open();
+        //        return conn.Update(yourClass);
+        //    }
+        //}
+        //public bool Update(Book yourClass)
+        //{
+        //    using (SqlConnection conn = new SqlConnection(ConnectionString))
+        //    {
+        //        conn.Open();
+        //        return conn.Update(yourClass);
+        //    }
+        //}
     }
 }

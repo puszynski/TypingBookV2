@@ -11,8 +11,12 @@
 
 @foreach (var item in Model)
 {
-    <h1>@item.Title</h1>
-    <b>@item.Authors - <a href="@Url.Action("Edit", new { id = item.ID })">Edit</a></b>
+    <h1 class="display-4">@item.Title</h1> 
+    <p>
+        by @item.Authors |
+        <a href="@Url.Action("Edit", new { id = item.ID })">Edit</a> |
+        <a href="@Url.Action("Delete", new { id = item.ID })">Delete</a>
+    </p>
     <p>@item.Content</p>
-    
+
 }

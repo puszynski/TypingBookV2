@@ -2,6 +2,7 @@
 using System.Linq;
 using TypingBook.Data;
 using TypingBook.Enums;
+using TypingBook.Extensions;
 using TypingBook.ViewModels.Book;
 
 namespace TypingBook.Controllers
@@ -14,7 +15,7 @@ namespace TypingBook.Controllers
 
         public IActionResult Index(string bookOrCompanySearchString)
         {
-            var sql = _sqLiteDB.GetAll();
+            var sql = _sqLiteDB.GetAllBooks();
 
             if (!string.IsNullOrWhiteSpace(bookOrCompanySearchString))
                 sql = sql.Where(x => x.Title.Contains(bookOrCompanySearchString)
@@ -25,7 +26,7 @@ namespace TypingBook.Controllers
             var row = sql.Select(x => new BookRowViewModel {
                 ID = x.ID,
                 Title = x.Title,
-                Content = x.Content,
+                Content = x.Content.ShowOnly500Char(),
                 Authors = x.Authors,
                 Genre = x.Genre.HasValue ? enumConv.Parse(x.Genre.GetValueOrDefault()).ToList() : null,
                 Rate = x.Rate,
@@ -51,7 +52,7 @@ namespace TypingBook.Controllers
 
         public IActionResult Edit(int id)
         {
-            var sql = _sqLiteDB.GetByID(id);
+            var sql = _sqLiteDB.GetBookByID(id);
 
             if (sql == null)
                 return View(); // TODO

@@ -17,5 +17,12 @@
 
             return result;
         }
+
+        public static string ShowOnly500Char(this string input)
+        {
+            if (input.Length < 500)
+                return input;
+            return input.Substring(0, 497) + "..."; 
+        }
     }
 }

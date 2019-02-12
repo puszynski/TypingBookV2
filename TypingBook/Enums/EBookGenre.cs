@@ -3,7 +3,7 @@
 namespace TypingBook.Enums
 {
     [Flags]
-    public enum BookGenre
+    public enum EBookGenre
     {        
         None = 0,
         SciFi = 1,
@@ -16,5 +16,5 @@ namespace TypingBook.Enums
         Documentary = 128,
         Comedy = 256,
         War = 512,
-    }
+    }        
 }
