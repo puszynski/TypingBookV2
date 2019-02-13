@@ -3,6 +3,7 @@ using System.Linq;
 using TypingBook.Data;
 using TypingBook.Enums;
 using TypingBook.Extensions;
+using TypingBook.Helpers;
 using TypingBook.ViewModels.Book;
 
 namespace TypingBook.Controllers
@@ -10,16 +11,21 @@ namespace TypingBook.Controllers
     public class BookController : Controller
     {
         readonly ISQLiteDapperRepository _sqLiteDB;
-
+               
         public BookController(ISQLiteDapperRepository sqLiteDB) => _sqLiteDB = sqLiteDB;
-
-        public IActionResult Index(string bookOrCompanySearchString)
+               
+        public IActionResult Index(string bookOrCompanySearchString, int? genreFilter)
         {
             var sql = _sqLiteDB.GetAllBooks();
 
             if (!string.IsNullOrWhiteSpace(bookOrCompanySearchString))
                 sql = sql.Where(x => x.Title.Contains(bookOrCompanySearchString)
                                 || x.Authors.Contains(bookOrCompanySearchString));
+
+            if (genreFilter.HasValue)
+            {
+                sql = sql.Where(x => (x.Genre & genreFilter) > 0); // TODO - PRZEANALIZOWAC
+            }
 
             var enumConv = new BinarySumToIntList();
 
@@ -33,7 +39,8 @@ namespace TypingBook.Controllers
                 ReleaseDate = x.ReleaseDate
             });
 
-            var model = new BookViewModel(row);
+            var model = new BookViewModel(row);            
+            model.BookGenreSelectListItems = new CreateSelectListItemHelper().GetSelectListItems<EBookGenre>();
             
             return View(model);
         }

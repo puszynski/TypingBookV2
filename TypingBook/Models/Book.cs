@@ -9,12 +9,14 @@ namespace TypingBook.Models
         public int ID { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Title { get; set; }
 
         [Required]
         public string Content { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Authors { get; set; }
 
         [Range(1, 10)]

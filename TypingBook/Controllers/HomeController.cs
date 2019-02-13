@@ -37,7 +37,7 @@ namespace TypingBook.Controllers
 
             bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
             if (isAjaxCall)
-                return PartialView("_Index", model);
+                return PartialView("_Typing", model);
             else
                 return View(model);
         }
