@@ -47,6 +47,12 @@ namespace TypingBook.Controllers
             return View();
         }
 
+        public IActionResult ModalPrivacy()
+        {
+            // do obsługi modala
+            return View("ModalPrivacy");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -28,12 +28,21 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">                        
+                    <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Books</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ModalPrivacy" data-toggle="modal" datatarget="#mainModal">Privacy in modal</a>                            
+                        </li>
+                        <li>
+                            @*TODO - zaimplementuj ModalLink z efitness`u*@
+                            @*@Html.ModalLink(null, editUrl, new Dictionary<string, string>() { { "class", "glyphicon-pencil" } })*@
+
+                            @* dane przekierowania: Home/ModalPrivacy - przycisk musi zawierać: data-toggle="modal" datatarget="#exampleModal"*@
                         </li>
                     </ul>
                 </div>
