@@ -40,7 +40,7 @@ namespace TypingBook.Controllers
             });
 
             var model = new BookViewModel(row);            
-            model.BookGenreSelectListItems = new CreateSelectListItemHelper().GetSelectListItems<EBookGenre>();
+            model.BookGenreSelectListItems = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
             
             return View(model);
         }

@@ -22,7 +22,7 @@ namespace TypingBook.Controllers
             if (bookID == 1)
                 ViewBag.IsIntroduction = true;
 
-            var typingHelper = new TypingHelper();
+            var typingHelper = TypingHelper.GetInstance();
             var bookPages = typingHelper.DivideBook(book.Content);            
 
             var model = new TypingViewModel()
