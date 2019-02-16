@@ -18,10 +18,21 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+    <div class="progress bg-dark" style="height:1px">
+        <div class="progress-bar bg-light progress-bar-correct" style="width:0%">
+        </div>
+        <div class="progress-bar bg-danger progress-bar-wrong" style="width:0%">
+        </div>
+    </div>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TypingBook</a>
+                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TypingBook</a>*@
+                <li class="nav-item">
+                    <input type="button" value="TypingBook" id="TypingBook_button" class="btn-link" />
+                </li>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -30,14 +41,16 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Books</a>
+                            @*TODO _ STYLE PRZYCISKU*@
+                            <input type="button" value="Books" id="Books_button" class="btn-link" />
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <input type="button" value="Privacy" id="Privacy_button" class="btn-link" />
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ModalPrivacy" data-toggle="modal" datatarget="#mainModal">Privacy in modal</a>                            
-                        </li>
+                        @*<li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ModalPrivacy" data-toggle="modal" datatarget="#mainModal">Privacy in modal</a>
+                            </li>*@
+
                         <li>
                             @*TODO - zaimplementuj ModalLink z efitness`u*@
                             @*@Html.ModalLink(null, editUrl, new Dictionary<string, string>() { { "class", "glyphicon-pencil" } })*@
@@ -49,7 +62,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container body-content">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
@@ -81,6 +94,10 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        ajaxMainMenu();
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

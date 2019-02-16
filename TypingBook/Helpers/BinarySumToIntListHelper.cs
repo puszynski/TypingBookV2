@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TypingBook.Enums
+namespace TypingBook.Helpers
 {
-    public class BinarySumToIntList
+    public class BinarySumToIntListHelper
     {
+        static BinarySumToIntListHelper _b;
+        private BinarySumToIntListHelper()
+        {
+        }
+
+        public static BinarySumToIntListHelper GetInstance()
+        {
+            if (_b == null)
+                _b = new BinarySumToIntListHelper();
+            return _b;
+        }
+
         public IEnumerable<int> Parse(int enumBinarySum)
         {
             var powerOfTwo = 0;

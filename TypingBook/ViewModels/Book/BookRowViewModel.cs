@@ -27,6 +27,7 @@ namespace TypingBook.ViewModels.Book
         public List<int> Genre { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Relase Date")]
         public DateTime? ReleaseDate { get; set; }
     }
 }

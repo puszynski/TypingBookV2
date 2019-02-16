@@ -27,7 +27,7 @@ namespace TypingBook.Controllers
                 sql = sql.Where(x => (x.Genre & genreFilter) > 0); // TODO - PRZEANALIZOWAC
             }
 
-            var enumConv = new BinarySumToIntList();
+            var enumConv = BinarySumToIntListHelper.GetInstance();
 
             var row = sql.Select(x => new BookRowViewModel {
                 ID = x.ID,
@@ -56,15 +56,16 @@ namespace TypingBook.Controllers
         {
             return View();
         }
-
+        
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var sql = _sqLiteDB.GetBookByID(id);
 
             if (sql == null)
-                return View(); // TODO
+                return RedirectToAction("Index");
 
-            var enumConv = new BinarySumToIntList();
+            var enumConv = BinarySumToIntListHelper.GetInstance();
 
             var model = new BookRowViewModel
             {
@@ -76,7 +77,7 @@ namespace TypingBook.Controllers
                 Rate = sql.Rate,
                 ReleaseDate = sql.ReleaseDate
             };
-            return View(model);
+            return RedirectToAction("Index");
         }
     }
 }

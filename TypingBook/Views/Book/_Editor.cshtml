@@ -1,0 +1,42 @@
+﻿@model TypingBook.ViewModels.Book.BookRowViewModel
+
+@Html.HiddenFor(x => x.ID)
+
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.ValidationSummary()
+    </p>
+    <p>
+        @Html.LabelFor(x => x.Title)
+        @Html.EditorFor(x => x.Title)
+    </p>
+    <p>
+        @Html.LabelFor(x => x.Content)
+        @Html.TextAreaFor(x => x.Content)
+    </p>
+    <p>
+        @Html.LabelFor(x => x.Authors)
+        @Html.EditorFor(x => x.Authors)
+    </p>
+    <p>
+        @Html.LabelFor(x => x.Genre)
+        @Html.DropDownListFor(x => x.Genre, new[] { new SelectListItem() { Text = "abc", Value = "1" }, new SelectListItem() { Text = "abc", Value = "1" } }, "Choose")
+        @Html.EditorFor(x => x.Genre)
+    </p>
+    <p>
+        @Html.LabelFor(x => x.Rate)
+        @Html.EditorFor(x => x.Rate)
+    </p>
+    <p>
+        @Html.LabelFor(x => x.ReleaseDate)
+        @Html.EditorFor(x => x.ReleaseDate)
+    </p>
+
+    <input type="submit" value="Submit changes" />
+}
+
+
+
+
+
