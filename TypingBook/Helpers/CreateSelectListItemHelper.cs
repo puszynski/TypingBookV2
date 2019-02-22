@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TypingBook.Enums;
 
 namespace TypingBook.Helpers
@@ -19,6 +20,22 @@ namespace TypingBook.Helpers
             return _createSelectListItemHelper;
         }
         #endregion
+
+        // eFitness - zaimplementuj
+        public static List<SelectListItem> SelectListForEnum<T>(Predicate<T> selectedItemPredicate, Func<T, string> textMappingFunction) where T : Enum
+        {
+            var enumValues = Enum
+                    .GetValues(typeof(T))
+                    .Cast<T>();
+
+            return enumValues.Select(x => new SelectListItem()
+            {
+                Value = Convert.ToInt32(x).ToString(),
+                Text = textMappingFunction(x),
+                Selected = selectedItemPredicate(x),
+            })
+            .ToList();
+        }
 
         public IEnumerable<SelectListItem> GetSelectListItems<T>(List<int> selected = null) where T: Enum
         {

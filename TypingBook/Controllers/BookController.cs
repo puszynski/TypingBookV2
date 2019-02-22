@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Text.RegularExpressions;
 using TypingBook.Data;
 using TypingBook.Enums;
 using TypingBook.Extensions;
@@ -41,7 +42,9 @@ namespace TypingBook.Controllers
 
             var model = new BookViewModel(row);            
             model.BookGenreSelectListItems = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
-            
+            //model.BookGenreSelectListItems = 
+
+
             return View(model);
         }
 
@@ -67,6 +70,10 @@ namespace TypingBook.Controllers
 
             var enumConv = BinarySumToIntListHelper.GetInstance();
 
+            // DLA POSTA I CREATEA POSTA*
+            //REMOVEDUBLESPACESANDSPECIALCHARACTERSFROMBOOKCONTENT
+            //    myString = Regex.Replace(myString, @"\s+", " "); //Since it will catch runs of any kind of whitespace (e.g. tabs, newlines, etc.) and replace them with a single space.
+
             var model = new BookRowViewModel
             {
                 ID = sql.ID,
@@ -77,6 +84,21 @@ namespace TypingBook.Controllers
                 Rate = sql.Rate,
                 ReleaseDate = sql.ReleaseDate
             };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(BookRowViewModel model)
+        {
+            if (ModelState.IsValid)
+                return View(model);
+
+            model.Content = Regex.Replace(model.Content, @"\s+", " "); // it will catch runs of any kind of whitespace (e.g. tabs, newlines, etc.) and replace them with a single space.
+            // + remove double spaces?? zrób test czy ten regex usuwa podwójne spacje, jak nie to trzeba jeszcze dodatkowo dodać
+            // + usuwanie wszelkich nietypowyych znaków
+            
+            _sqLiteDB.UpdateBook(model);
+
             return RedirectToAction("Index");
         }
     }

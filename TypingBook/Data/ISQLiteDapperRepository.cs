@@ -9,5 +9,7 @@ namespace TypingBook.Data
         IEnumerable<Book> GetAllBooks();
         Book GetBookByID(int id);
         Task<Book> GetByIDAsync(int id);
+
+        void UpdateBook(Book model);
     }
 }

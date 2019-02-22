@@ -85,10 +85,10 @@ function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
 }
 
 function isSameChar(typedCharCode, charToType) {
-    if (typedCharCode == charToType) {
+    if (typedCharCode == charToType) { // TO NIE DZIAŁA :/ PRZEPUSZCZA WSZYTSKO!
         return true;
     }
-    else if (charToType == 8217 || 8211) {
+    else if (charToType == 8217 || charToType == 8211 || charToType == 8220) {
         return true;
     }
     else

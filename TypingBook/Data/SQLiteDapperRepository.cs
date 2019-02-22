@@ -92,13 +92,13 @@ namespace TypingBook.Data
         //        return conn.Update(yourClass);
         //    }
         //}
-        //public bool Update(Book yourClass)
-        //{
-        //    using (SqlConnection conn = new SqlConnection(ConnectionString))
-        //    {
-        //        conn.Open();
-        //        return conn.Update(yourClass);
-        //    }
-        //}
+        public bool UpdateBook(Book model)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(_connectionString))
+            {
+                cnn.Open();
+                return cnn.Update(model);
+            }
+        }
     }
 }
