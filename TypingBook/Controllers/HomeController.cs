@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 using TypingBook.Data;
 using TypingBook.Helpers;
@@ -8,27 +9,41 @@ using TypingBook.ViewModels.Home;
 namespace TypingBook.Controllers
 {
     public class HomeController : Controller
-    {
-        private const int _defaultBook = 2;
+    {   
         readonly ISQLiteDapperRepository _sqLiteDB;
+        readonly IMemoryCache _memoryCache;
 
-        public HomeController(ISQLiteDapperRepository sqLiteDB) => _sqLiteDB = sqLiteDB;
+        private const int _defaultBook = 2;
 
+        public HomeController(ISQLiteDapperRepository sqLiteDB, IMemoryCache memoryCache)
+        {
+            _sqLiteDB = sqLiteDB;
+            _memoryCache = memoryCache;
+        }
 
+        // Typing
         public IActionResult Index(int bookID = _defaultBook, int bookPage = 0)
         {
-            var book = _sqLiteDB.GetBookByID(bookID);
+            if (!_memoryCache.TryGetValue<Book>($"Book_ID{bookID}", out Book book))
+            {
+                book = _sqLiteDB.GetBookByID(bookID);
+                _memoryCache.Set<Book>($"Book_ID{bookID}", book);
+            }            
 
             if (bookID == 1)
                 ViewBag.IsIntroduction = true;
 
             var typingHelper = TypingHelper.GetInstance();
-            var bookPages = typingHelper.DivideBook(book.Content);            
+            var bookPages = typingHelper.DivideBook(book.Content);
+
+            // tutaj sprawdzasz czy istnieje cash dla danego usera - jak tak to jest tam podana strona dla ktorej skonczył - musimy dodatkowo wywołać akcje z js po każdej stronie i za pomocą tej akcji zapisywać/aktualizować aktualną stone;
+            int? bookPageFormCache = _memoryCache.Get<int>("UserIdBookId");
+            
 
             var model = new TypingViewModel()
             {
                 BookAuthors = book.Authors,
-                CurrentBookPage = bookPage,
+                CurrentBookPage = bookPageFormCache.HasValue ? bookPageFormCache.Value : bookPage,
                 BookPages = bookPages,
                 BookTitle = book.Title,
                 BookID = bookID
@@ -36,6 +51,7 @@ namespace TypingBook.Controllers
 
 
             bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
+
             if (isAjaxCall)
                 return PartialView("_Typing", model);
             else

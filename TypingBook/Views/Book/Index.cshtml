@@ -6,9 +6,9 @@
 
 <form>
     Szukaj: <input type="text" id="book-search" name="bookOrCompanySearchString" />
-    Gatunek: 
-                @Html.DropDownList("GenreFilter", Model.BookGenreSelectListItems)
-    
+    Gatunek:
+    @Html.DropDownList("GenreFilter", Model.BookGenreSelectListItems)
+
     @*
         - same but prop in VM needed
         @Html.DropDownListFor(x => x.Genre, Model.BookGenreSelectListItems)
@@ -17,8 +17,9 @@
         @Html.ListBox("GenreFilter", Model.BookGenreSelectListItems)
         @Html.ListBoxFor(x => x.Genre, Model.BookGenreSelectListItems)
     *@
-    
-    <input type="submit" value="Refreash" />
+
+    <input type="submit" value="Refreash" /> | 
+    <a href="@Url.Action("Create")">Add New</a>
 </form>
 
 

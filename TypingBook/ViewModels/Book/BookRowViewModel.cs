@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,6 +26,8 @@ namespace TypingBook.ViewModels.Book
 
         [Display(Name = "Book Genre")]
         public List<int> Genre { get; set; }
+
+        public IEnumerable<SelectListItem> GenreSelectListItem { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Relase Date")]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TypingBook.Extensions;
 
 namespace TypingBook.Helpers
@@ -86,6 +87,6 @@ namespace TypingBook.Helpers
                 return result;
             }
         }
-        #endregion DivideBook
+        #endregion DivideBook        
     }
 }

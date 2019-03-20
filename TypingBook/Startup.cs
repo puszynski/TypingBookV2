@@ -36,12 +36,15 @@ namespace TypingBook
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            
             services
                 .AddSingleton<ISQLiteDapperRepository, SQLiteDapperRepository>();
 
             services.AddMvc()
                 .AddNewtonsoftJson();
+
+            services
+                .AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

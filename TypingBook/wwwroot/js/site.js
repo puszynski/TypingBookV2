@@ -11,17 +11,42 @@ function ajaxMainMenu() {
     });
 
     $("#Privacy_button").click(function () {
-        $(".body-content").load(
+        $(".body-container").load(
             "/Home/Privacy"
         );
     });
 
     $("#TypingBook_button").click(function () {
-        $(".body-content").load(
+        $(".body-container").load(
             "/Home/Index"
         );
     });
 }
+
+function ajaxLink() {
+    $("#ajax_link").click(function (e) {
+
+        e.preventDefault(); 
+        
+        var myLink = $(this);
+
+        $.get(myLink.attr("hreaf"), function (res) {
+            $('#' + myLink.data("target")).html(res);
+        });
+    });
+}
+
+// alternative of using Ajax links - data is get from anchor tag helpers https://stackoverflow.com/questions/39193604/ajax-actionlink-alternative-with-mvc-core
+//$(function () {
+//    $("#ajax-link").click(function (e) {
+
+//        e.preventDefault();
+//        var _this = $(this);
+//        $.get(_this.attr("href"), function (res) {
+//            $('#' + _this.data("target")).html(res);
+//        });
+//    });
+//});
 
 
 function typingBook(currentBookPage, bookPagesJson, isIntroduction) {

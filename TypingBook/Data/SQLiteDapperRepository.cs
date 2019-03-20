@@ -92,13 +92,20 @@ namespace TypingBook.Data
         //        return conn.Update(yourClass);
         //    }
         //}
-        public bool UpdateBook(Book model)
+
+        // TODO - to albo to niżej !!!!
+        //public bool UpdateBook(Book model)
+        //{
+        //    using (IDbConnection cnn = new SQLiteConnection(_connectionString))
+        //    {
+        //        cnn.Open();
+        //        return cnn.Update(model);
+        //    }
+        //}
+        // TODO
+        void ISQLiteDapperRepository.UpdateBook(Book model)
         {
-            using (IDbConnection cnn = new SQLiteConnection(_connectionString))
-            {
-                cnn.Open();
-                return cnn.Update(model);
-            }
+            throw new System.NotImplementedException();
         }
     }
 }

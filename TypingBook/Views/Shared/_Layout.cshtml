@@ -27,42 +27,36 @@
 
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TypingBook</a>*@
-                <li class="nav-item">
-                    <input type="button" value="TypingBook" id="TypingBook_button" class="btn-link" />
-                </li>
+            <div class="container">                
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
+
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            @*TODO _ STYLE PRZYCISKU*@
-                            <input type="button" value="Books" id="Books_button" class="btn-link" />
+                            <a class="nav-link text-dark" asp-action="Index" asp-controller="Home" asp-route-id="123"
+                               data-target="body-container" id="ajax_link">Type!</a>
                         </li>
                         <li class="nav-item">
-                            <input type="button" value="Privacy" id="Privacy_button" class="btn-link" />
+                            <a class="nav-link text-dark" asp-action="Index" asp-controller="Book" asp-route-id="123"
+                               data-target="body-container" id="ajax_link">Books</a>
                         </li>
-                        @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ModalPrivacy" data-toggle="modal" datatarget="#mainModal">Privacy in modal</a>
-                            </li>*@
-
-                        <li>
-                            @*TODO - zaimplementuj ModalLink z efitness`u*@
-                            @*@Html.ModalLink(null, editUrl, new Dictionary<string, string>() { { "class", "glyphicon-pencil" } })*@
-
-                            @* dane przekierowania: Home/ModalPrivacy - przycisk musi zawierać: data-toggle="modal" datatarget="#exampleModal"*@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-action="Privacy" asp-controller="Home" asp-route-id="123"
+                               data-target="body-container" id="ajax_link">Privacy</a>
                         </li>
                     </ul>
+
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container body-content">
+    <div class="container body-container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
@@ -97,6 +91,7 @@
 
     <script>
         ajaxMainMenu();
+        ajaxLink();
     </script>
 
     @RenderSection("Scripts", required: false)

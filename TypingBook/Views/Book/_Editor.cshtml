@@ -21,7 +21,7 @@
     </p>
     <p>
         @Html.LabelFor(x => x.Genre)
-        @Html.DropDownListFor(x => x.Genre, new[] { new SelectListItem() { Text = "testPierwszy", Value = "1" }, new SelectListItem() { Text = "testDrugi", Value = "2" } }, "Choose") @*TODO - LISTA NA PODST ENUMÓW*@
+        @Html.DropDownListFor(x => x.Genre, Model.GenreSelectListItem, "Choose") @*TODO - LISTA NA PODST ENUMÓW*@
         @Html.EditorFor(x => x.Genre)
     </p>
     <p>
