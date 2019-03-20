@@ -3,26 +3,7 @@
 
 // Write your JavaScript code.
 
-function ajaxMainMenu() {
-    $("#Books_button").click(function () {
-        $(".body-content").load(
-            "/Book/Index"//, { model data goes here..}
-        );
-    });
-
-    $("#Privacy_button").click(function () {
-        $(".body-container").load(
-            "/Home/Privacy"
-        );
-    });
-
-    $("#TypingBook_button").click(function () {
-        $(".body-container").load(
-            "/Home/Index"
-        );
-    });
-}
-
+// create ajax links from, e.g.:  <a class="nav-link text-dark" asp-action="Index" asp-controller="Home" asp-route-id="123" data - target="body-container" id = "ajax_link" >Type</a >
 function ajaxLink() {
     $("#ajax_link").click(function (e) {
 
@@ -35,18 +16,6 @@ function ajaxLink() {
         });
     });
 }
-
-// alternative of using Ajax links - data is get from anchor tag helpers https://stackoverflow.com/questions/39193604/ajax-actionlink-alternative-with-mvc-core
-//$(function () {
-//    $("#ajax-link").click(function (e) {
-
-//        e.preventDefault();
-//        var _this = $(this);
-//        $.get(_this.attr("href"), function (res) {
-//            $('#' + _this.data("target")).html(res);
-//        });
-//    });
-//});
 
 
 function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
