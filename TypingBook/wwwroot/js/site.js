@@ -82,7 +82,7 @@ function isSameChar(typedCharCode, charToType) {
     if (typedCharCode == charToType) { // TO NIE DZIAŁA :/ PRZEPUSZCZA WSZYTSKO!
         return true;
     }
-    else if (charToType == 8217 || charToType == 8211 || charToType == 8220) {
+    else if (charToType > 8200 /*charToType == 8217 || charToType == 8211 || charToType == 8220 || charToType = 8221*/) {
         return true;
     }
     else

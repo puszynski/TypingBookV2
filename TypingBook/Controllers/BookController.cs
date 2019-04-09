@@ -9,7 +9,7 @@ using TypingBook.ViewModels.Book;
 
 namespace TypingBook.Controllers
 {
-    public class BookController : Controller
+    public class BookController : BaseController
     {
         readonly ISQLiteDapperRepository _sqLiteDB;
                

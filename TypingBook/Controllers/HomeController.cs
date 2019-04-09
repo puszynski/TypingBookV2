@@ -8,7 +8,7 @@ using TypingBook.ViewModels.Home;
 
 namespace TypingBook.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {   
         readonly ISQLiteDapperRepository _sqLiteDB;
         readonly IMemoryCache _memoryCache;
@@ -53,14 +53,19 @@ namespace TypingBook.Controllers
             bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
 
             if (isAjaxCall)
-                return PartialView("_Typing", model);
+                return PartialView("_Index", model);
             else
                 return View(model);
         }
 
         public IActionResult Privacy()
         {
-            return View();
+            bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
+            
+            if (isAjaxCall)
+                return PartialView("_Privacy");
+            else
+                return View();
         }
 
         public IActionResult ModalPrivacy()
