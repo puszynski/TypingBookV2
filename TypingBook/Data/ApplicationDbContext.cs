@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TypingBook.Models;
 
 namespace TypingBook.Data
 {
@@ -12,5 +10,10 @@ namespace TypingBook.Data
             : base(options)
         {
         }
+
+        public DbSet<Book> Books { get; set; }
     }
 }
+
+
+

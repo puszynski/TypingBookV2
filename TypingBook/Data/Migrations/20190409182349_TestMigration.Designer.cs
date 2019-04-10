@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TypingBook.Data;
 
 namespace TypingBook.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190409182349_TestMigration")]
+    partial class TestMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,34 +184,6 @@ namespace TypingBook.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("TypingBook.Models.Book", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Authors")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Content")
-                        .IsRequired();
-
-                    b.Property<int?>("Genre");
-
-                    b.Property<int?>("Rate");
-
-                    b.Property<DateTime?>("ReleaseDate");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

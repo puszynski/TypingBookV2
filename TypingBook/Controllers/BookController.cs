@@ -5,6 +5,7 @@ using TypingBook.Enums;
 using TypingBook.Extensions;
 using TypingBook.Helpers;
 using TypingBook.Models;
+using TypingBook.Repositories.IReporitories;
 using TypingBook.ViewModels.Book;
 
 namespace TypingBook.Controllers
@@ -12,9 +13,14 @@ namespace TypingBook.Controllers
     public class BookController : BaseController
     {
         readonly ISQLiteDapperRepository _sqLiteDB;
-               
-        public BookController(ISQLiteDapperRepository sqLiteDB) => _sqLiteDB = sqLiteDB;
-               
+        readonly IBookRepository _bookRepository;
+
+        public BookController(ISQLiteDapperRepository sqLiteDB, IBookRepository bookRepository)
+        {
+            _sqLiteDB = sqLiteDB;
+            _bookRepository = null;// bookRepository;
+        }
+
         public IActionResult Index(string bookOrCompanySearchString, int? genreFilter)
         {
             var sql = _sqLiteDB.GetAllBooks();
@@ -76,6 +82,7 @@ namespace TypingBook.Controllers
             };
 
             //_sqLiteDB.Create(sql);
+            _bookRepository.CreateBook(sql);
 
             return RedirectToAction("Index");
         }

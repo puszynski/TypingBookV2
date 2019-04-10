@@ -35,7 +35,7 @@ function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
 
             updateBookPageStatusBar(pageLength);
 
-            document.body.style.backgroundColor = "dimgray";
+            //document.body.style.backgroundColor = "dimgray";
             document.getElementById('typed_content').innerHTML += book_content.charAt(0);
             document.getElementById('book_content').innerHTML = book_content.substr(1);
 
@@ -72,7 +72,7 @@ function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
             var increasedValue = parseInt($(".wrongTyped").text(), 10) + 1;
             $('.wrongTyped').html(increasedValue);
 
-            document.body.style.backgroundColor = "white";
+            //document.body.style.backgroundColor = "white";
             updateBookPageStatusBar(pageLength);
         }
     };
