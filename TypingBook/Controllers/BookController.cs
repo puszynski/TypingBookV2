@@ -67,7 +67,11 @@ namespace TypingBook.Controllers
         public IActionResult Create(BookRowViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                // move to model (Getter?)
+                model.GenreSelectListItem = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
                 return View(model);
+            }
 
             var bookContentHelper = new BookContentHelper();
             var enumConv = EnumBinarySumConverterHelper.GetInstance();
