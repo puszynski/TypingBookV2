@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TypingBook.Enums;
+using TypingBook.Helpers;
 
 namespace TypingBook.ViewModels.Book
 {
@@ -27,7 +29,13 @@ namespace TypingBook.ViewModels.Book
         [Display(Name = "Book Genre")]
         public List<int> Genre { get; set; }
 
-        public IEnumerable<SelectListItem> GenreSelectListItem { get; set; }
+        public IEnumerable<SelectListItem> GenreSelectListItem
+        {
+            get
+            {
+                return CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
+            }
+        }
 
         [DataType(DataType.Date)]
         [Display(Name = "Relase Date")]

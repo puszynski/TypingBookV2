@@ -1,0 +1,6 @@
+﻿When add new book - genre is not saved in DB
+
+
+
+ideas:
+- admin task - programs that can by run manualy by admin user (1) it will run thru all books and use "bookContentHelper.TransformeBookContent(model.Content)" and others methods to transorm actuall db data (e.g. when transform code logic will changed)

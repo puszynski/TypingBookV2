@@ -1,4 +1,6 @@
-﻿namespace TypingBook.Extensions
+﻿using System;
+
+namespace TypingBook.Extensions
 {
     public static class StringExtensions
     {
@@ -23,6 +25,14 @@
             if (input.Length < 500)
                 return input;
             return input.Substring(0, 497) + "..."; 
+        }
+
+        public static string Replace(this string input, char[] charsToReplace, char newCharForReplaced)
+        {
+            string[] temp;
+
+            temp = input.Split(charsToReplace, StringSplitOptions.RemoveEmptyEntries);
+            return String.Join(newCharForReplaced, temp);
         }
     }
 }

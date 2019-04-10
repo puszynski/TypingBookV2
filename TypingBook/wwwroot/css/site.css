@@ -41,6 +41,11 @@ html {
   min-height: 100%;
 }
 
+h1 {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;

@@ -14,9 +14,15 @@ namespace TypingBook.Repositories
             _db = db;
         }        
 
+
         public Book GetBookByID(int id)
         {
             return _db.Books.Single(x => x.ID == id);
+        }
+
+        public IQueryable<Book> GetAllBooks()
+        {
+            return _db.Books;
         }
 
         public void UpdateBook(Book model)
@@ -27,6 +33,11 @@ namespace TypingBook.Repositories
         public void CreateBook(Book model)
         {
             _db.Add(model);
+        }
+
+        public void SaveChanges()
+        {
+            _db.SaveChanges();
         }
     }
 }
