@@ -68,7 +68,7 @@ namespace TypingBook.Controllers
             {
                 Authors = model.Authors,
                 Content = bookContentHelper.TransformeBookContent(model.Content),
-                Genre = enumConv.ParseSelectedListItemsToBinarySum(model.GenreSelectListItem),
+                Genre = model.Genre.Sum(),
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
             };
@@ -105,7 +105,7 @@ namespace TypingBook.Controllers
         [HttpPost]
         public IActionResult Edit(BookRowViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(model);
 
             var sql = _bookRepository.GetBookByID(model.ID);
@@ -115,9 +115,7 @@ namespace TypingBook.Controllers
             sql.Authors = model.Authors;
             sql.ReleaseDate = model.ReleaseDate;
             sql.Title = model.Title;
-
-            var enumConv = EnumBinarySumConverterHelper.GetInstance();
-            sql.Genre = enumConv.ParseSelectedListItemsToBinarySum(model.GenreSelectListItem);
+            sql.Genre = model.Genre.Sum();
 
             _bookRepository.UpdateBook(sql);
             _bookRepository.SaveChanges();
