@@ -32,21 +32,12 @@ namespace TypingBook.Helpers
         }
 
         // ToDelete?
-        public int? ParseSelectedListItemsToBinarySum(IEnumerable<SelectListItem> input)
-        {
-            if(!input.Any())
-                return null;
+        //public int? ParseSelectedListItemsToBinarySum(IEnumerable<SelectListItem> input)
+        //{
+        //    if(!input.Any())
+        //        return null;
 
-            return input.Where(x => x.Selected == true).Select(x => x.Value).Cast<int>().Sum();
-        }
-
-
-        public int? ParseIntListToBinarySum(List<int> input)
-        {
-            if (!input.Any())
-                return null;
-
-            return input.Sum();
-        }
+        //    return input.Where(x => x.Selected == true).Select(x => x.Value).Cast<int>().Sum();
+        //}
     }
 }
