@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 using TypingBook.Enums;
 using TypingBook.Extensions;
 using TypingBook.Helpers;
@@ -121,6 +122,29 @@ namespace TypingBook.Controllers
             _bookRepository.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+                
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var book = await _bookRepository.GetAsyncBookByID(id.Value);
+
+            if (book == null)
+                return NotFound();
+
+            return View(book);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var book = await _bookRepository.GetAsyncBookByID(id);
+            _bookRepository.RemoveBook(book);
+            await _bookRepository.SaveAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
