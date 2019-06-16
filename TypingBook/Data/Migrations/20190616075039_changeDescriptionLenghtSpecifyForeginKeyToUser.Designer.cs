@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TypingBook.Data;
 
 namespace TypingBook.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190616075039_changeDescriptionLenghtSpecifyForeginKeyToUser")]
+    partial class ChangeDescriptionLenghtSpecifyForeginKeyToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,44 +212,6 @@ namespace TypingBook.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Agreements");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            Description = "Testowa umowa PRZEDŁUŻONA dwumiesięczna: styczeń-luty, wygenerowana jako metoda SeedData",
-                            From = new DateTime(2019, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SignedDate = new DateTime(2019, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            To = new DateTime(2019, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
-                        },
-                        new
-                        {
-                            ID = 2,
-                            Description = "Testowa umowa dwumiesięczna, NIEPRZEDŁUŻONA: luty-marzec, wygenerowana jako metoda SeedData",
-                            From = new DateTime(2019, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SignedDate = new DateTime(2019, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            To = new DateTime(2019, 3, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
-                        },
-                        new
-                        {
-                            ID = 3,
-                            Description = "Testowa umowa dwumiesięczna, RÓWNOLEGŁA - PRZEDŁUŻONA KARNETEM RÓWNOLEGŁYM: maj-czerwiec, wygenerowana jako metoda SeedData",
-                            From = new DateTime(2019, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SignedDate = new DateTime(2019, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            To = new DateTime(2019, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
-                        },
-                        new
-                        {
-                            ID = 4,
-                            Description = "Testowa umowa RÓWNOLEGŁA: kwiecień-lipiec, NIEPRZEDŁUŻONA, wygenerowana jako metoda SeedData",
-                            From = new DateTime(2019, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SignedDate = new DateTime(2019, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            To = new DateTime(2019, 7, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
-                        });
                 });
 
             modelBuilder.Entity("TypingBook.Models.Book", b =>
