@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using TypingBook.Data;
 using TypingBook.Models;
 using TypingBook.Repositories.IReporitories;
@@ -14,9 +15,20 @@ namespace TypingBook.Repositories
             _db = db;
         }        
 
+
         public Book GetBookByID(int id)
         {
             return _db.Books.Single(x => x.ID == id);
+        }
+
+        public async Task<Book> GetAsyncBookByID(int id)
+        {
+            return await _db.Books.FindAsync(id);
+        }
+
+        public IQueryable<Book> GetAllBooks()
+        {
+            return _db.Books;
         }
 
         public void UpdateBook(Book model)
@@ -27,6 +39,20 @@ namespace TypingBook.Repositories
         public void CreateBook(Book model)
         {
             _db.Add(model);
+        }
+
+        public void RemoveBook(Book book)
+        {
+            _db.Books.Remove(book);
+        }
+
+        public void SaveChanges()
+        {
+            _db.SaveChanges();
+        }
+        public async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
         }
     }
 }

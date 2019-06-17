@@ -21,8 +21,7 @@
     </p>
     <p>
         @Html.LabelFor(x => x.Genre)
-        @Html.DropDownListFor(x => x.Genre, Model.GenreSelectListItem, "Choose") @*TODO - LISTA NA PODST ENUMÓW*@
-        @Html.EditorFor(x => x.Genre)
+        @Html.ListBoxFor(m => m.Genre, Model.GenreSelectListItem)
     </p>
     <p>
         @Html.LabelFor(x => x.ReleaseDate)

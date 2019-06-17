@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TypingBook.Helpers
 {
@@ -31,12 +29,13 @@ namespace TypingBook.Helpers
             }
         }
 
-        public int? ParseSelectedListItemsToBinarySum(IEnumerable<SelectListItem> input)
-        {
-            if(!input.Any())
-                return null;
+        // ToDelete?
+        //public int? ParseSelectedListItemsToBinarySum(IEnumerable<SelectListItem> input)
+        //{
+        //    if(!input.Any())
+        //        return null;
 
-            return input.Where(x => x.Selected == true).Select(x => x.Value).Cast<int>().Sum(); ;
-        }
+        //    return input.Where(x => x.Selected == true).Select(x => x.Value).Cast<int>().Sum();
+        //}
     }
 }

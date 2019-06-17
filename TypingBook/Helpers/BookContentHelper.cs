@@ -1,17 +1,21 @@
 ﻿using System.Text.RegularExpressions;
+using TypingBook.Extensions;
 
 namespace TypingBook.Helpers
 {
     public class BookContentHelper
     {
-        public string TransformedBookContent(string input)
+        public string TransformeBookContent(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return input;
 
-            var result = Regex.Replace(input, @"\s+", " "); // it will catch runs of any kind of whitespace (e.g. tabs, newlines, etc.) and replace them with a single space.
-            // + remove double spaces?? zrób test czy ten regex usuwa podwójne spacje, jak nie to trzeba jeszcze dodatkowo dodać
-            // + usuwanie wszelkich nietypowyych znaków
+            // replace special char
+            var charsToReplece = new char[] { ' ', ';', ',', '\r', '\t', '\n' };
+            var result = input.Replace(charsToReplece, ' ');
+
+            // replace any kind of whitespace (e.g. tabs, newlines, {doublespaces??} etc.)
+            result = Regex.Replace(result, @"\s+", " ");
 
             return result;
         }

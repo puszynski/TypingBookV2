@@ -1,6 +1,12 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+/*
+    .classSelectro
+    #idSelector
+
+*/
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -41,6 +47,11 @@ html {
   min-height: 100%;
 }
 
+h1 {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
@@ -53,6 +64,11 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
+}
+
+
+.typed_text {
+    color: gray;
 }
 
 

@@ -184,6 +184,72 @@ namespace TypingBook.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TypingBook.Models.Agreement", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200);
+
+                    b.Property<DateTime>("From");
+
+                    b.Property<DateTime>("SignedDate");
+
+                    b.Property<DateTime?>("TerminationDate");
+
+                    b.Property<int?>("TerminationType");
+
+                    b.Property<DateTime>("To");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Agreements");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Description = "Testowa umowa PRZEDŁUŻONA dwumiesięczna: styczeń-luty, wygenerowana jako metoda SeedData",
+                            From = new DateTime(2019, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SignedDate = new DateTime(2019, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            To = new DateTime(2019, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Description = "Testowa umowa dwumiesięczna, NIEPRZEDŁUŻONA: luty-marzec, wygenerowana jako metoda SeedData",
+                            From = new DateTime(2019, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SignedDate = new DateTime(2019, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            To = new DateTime(2019, 3, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Description = "Testowa umowa dwumiesięczna, RÓWNOLEGŁA - PRZEDŁUŻONA KARNETEM RÓWNOLEGŁYM: maj-czerwiec, wygenerowana jako metoda SeedData",
+                            From = new DateTime(2019, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SignedDate = new DateTime(2019, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            To = new DateTime(2019, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
+                        },
+                        new
+                        {
+                            ID = 4,
+                            Description = "Testowa umowa RÓWNOLEGŁA: kwiecień-lipiec, NIEPRZEDŁUŻONA, wygenerowana jako metoda SeedData",
+                            From = new DateTime(2019, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SignedDate = new DateTime(2019, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            To = new DateTime(2019, 7, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d"
+                        });
+                });
+
             modelBuilder.Entity("TypingBook.Models.Book", b =>
                 {
                     b.Property<int>("ID")
@@ -255,6 +321,13 @@ namespace TypingBook.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TypingBook.Models.Agreement", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
