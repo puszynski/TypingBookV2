@@ -48,9 +48,11 @@ namespace TypingBook
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services
-                .AddScoped<IBookRepository, BookRepository>(); // why not singleton? AddDbContext is Scope, so each repo used it must be too => https://dotnetcoretutorials.com/2018/03/20/cannot-consume-scoped-service-from-singleton-a-lesson-in-asp-net-core-di-scopes/
+            // repositories
+            services.AddScoped<IBookRepository, BookRepository>(); 
+            services.AddScoped<IAgreementRepository, AgreementRepository>();
 
+            // TO REMOVE
             services
                 .AddSingleton<ISQLiteDapperRepository, SQLiteDapperRepository>();
 

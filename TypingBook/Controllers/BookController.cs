@@ -19,13 +19,17 @@ namespace TypingBook.Controllers
             _bookRepository = bookRepository;
         }
 
-        public IActionResult Index(string bookOrCompanySearchString, int? genreFilter)
+        public IActionResult Index(string bookOrAuthorSearchString, int? genreFilter)
         {
             var sql = _bookRepository.GetAllBooks();
 
-            if (!string.IsNullOrWhiteSpace(bookOrCompanySearchString))
-                sql = sql.Where(x => x.Title.Contains(bookOrCompanySearchString)
-                                || x.Authors.Contains(bookOrCompanySearchString));
+            // todo - get loggged user
+            //var user = User... if user == null ..... else ...
+
+
+            if (!string.IsNullOrWhiteSpace(bookOrAuthorSearchString))
+                sql = sql.Where(x => x.Title.Contains(bookOrAuthorSearchString)
+                                || x.Authors.Contains(bookOrAuthorSearchString));
 
             if (genreFilter.HasValue)
                 sql = sql.Where(x => (x.Genre & genreFilter) > 0);
