@@ -14,6 +14,7 @@ namespace TypingBook.Data
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<UserData> UserData { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,12 +27,12 @@ namespace TypingBook.Data
             //    .HasForeignKey(p => p.UserId);
 
 
-
+            // seed data
             modelBuilder.Entity<Agreement>().HasData
                 (
                     new Agreement
                     {
-                        ID = 1, 
+                        Id = 1, 
                         UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d",                        
                         Description = "Testowa umowa PRZEDŁUŻONA dwumiesięczna: styczeń-luty, wygenerowana jako metoda SeedData",
                         SignedDate = DateTime.Parse("2019-01-01"),
@@ -42,7 +43,7 @@ namespace TypingBook.Data
                     },
                     new Agreement
                     {
-                        ID = 2,
+                        Id = 2,
                         UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d",
                         Description = "Testowa umowa dwumiesięczna, NIEPRZEDŁUŻONA: luty-marzec, wygenerowana jako metoda SeedData",
                         SignedDate = DateTime.Parse("2019-02-01"),
@@ -53,7 +54,7 @@ namespace TypingBook.Data
                     },
                     new Agreement
                     {
-                        ID = 3,
+                        Id = 3,
                         UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d",
                         Description = "Testowa umowa dwumiesięczna, RÓWNOLEGŁA - PRZEDŁUŻONA KARNETEM RÓWNOLEGŁYM: maj-czerwiec, wygenerowana jako metoda SeedData",
                         SignedDate = DateTime.Parse("2019-05-01"),
@@ -64,7 +65,7 @@ namespace TypingBook.Data
                     },
                     new Agreement
                     {
-                        ID = 4,
+                        Id = 4,
                         UserId = "34f8fa11-fa68-4c9c-ab2a-0424b0d9319d",
                         Description = "Testowa umowa RÓWNOLEGŁA: kwiecień-lipiec, NIEPRZEDŁUŻONA, wygenerowana jako metoda SeedData",
                         SignedDate = DateTime.Parse("2019-04-01"),

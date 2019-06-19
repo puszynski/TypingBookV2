@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using TypingBook.Models.IModels;
 
 namespace TypingBook.Models
 {
-    public class Note
+    public class Note : IId
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public IdentityUser User { get; set; }

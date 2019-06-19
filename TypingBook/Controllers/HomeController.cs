@@ -114,7 +114,7 @@ namespace TypingBook.Controllers
             {
                 // simplyfied - no terminantion date
                 query.Where(q => allAgreements.Where
-                                    (a => a.From <= q.To && a.To > q.To).Count() == 0);
+                                    (a => a.From <= q.To && a.To > q.To).Count() > 0);
 
                 //query.Where(q => allAgreements.Where
                 //                    (a => a.TerminationDate.HasValue && a.From <= q.To && a.TerminationDate > q.To

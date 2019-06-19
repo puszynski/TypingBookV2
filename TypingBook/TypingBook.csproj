@@ -15,6 +15,8 @@
     <Compile Remove="Data\Migrations\20190616072807_SeedAgreements_noUserAssigned.Designer.cs" />
     <Compile Remove="Data\Migrations\20190616074510_changeAgreementDescriptionLenghtTo100AndSeedAgreements.cs" />
     <Compile Remove="Data\Migrations\20190616074510_changeAgreementDescriptionLenghtTo100AndSeedAgreements.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190618151514_AddUserData.cs" />
+    <Compile Remove="Data\Migrations\20190618151514_AddUserData.Designer.cs" />
   </ItemGroup>
 
 

@@ -3,12 +3,13 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TypingBook.Enums;
+using TypingBook.Models.IModels;
 
 namespace TypingBook.Models
 {
-    public class Agreement
+    public class Agreement : IId
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [MaxLength(200)]
         public string Description { get; set; }

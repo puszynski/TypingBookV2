@@ -51,6 +51,7 @@ namespace TypingBook
             // repositories
             services.AddScoped<IBookRepository, BookRepository>(); 
             services.AddScoped<IAgreementRepository, AgreementRepository>();
+            services.AddScoped<IUserDataRepository, UserDataRepository>();
 
             // TO REMOVE
             services

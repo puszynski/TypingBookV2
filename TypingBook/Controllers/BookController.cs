@@ -38,7 +38,7 @@ namespace TypingBook.Controllers
 
             var row = sql.Select(x => new BookRowViewModel
             {
-                ID = x.ID,
+                ID = x.Id,
                 Title = x.Title,
                 Content = x.Content.ShowOnly500Char(),
                 Authors = x.Authors,
@@ -96,7 +96,7 @@ namespace TypingBook.Controllers
 
             var model = new BookRowViewModel
             {
-                ID = sql.ID,
+                ID = sql.Id,
                 Title = sql.Title,
                 Content = sql.Content,
                 Genre = sql.Genre.HasValue ? enumConv.ParseBinarySumToIntList(sql.Genre.GetValueOrDefault()).ToList() : null,

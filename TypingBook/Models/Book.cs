@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using TypingBook.Models.IModels;
 
 namespace TypingBook.Models
 {
-    public class Book
+    public class Book : IId
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(100)]
