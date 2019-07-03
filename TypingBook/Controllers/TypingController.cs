@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using TypingBook.Helpers;
 using TypingBook.Repositories.IReporitories;
-using TypingBook.Services;
+using TypingBook.Services.IServices;
 using TypingBook.ViewModels.Home;
 using TypingBook.ViewModels.Typing;
 
@@ -14,18 +14,14 @@ namespace TypingBook.Controllers
         readonly IUserDataRepository _userDataRepository;
         readonly IBookRepository _bookRepository;
         readonly IMemoryCache _memoryCache;
+        readonly ITypingServices _typingServices;
 
-        readonly TypingServices _typingServices;
-        readonly BookContentHelper _bookContentHelper;
-
-        public TypingController(IUserDataRepository userDataRepository, IBookRepository bookRepository, IMemoryCache memoryCache)
+        public TypingController(IUserDataRepository userDataRepository, IBookRepository bookRepository, ITypingServices typingServices, IMemoryCache memoryCache)
         {
             _userDataRepository = userDataRepository;
             _bookRepository = bookRepository;
             _memoryCache = memoryCache;
-
-            _typingServices = new TypingServices();
-            _bookContentHelper = new BookContentHelper();
+            _typingServices = typingServices;
         }
 
         // move typing here
@@ -37,12 +33,11 @@ namespace TypingBook.Controllers
             if (bookId.HasValue && _memoryCache.TryGetValue($"Book_ID{bookId}", out TypingViewModel book))
                 model = book; /// warunek: aby poprawnie działało => aktualizuj cache po każdej stronie! (w akcji zapisywania progresu) 
 
+
             var userId = GetLoggedUserId();
 
-            if (userId == null && !bookId.HasValue)
-                model = _typingServices.GetIntroductionModel(currentBookPage);
-            else if (!bookId.HasValue)
-                model = _typingServices.GetTypingBookModel(userId, null, null);
+            if (userId == null)
+                model = _typingServices.GetIntroductionModel(bookId, currentBookPage);
             else
                 model = _typingServices.GetTypingBookModel(userId, bookId, currentBookPage);
 

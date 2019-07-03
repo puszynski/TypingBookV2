@@ -2,12 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TypingBook.Helpers
 {
+    /// <summary>
+    /// e.g. 2:35 4:12 7:188 => Dictionary<BookId,BookPage> => last saved book go first
+    /// </summary>
     public class UserDataHelper
     {
+        public int? GetLastBookId(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return null;
+
+            var bookID = input.Split(':').First();
+
+            return Int32.Parse(bookID);
+        }
+
+        public int? GetLastCurrentBookPage(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return null;
+
+            var bookPage = input.Split(' ').First().Split(':')[1];
+
+            return Int32.Parse(bookPage);
+        }
+
+
         public Dictionary<int, int> DeserializeProgressBar(string input)
         {
             var result = new Dictionary<int, int>();

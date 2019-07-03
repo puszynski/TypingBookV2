@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using TypingBook.Data;
 using TypingBook.Repositories;
 using TypingBook.Repositories.IReporitories;
+using TypingBook.Services;
+using TypingBook.Services.IServices;
 
 namespace TypingBook
 {
@@ -53,6 +55,9 @@ namespace TypingBook
             services.AddScoped<IAgreementRepository, AgreementRepository>();
             services.AddScoped<IUserDataRepository, UserDataRepository>();
 
+            // services
+            services.AddScoped<ITypingServices, TypingServices>();
+
             // TO REMOVE
             services
                 .AddSingleton<ISQLiteDapperRepository, SQLiteDapperRepository>();
@@ -81,13 +86,22 @@ namespace TypingBook
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRouting();
 
-            app.UseRouting(routes =>
+            //app.UseRouting(routes =>
+            //{
+            //    routes.MapApplication();
+            //    routes.MapControllerRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
+
+            app.UseEndpoints(routes =>
             {
-                routes.MapApplication();
                 routes.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRazorPages();
             });
 
             app.UseCookiePolicy();

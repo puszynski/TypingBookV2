@@ -34,7 +34,6 @@ namespace TypingBook.Controllers
             if (genreFilter.HasValue)
                 sql = sql.Where(x => (x.Genre & genreFilter) > 0);
 
-            var enumConv = EnumBinarySumConverterHelper.GetInstance();
 
             var row = sql.Select(x => new BookRowViewModel
             {
@@ -42,7 +41,7 @@ namespace TypingBook.Controllers
                 Title = x.Title,
                 Content = x.Content.ShowOnly500Char(),
                 Authors = x.Authors,
-                Genre = x.Genre.HasValue ? enumConv.ParseBinarySumToIntList(x.Genre.GetValueOrDefault()).ToList() : null,
+                Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Rate = x.Rate,
                 ReleaseDate = x.ReleaseDate
             });
@@ -99,7 +98,7 @@ namespace TypingBook.Controllers
                 ID = sql.Id,
                 Title = sql.Title,
                 Content = sql.Content,
-                Genre = sql.Genre.HasValue ? enumConv.ParseBinarySumToIntList(sql.Genre.GetValueOrDefault()).ToList() : null,
+                Genre = sql.Genre.HasValue ? sql.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Authors = sql.Authors,
                 Rate = sql.Rate,
                 ReleaseDate = sql.ReleaseDate
