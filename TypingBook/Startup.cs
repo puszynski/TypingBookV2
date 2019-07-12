@@ -81,12 +81,20 @@ namespace TypingBook
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting(routes =>
+            //app.UseRouting(routes =>
+            //{
+            //    routes.MapApplication();
+            //    routes.MapControllerRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
+
+            app.UseEndpoints(routes =>
             {
-                routes.MapApplication();
                 routes.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRazorPages();
             });
 
             app.UseCookiePolicy();
