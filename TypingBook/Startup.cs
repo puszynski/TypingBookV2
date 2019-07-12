@@ -57,11 +57,7 @@ namespace TypingBook
 
             // services
             services.AddScoped<ITypingServices, TypingServices>();
-
-            // TO REMOVE
-            services
-                .AddSingleton<ISQLiteDapperRepository, SQLiteDapperRepository>();
-
+            
             services.AddMvc()
                 .AddNewtonsoftJson();
 

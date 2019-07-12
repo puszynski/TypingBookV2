@@ -14,7 +14,6 @@ namespace TypingBook.Controllers
 {
     public class HomeController : BaseController
     {   
-        readonly ISQLiteDapperRepository _sqLiteDB; // TODO DELETE
         readonly IBookRepository _bookRepository;
         readonly IMemoryCache _memoryCache;
 
@@ -22,49 +21,17 @@ namespace TypingBook.Controllers
 
         private const int _defaultBook = 2;
 
-        public HomeController(ISQLiteDapperRepository sqLiteDB, IBookRepository bookRepository, IAgreementRepository agreementRepository, IMemoryCache memoryCache)
+        public HomeController(IBookRepository bookRepository, IAgreementRepository agreementRepository, IMemoryCache memoryCache)
         {
             _bookRepository = bookRepository;
-            _sqLiteDB = sqLiteDB;
             _agreementRepository = agreementRepository;
             _memoryCache = memoryCache;
         }
 
-        // Typing
-        public IActionResult Index(int bookID = _defaultBook, int bookPage = 0)
+        // Typing/Index is default route
+        public string Index()
         {
-            if (!_memoryCache.TryGetValue<Book>($"Book_ID{bookID}", out Book book))
-            {
-                book = _sqLiteDB.GetBookByID(bookID);
-                _memoryCache.Set<Book>($"Book_ID{bookID}", book);
-            }            
-
-            if (bookID == 1)
-                ViewBag.IsIntroduction = true;
-
-            var typingHelper = TypingHelper.GetInstance();
-            var bookPages = typingHelper.DivideBook(book.Content);
-
-            // tutaj sprawdzasz czy istnieje cash dla danego usera - jak tak to jest tam podana strona dla ktorej skonczył - musimy dodatkowo wywołać akcje z js po każdej stronie i za pomocą tej akcji zapisywać/aktualizować aktualną stone;
-            int? bookPageFormCache = _memoryCache.Get<int>("UserIdBookId");
-            
-
-            var model = new TypingViewModel()
-            {
-                BookAuthors = book.Authors,
-                CurrentBookPage = bookPageFormCache.HasValue ? bookPageFormCache.Value : bookPage,
-                BookPages = bookPages,
-                BookTitle = book.Title,
-                BookID = bookID
-            };
-
-
-            bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
-
-            if (isAjaxCall)
-                return PartialView("_Index", model);
-            else
-                return View(model);
+            return "Ops - that route is out of date!";
         }
 
         public IActionResult Privacy()
