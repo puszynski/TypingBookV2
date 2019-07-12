@@ -93,18 +93,19 @@ namespace TypingBook
             //        template: "{controller=Home}/{action=Index}/{id?}");
             //});
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(routes =>
             {
+                routes.MapRazorPages();
                 routes.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Typing}/{action=Index}/{id?}");
-                routes.MapRazorPages();
             });
 
             app.UseCookiePolicy();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
         }
     }
 }
