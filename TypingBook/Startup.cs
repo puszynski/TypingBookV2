@@ -100,7 +100,7 @@ namespace TypingBook
             {
                 routes.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Typing}/{action=Index}/{id?}");
                 routes.MapRazorPages();
             });
 
