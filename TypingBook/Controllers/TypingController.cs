@@ -28,30 +28,24 @@ namespace TypingBook.Controllers
         [HttpGet]
         public IActionResult Index(int? bookId, int? currentBookPage)
         {
-            var model = new TypingViewModel();
+            var result = new TypingViewModel();
 
             if (bookId.HasValue && _memoryCache.TryGetValue($"Book_ID{bookId}", out TypingViewModel book))
-                model = book; /// warunek: aby poprawnie działało => aktualizuj cache po każdej stronie! (w akcji zapisywania progresu) 
-
-
-            var userId = GetLoggedUserId();
-
-            if (userId == null)
-                model = _typingServices.GetIntroductionModel(bookId, currentBookPage);
+                result = book; // warunek: aby poprawnie działało => aktualizuj cache po każdej stronie! (w akcji zapisywania progresu)
             else
-                model = _typingServices.GetTypingBookModel(userId, bookId, currentBookPage);
-
-            //CO JAK KTOŚ NIE BEDZIE UZYWAC CACHE??!! - zakładam że każdy musi (że nie da się tego zblokować)
-
+            {
+                var userId = GetLoggedUserId();
+                result = _typingServices.GetTypingViewModel(userId, bookId, currentBookPage);
+            }
+            
             bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
 
             if (isAjaxCall)
-                return PartialView("_Index", model);
+                return PartialView("_Index", result);
             else
-                return View(model);
+                return View(result);
         }
-
-
+               
 
         [HttpGet]
         [Authorize]

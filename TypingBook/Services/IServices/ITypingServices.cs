@@ -4,7 +4,6 @@ namespace TypingBook.Services.IServices
 {
     public interface ITypingServices
     {
-        TypingViewModel GetIntroductionModel(int? bookId, int? currentBookPage);
-        TypingViewModel GetTypingBookModel(string userId, int? bookId, int? currentBookPage);
+        TypingViewModel GetTypingViewModel(string userId, int? bookId, int? currentBookPage);
     }
 }
