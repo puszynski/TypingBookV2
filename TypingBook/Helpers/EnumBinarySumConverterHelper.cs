@@ -17,17 +17,18 @@ namespace TypingBook.Helpers
             return _b;
         }
 
-        public IEnumerable<int> ParseBinarySumToIntList(int enumBinarySum)
-        {
-            var powerOfTwo = 0;
+        // Zastąpione przez extensiona do int`a => EnumExtensions
+        //public IEnumerable<int> ParseBinarySumToIntList(int enumBinarySum)
+        //{
+        //    var powerOfTwo = 0;
 
-            for (int i = 0; powerOfTwo < enumBinarySum; i++)
-            {
-                powerOfTwo = (int)Math.Pow(2, i);
-                if ((enumBinarySum & powerOfTwo) == powerOfTwo)
-                    yield return powerOfTwo;
-            }
-        }
+        //    for (int i = 0; powerOfTwo < enumBinarySum; i++)
+        //    {
+        //        powerOfTwo = (int)Math.Pow(2, i);
+        //        if ((enumBinarySum & powerOfTwo) == powerOfTwo)
+        //            yield return powerOfTwo;
+        //    }
+        //}
 
         // ToDelete?
         //public int? ParseSelectedListItemsToBinarySum(IEnumerable<SelectListItem> input)
