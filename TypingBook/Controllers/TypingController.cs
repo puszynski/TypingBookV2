@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using TypingBook.Repositories.IReporitories;
@@ -27,14 +27,9 @@ namespace TypingBook.Controllers
         public IActionResult Index(int? bookId, int? currentBookPage)
         {
             var result = new TypingViewModel();
-
-            if (bookId.HasValue && _memoryCache.TryGetValue($"Book_ID{bookId}", out TypingViewModel book))
-                result = book; // warunek: aby poprawnie działało => aktualizuj cache po każdej stronie! (w akcji zapisywania progresu)
-            else
-            {
-                var userId = GetLoggedUserId();
-                result = _typingServices.GetTypingViewModel(userId, bookId, currentBookPage);
-            }
+            var userId = GetLoggedUserId();
+            
+            result = _typingServices.GetTypingViewModel(userId, bookId, currentBookPage);
             
             bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
 
@@ -44,29 +39,17 @@ namespace TypingBook.Controllers
                 return View(result);
         }
         
-
-        // TODO call from js
+        
         [HttpPost]
-        public IActionResult SaveTypingResult(int correctTyped, int wrongTyped, TypingViewModel model = null)
+        [Authorize]
+        public IActionResult SaveTypingResult(int bookId, int nextBookPage, int correctTyped, int wrongTyped)//bookId pokazuje jakby currentPage+1, nextBookPage jest undifined..
         {
             var userId = GetLoggedUserId();
             
-            if (model == null || string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(userId))
                 return BadRequest();
 
-            if (_memoryCache.TryGetValue($"Book{model.BookId}User{userId}", out TypingViewModel book))
-            {
-                _memoryCache.Remove($"Book{model.BookId}User{userId}");
-                _memoryCache.Set(
-                    $"Book{model.BookId}User{userId}", 
-                    model, 
-                    new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(90))
-                    );                
-            }
-            else
-                _memoryCache.Set($"Book{model.BookId}User{userId}", model);
-
-            var result = _typingServices.SaveBookProgress(model, userId);  
+            var result = _typingServices.SaveBookProgress(bookId, nextBookPage, userId);  
             return Ok(result);
         }
     }

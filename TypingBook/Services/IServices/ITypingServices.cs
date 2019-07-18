@@ -5,7 +5,6 @@ namespace TypingBook.Services.IServices
     public interface ITypingServices
     {
         TypingViewModel GetTypingViewModel(string userId, int? bookId, int? currentBookPage);
-
-        bool SaveBookProgress(TypingViewModel model, string userId);
+        bool SaveBookProgress(int bookId, int nextBookPage, string userId);
     }
 }

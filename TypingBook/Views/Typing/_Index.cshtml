@@ -1,7 +1,6 @@
 ﻿@model TypingBook.ViewModels.Typing.TypingViewModel
 @{
     var bookPages = @Html.Raw(Json.Serialize(Model.BookPages));
-    var isIntroduction = @ViewBag.IsIntroduction == true ? 1 : 0;
 }
 
 <h1 @*class="display-4"*@>
@@ -24,6 +23,6 @@
 
 <script>
 
-    typingBook(@Model.CurrentBookPage, @bookPages, @isIntroduction);
+    typingBook(@Model.CurrentBookPage, @bookPages, @Model.BookId);
 </script>
 

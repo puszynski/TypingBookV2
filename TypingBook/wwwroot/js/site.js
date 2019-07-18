@@ -15,7 +15,7 @@ function ajaxLink() {
 }
 
 
-function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
+function typingBook(currentBookPage, bookPagesJson, bookId) {
     document.onkeypress = function (e) {
         e = e || window.event;
 
@@ -30,7 +30,7 @@ function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
             var decreasedValue = parseInt($(".correctTyped").text(), 10) + 1;
             $('.correctTyped').html(decreasedValue);
 
-            updateBookPageStatusBar(pageLength);
+            updateBookPageStatusBar(bookId, currentBookPage);
 
             //document.body.style.backgroundColor = "dimgray";
             document.getElementById('typed_content').innerHTML += book_content.charAt(0);
@@ -42,21 +42,15 @@ function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
                 var bookPages = bookPagesJson;
                 var nextPage = ++currentBookPage;
 
-                saveTypingResult();
+                saveTypingResult(nextPage);
 
                 $('.progress-bar-correct').css({ 'width': '0%' });
                 $('.progress-bar-wrong').css({ 'width': '0%' });
                 $('.correctTyped').html('0');
                 $('.wrongTyped').html('0');
 
-                if (bookPages.length <= nextPage) {
-                    if (isIntroduction === 1) {
-                        window.location.href = '?bookID=2&bookPage=0';
-                    }
-                    else {
-                        window.location.href = '@Url.Action("Index", "Book")';
-                        //redirectToAction();
-                    }
+                if (bookPages.length <= nextPage) {                    
+                        window.location.href = '@Url.Action("Index", "Book")'; 
                 }
                 else {
                     document.getElementById('typed_content').innerHTML = '';
@@ -75,7 +69,7 @@ function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
 }
 
 function isSameChar(typedCharCode, charToType) {
-    if (typedCharCode == charToType) { // TO NIE DZIAŁA :/ PRZEPUSZCZA WSZYTSKO!
+    if (typedCharCode == charToType) {
         return true;
     }
     else if (charToType > 8200 /*charToType == 8217 || charToType == 8211 || charToType == 8220 || charToType = 8221*/) {
@@ -100,7 +94,7 @@ function updateBookPageStatusBar(pageLength) {
 
 
 
-function saveTypingResult() {
+function saveTypingResult(bookId, nextBookPage) {
     var url = '/Typing/SaveTypingResult';
 
     var correctTyped = parseInt($(".correctTyped").text(), 10);
@@ -108,16 +102,16 @@ function saveTypingResult() {
 
     $.ajax({
         url: url,
-        data: { // TODO
+        data: {
+            bookId: bookId,
+            nextBookPage: nextBookPage,
             correctTyped: correctTyped,
             wrongTyped: wrongTyped
-        },
-        // Send object => https://stackoverflow.com/questions/1068189/post-an-object-as-data-using-jquery-ajax
+        },                              // Send as object => https://stackoverflow.com/questions/1068189/post-an-object-as-data-using-jquery-ajax
         type: 'POST',
         datatype: 'json',
         //success: function () {
-        //    alert("Data has been added successfully.");  
-        //    LoadData();
+        //    console.log("Data has been sended successfully.");  
         //},
         error: function () {
            console.log("Error while calling the /Typing/SaveTypingResult from site.js, function: saveTypingResult()");

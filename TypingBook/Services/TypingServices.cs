@@ -38,7 +38,7 @@ namespace TypingBook.Services
 
         TypingViewModel GetIntroductionModel()
         {
-            var introduction = "TypingBook is simple but smarth app that will rise yours quick and accuracy typing on keyboard and english words knowleadge - rewritng is Key here. Those skills will help you on many areas. But in the same time you can relax by typing your favorite books or use one of recomended. Skill up learn and take a fun! Switch to Light Layout if you prefer.<array> Use minimise option to size TypingWindow to minimum so you can e.g. watch movie in the same time.<arrow> By default we will use cookies to save your actuall progress on your computer. You have access to our library of public books. <arrow to BooksLibrary> If you need more - add your own books or load your notes to rewrite it (its briliant excersize) or get more advance statistisc - please LogIN so we can store your data in our Data Base.<arrow to LogIN> Now please enjoy the journey with default book - IN TO THE WILD by Jon Krakauer.";
+            var introduction = "TypingBook is simple but smarth app that will rise yours quick and accuracy typing on keyboard and english words knowleadge - rewritng is Key here. Those skills will help you on many areas. But in the same time you can relax by typing your favorite books or use one of recomended. Skill up learn and take a fun! Switch to Light Layout if you prefer.<array> Use minimise option to size TypingWindow to minimum so you can e.g. watch movie in the same time.<arrow> You can type any book we have, but your progress will be not saved. Please log in to store your progress or just choose page manually.";
 
             return new TypingViewModel()
             {
@@ -80,13 +80,13 @@ namespace TypingBook.Services
             };
         }
 
-        public bool SaveBookProgress(TypingViewModel model, string userId)
+        public bool SaveBookProgress(int bookId, int nextBookPage, string userId)
         {
             var userData = _userDataRepository.GetById(userId);
 
             Dictionary<int, int> bookProgress = _userDataHelper.DeserializeProgressBar(userData.BookProgress);
 
-            bookProgress[model.BookId] = model.CurrentBookPage;
+            bookProgress[bookId] = nextBookPage; // musisz jeszcze umieścić go jako pierwszą pozycje (może być na innej - aby było jako pstatnio czytana)
 
             try
             {
