@@ -69,20 +69,18 @@ namespace TypingBook.Controllers
             return Json(userData);
         }
 
+        // TODO WYWOŁAĆ TĄ AKCJE Z JS PODCZAS TYPING
         [HttpPost]
-        public IActionResult SaveBookProgress()
+        public IActionResult SaveTypingResult(int bookId, int typedBookPage)
         {
             var userId = GetLoggedUserId();
 
             // TODO - aktualizuj cache po każdej stronie!
 
-            if (userId == null)
-                return null;
+            if (!string.IsNullOrEmpty(userId))
+                _typingServices.SaveBookProgress(userId, bookId, typedBookPage); //TODO use boolen
 
-            var userData = "";
-            
-
-            return Json(userData);
+            return Ok();
         }
     }
 }

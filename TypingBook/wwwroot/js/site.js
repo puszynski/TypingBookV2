@@ -99,14 +99,14 @@ function updateBookPageStatusBar(pageLength) {
 }
 
 function saveBookPageProgress() {
-    var url = '/Statistics/SaveBookPageProgress';
+    var url = '/Typing/SaveTypingResult';
 
     $.ajax({
         url: url,
-        data: { // TODO
+        data: {
             input: "razdwatrzy"
         },
-        type: 'GET',
+        type: 'POST',
         datatype: 'json'
     });
 }

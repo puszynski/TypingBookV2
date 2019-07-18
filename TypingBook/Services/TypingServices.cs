@@ -1,4 +1,6 @@
-﻿using TypingBook.Helpers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using TypingBook.Helpers;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
 using TypingBook.ViewModels.Home;
@@ -34,7 +36,7 @@ namespace TypingBook.Services
             return result;
         }
 
-        public TypingViewModel GetIntroductionModel()
+        TypingViewModel GetIntroductionModel()
         {
             var introduction = "TypingBook is simple but smarth app that will rise yours quick and accuracy typing on keyboard and english words knowleadge - rewritng is Key here. Those skills will help you on many areas. But in the same time you can relax by typing your favorite books or use one of recomended. Skill up learn and take a fun! Switch to Light Layout if you prefer.<array> Use minimise option to size TypingWindow to minimum so you can e.g. watch movie in the same time.<arrow> By default we will use cookies to save your actuall progress on your computer. You have access to our library of public books. <arrow to BooksLibrary> If you need more - add your own books or load your notes to rewrite it (its briliant excersize) or get more advance statistisc - please LogIN so we can store your data in our Data Base.<arrow to LogIN> Now please enjoy the journey with default book - IN TO THE WILD by Jon Krakauer.";
 
@@ -48,7 +50,7 @@ namespace TypingBook.Services
             };
         }
 
-        public TypingViewModel GetModelForLoggedUser(string userId)
+        TypingViewModel GetModelForLoggedUser(string userId)
         {            
             var userData = _userDataRepository.GetById(userId);
 
@@ -64,7 +66,7 @@ namespace TypingBook.Services
             return GetTypingViewModelByBookId(lastTypedBookId.Value, lastTypedBookCurrentPage);
         }
         
-        private TypingViewModel GetTypingViewModelByBookId(int bookId, int? currentBookPage)
+        TypingViewModel GetTypingViewModelByBookId(int bookId, int? currentBookPage)
         {
             var model = _bookRepository.GetBookByID(bookId);
 
@@ -76,6 +78,26 @@ namespace TypingBook.Services
                 BookTitle = model.Title,
                 BookID = model.Id
             };
-        } 
+        }
+
+        public bool SaveBookProgress(string userId, int bookId, int typedBookPage)
+        {
+            var userData = _userDataRepository.GetById(userId);
+
+            Dictionary<int, int> bookProgress = _userDataHelper.DeserializeProgressBar(userData.BookProgress);
+
+            bookProgress[bookId] = typedBookPage;
+
+            try
+            {
+                _userDataRepository.SaveChanges();
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
