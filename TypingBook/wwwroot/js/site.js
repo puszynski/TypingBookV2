@@ -42,8 +42,7 @@ function typingBook(currentBookPage, bookPagesJson, isIntroduction) {
                 var bookPages = bookPagesJson;
                 var nextPage = ++currentBookPage;
 
-                saveBookPageProgress();
-                saveStatisticsProgress();
+                saveTypingResult();
 
                 $('.progress-bar-correct').css({ 'width': '0%' });
                 $('.progress-bar-wrong').css({ 'width': '0%' });
@@ -98,22 +97,11 @@ function updateBookPageStatusBar(pageLength) {
     $('.progress-bar-wrong').css({ 'width': wrongPercent + '%' });
 }
 
-function saveBookPageProgress() {
+
+
+
+function saveTypingResult() {
     var url = '/Typing/SaveTypingResult';
-
-    $.ajax({
-        url: url,
-        data: {
-            input: "razdwatrzy"
-        },
-        type: 'POST',
-        datatype: 'json'
-    });
-}
-
-
-function saveStatisticsProgress() {
-    var url = '/Statistics/SaveStatisticProgress';
 
     var correctTyped = parseInt($(".correctTyped").text(), 10);
     var wrongTyped = parseInt($(".wrongTyped").text(), 10);
@@ -124,14 +112,15 @@ function saveStatisticsProgress() {
             correctTyped: correctTyped,
             wrongTyped: wrongTyped
         },
-        type: 'GET',
-        datatype: 'json'
+        // Send object => https://stackoverflow.com/questions/1068189/post-an-object-as-data-using-jquery-ajax
+        type: 'POST',
+        datatype: 'json',
         //success: function () {
         //    alert("Data has been added successfully.");  
         //    LoadData();
         //},
-        //error: function () {
-        //    alert("Error while inserting data");
-        //}
+        error: function () {
+           console.log("Error while calling the /Typing/SaveTypingResult from site.js, function: saveTypingResult()");
+        }
     });
 }

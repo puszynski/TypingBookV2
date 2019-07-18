@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using TypingBook.Helpers;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
-using TypingBook.ViewModels.Home;
 using TypingBook.ViewModels.Typing;
 
 namespace TypingBook.Controllers
@@ -24,7 +22,7 @@ namespace TypingBook.Controllers
             _typingServices = typingServices;
         }
 
-        // move typing here
+        
         [HttpGet]
         public IActionResult Index(int? bookId, int? currentBookPage)
         {
@@ -45,67 +43,31 @@ namespace TypingBook.Controllers
             else
                 return View(result);
         }
-               
+        
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult GetBookProgress(TypingViewModel model)
+        // TODO call from js
+        [HttpPost]
+        public IActionResult SaveTypingResult(int correctTyped, int wrongTyped, TypingViewModel model = null)
         {
             var userId = GetLoggedUserId();
+            
+            if (model == null || string.IsNullOrEmpty(userId))
+                return BadRequest();
 
-            if (_memoryCache.TryGetValue($"Book_ID{bookId}", out TypingViewModel book))
+            if (_memoryCache.TryGetValue($"Book{model.BookId}User{userId}", out TypingViewModel book))
             {
-                book.currentBookPage = currentBookPage;
+                _memoryCache.Remove($"Book{model.BookId}User{userId}");
+                _memoryCache.Set(
+                    $"Book{model.BookId}User{userId}", 
+                    model, 
+                    new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(90))
+                    );                
             }
             else
-            {
-                var cacheEntry = model;
-                _cache.Set($"Book_ID{bookId}", cacheEntry, cacheEntryOptions);
+                _memoryCache.Set($"Book{model.BookId}User{userId}", model);
 
-            }
-            //save in cache => https://docs.microsoft.com/pl-pl/aspnet/core/performance/caching/memory?view=aspnetcore-2.2
-
-            var cacheEntry = DateTime.Now;
-            _memoryCache.Save;
-
-
-            //save in db
-            if (userId == null)
-                return null;
-
-            var userData = _userDataRepository.GetById(userId);
-
-            var userDataHelper = new UserDataHelper();
-
-            var model = new UserDataViewModel()
-            {
-                BookProgress = userDataHelper.DeserializeProgressBar(userData.BookProgress),                
-                Statistics = userDataHelper.DeserializeStatisticBar(userData.Statistics)
-            };
-
-            return Json(userData);
-        }
-
-        // TODO WYWOŁAĆ TĄ AKCJE Z JS PODCZAS TYPING
-        [HttpPost]
-        public IActionResult SaveTypingResult(int bookId, int typedBookPage)
-        {
-            var userId = GetLoggedUserId();
-
-
-
-            // TODO - aktualizuj cache po każdej stronie!
-
-            if (!string.IsNullOrEmpty(userId))
-                _typingServices.SaveBookProgress(userId, bookId, typedBookPage); //TODO use boolen
-
-            return Ok();
-        }
-
-        [Authorize]
-        private SaveBookProgressInDB()
-        {
-
+            var result = _typingServices.SaveBookProgress(model, userId);  
+            return Ok(result);
         }
     }
 }

@@ -1,4 +1,4 @@
-using TypingBook.ViewModels.Home;
+using TypingBook.ViewModels.Typing;
 
 namespace TypingBook.Services.IServices
 {
@@ -6,6 +6,6 @@ namespace TypingBook.Services.IServices
     {
         TypingViewModel GetTypingViewModel(string userId, int? bookId, int? currentBookPage);
 
-        bool SaveBookProgress(string userId, int bookId, int typedBookPage);
+        bool SaveBookProgress(TypingViewModel model, string userId);
     }
 }

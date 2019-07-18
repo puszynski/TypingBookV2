@@ -3,7 +3,7 @@ using System.Linq;
 using TypingBook.Helpers;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
-using TypingBook.ViewModels.Home;
+using TypingBook.ViewModels.Typing;
 
 namespace TypingBook.Services
 {
@@ -46,7 +46,7 @@ namespace TypingBook.Services
                 CurrentBookPage = 0,
                 BookPages = _typingHelper.DivideBook(introduction),
                 BookTitle = "Introduction",
-                BookID = 0
+                BookId = 0
             };
         }
 
@@ -76,17 +76,17 @@ namespace TypingBook.Services
                 CurrentBookPage = currentBookPage ?? 0,
                 BookPages = _typingHelper.DivideBook(model.Content),
                 BookTitle = model.Title,
-                BookID = model.Id
+                BookId = model.Id
             };
         }
 
-        public bool SaveBookProgress(string userId, int bookId, int typedBookPage)
+        public bool SaveBookProgress(TypingViewModel model, string userId)
         {
             var userData = _userDataRepository.GetById(userId);
 
             Dictionary<int, int> bookProgress = _userDataHelper.DeserializeProgressBar(userData.BookProgress);
 
-            bookProgress[bookId] = typedBookPage;
+            bookProgress[model.BookId] = model.CurrentBookPage;
 
             try
             {
@@ -96,7 +96,6 @@ namespace TypingBook.Services
             {
                 return false;
             }
-
             return true;
         }
     }
