@@ -30,7 +30,7 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
             var decreasedValue = parseInt($(".correctTyped").text(), 10) + 1;
             $('.correctTyped').html(decreasedValue);
 
-            updateBookPageStatusBar(bookId, currentBookPage);
+            updateBookPageStatusBar(pageLength);
 
             //document.body.style.backgroundColor = "dimgray";
             document.getElementById('typed_content').innerHTML += book_content.charAt(0);
@@ -42,7 +42,7 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
                 var bookPages = bookPagesJson;
                 var nextPage = ++currentBookPage;
 
-                saveTypingResult(nextPage);
+                saveTypingResult(bookId, nextPage);
 
                 $('.progress-bar-correct').css({ 'width': '0%' });
                 $('.progress-bar-wrong').css({ 'width': '0%' });
