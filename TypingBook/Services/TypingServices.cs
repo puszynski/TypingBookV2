@@ -84,9 +84,10 @@ namespace TypingBook.Services
         {
             var userData = _userDataRepository.GetById(userId);
 
-            Dictionary<int, int> bookProgress = _userDataHelper.DeserializeProgressBar(userData.BookProgress);
+            var bookProgress = _userDataHelper.DeserializeProgressBar(userData.BookProgress);
+            bookProgress[bookId] = nextBookPage;
 
-            bookProgress[bookId] = nextBookPage; // musisz jeszcze umieścić go jako pierwszą pozycje (może być na innej - aby było jako pstatnio czytana)
+            userData.BookProgress = _userDataHelper.SerializeProgressBar(bookProgress);
 
             try
             {
