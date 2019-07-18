@@ -49,10 +49,27 @@ namespace TypingBook.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetBookProgress()
+        public IActionResult GetBookProgress(TypingViewModel model)
         {
             var userId = GetLoggedUserId();
 
+            if (_memoryCache.TryGetValue($"Book_ID{bookId}", out TypingViewModel book))
+            {
+                book.currentBookPage = currentBookPage;
+            }
+            else
+            {
+                var cacheEntry = model;
+                _cache.Set($"Book_ID{bookId}", cacheEntry, cacheEntryOptions);
+
+            }
+            //save in cache => https://docs.microsoft.com/pl-pl/aspnet/core/performance/caching/memory?view=aspnetcore-2.2
+
+            var cacheEntry = DateTime.Now;
+            _memoryCache.Save;
+
+
+            //save in db
             if (userId == null)
                 return null;
 
@@ -75,12 +92,20 @@ namespace TypingBook.Controllers
         {
             var userId = GetLoggedUserId();
 
+
+
             // TODO - aktualizuj cache po każdej stronie!
 
             if (!string.IsNullOrEmpty(userId))
                 _typingServices.SaveBookProgress(userId, bookId, typedBookPage); //TODO use boolen
 
             return Ok();
+        }
+
+        [Authorize]
+        private SaveBookProgressInDB()
+        {
+
         }
     }
 }

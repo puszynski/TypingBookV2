@@ -7,7 +7,7 @@ namespace TypingBook.ViewModels.Home
 {
     public class TypingViewModel
     {
-        public int BookID { get; set; }
+        public int BookId { get; set; }
 
         // BookContent devided into list
         public List<string> BookPages { get; set; }
