@@ -55,7 +55,7 @@ namespace TypingBook.Helpers
                 sb.Append(item.Key+":"+item.Value+" ");
             }
 
-            return sb.ToString();
+            return sb.ToString().TrimEnd();
         }
 
         public Dictionary<DateTime, int> DeserializeStatisticBar(string input)

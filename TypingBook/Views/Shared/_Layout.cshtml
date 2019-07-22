@@ -18,16 +18,13 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <div class="progress bg-dark" style="height:1px">
-        <div class="progress-bar bg-light progress-bar-correct" style="width:0%">
-        </div>
-        <div class="progress-bar bg-danger progress-bar-wrong" style="width:0%">
-        </div>
+    <div class="progress bg-light" style="height:5px">
+        <div id="progress-bar-correct" class="progress-bar bg-info progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+        <div id="progress-bar-wrong" class="progress-bar bg-danger progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
-
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">                
+            <div class="container">
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -39,26 +36,27 @@
 
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Index" asp-controller="Typing" asp-route-id="123"
-                               data-target="body-container" id="ajax_link">Type!</a>
+                            <a class="nav-link text-dark" asp-action="Index" asp-controller="Typing">Type!</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Index" asp-controller="Book" asp-route-id="123"
-                               data-target="body-container" id="ajax_link">Books</a>
+                            <a class="nav-link text-dark" asp-action="Index" asp-controller="Book">Books</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Privacy" asp-controller="Home" asp-route-id="123"
-                               data-target="body-container" id="ajax_link">Privacy</a>
+                            <a class="nav-link text-dark" asp-action="Privacy" asp-controller="Home">Privacy</a>
                         </li>
                     </ul>
-
                 </div>
+
+
             </div>
         </nav>
     </header>
     <div class="container body-container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
+                            
+
+
             @RenderBody()
         </main>
     </div>

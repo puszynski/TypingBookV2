@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using TypingBook.Helpers;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
-using TypingBook.ViewModels.Home;
 using TypingBook.ViewModels.Typing;
 
 namespace TypingBook.Controllers
@@ -24,19 +22,14 @@ namespace TypingBook.Controllers
             _typingServices = typingServices;
         }
 
-        // move typing here
+        
         [HttpGet]
         public IActionResult Index(int? bookId, int? currentBookPage)
         {
             var result = new TypingViewModel();
-
-            if (bookId.HasValue && _memoryCache.TryGetValue($"Book_ID{bookId}", out TypingViewModel book))
-                result = book; // warunek: aby poprawnie działało => aktualizuj cache po każdej stronie! (w akcji zapisywania progresu)
-            else
-            {
-                var userId = GetLoggedUserId();
-                result = _typingServices.GetTypingViewModel(userId, bookId, currentBookPage);
-            }
+            var userId = GetLoggedUserId();
+            
+            result = _typingServices.GetTypingViewModel(userId, bookId, currentBookPage);
             
             bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
 
@@ -45,44 +38,19 @@ namespace TypingBook.Controllers
             else
                 return View(result);
         }
-               
-
-        [HttpGet]
-        [Authorize]
-        public IActionResult GetBookProgress()
-        {
-            var userId = GetLoggedUserId();
-
-            if (userId == null)
-                return null;
-
-            var userData = _userDataRepository.GetById(userId);
-
-            var userDataHelper = new UserDataHelper();
-
-            var model = new UserDataViewModel()
-            {
-                BookProgress = userDataHelper.DeserializeProgressBar(userData.BookProgress),                
-                Statistics = userDataHelper.DeserializeStatisticBar(userData.Statistics)
-            };
-
-            return Json(userData);
-        }
-
+        
+        
         [HttpPost]
-        public IActionResult SaveBookProgress()
+        [Authorize]
+        public IActionResult SaveTypingResult(int bookId, int nextBookPage, int correctTyped, int wrongTyped)//bookId pokazuje jakby currentPage+1, nextBookPage jest undifined..
         {
             var userId = GetLoggedUserId();
-
-            // TODO - aktualizuj cache po każdej stronie!
-
-            if (userId == null)
-                return null;
-
-            var userData = "";
             
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest();
 
-            return Json(userData);
+            var result = _typingServices.SaveBookProgress(bookId, nextBookPage, userId);  
+            return Ok(result);
         }
     }
 }

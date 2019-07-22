@@ -37,7 +37,7 @@ namespace TypingBook
             services.Configure<IdentityOptions>(options =>
             {
                 // custom passoward validation
-                options.Password.RequiredLength = 5;
+                options.Password.RequiredLength = 3;
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
@@ -57,13 +57,10 @@ namespace TypingBook
             services.AddScoped<IUserDataRepository, UserDataRepository>();
 
             // services
-            services.AddScoped<ITypingServices, TypingServices>();
-            
-            services.AddMvc()
-                .AddNewtonsoftJson();
+            services.AddScoped<ITypingServices, TypingServices>();            
+            services.AddMvc().AddNewtonsoftJson();
+            services.AddMemoryCache(); // IMemoryCache store data in the memory of web server, in future set size/limit to cache => https://docs.microsoft.com/pl-pl/aspnet/core/performance/caching/memory?view=aspnetcore-2.2#use-setsize-size-and-sizelimit-to-limit-cache-size
 
-            services
-                .AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,18 +81,8 @@ namespace TypingBook
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-
-            //app.UseRouting(routes =>
-            //{
-            //    routes.MapApplication();
-            //    routes.MapControllerRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(routes =>
             {
                 routes.MapRazorPages();
@@ -103,9 +90,7 @@ namespace TypingBook
                     name: "default",
                     pattern: "{controller=Typing}/{action=Index}/{id?}");
             });
-
             app.UseCookiePolicy();
-
         }
     }
 }

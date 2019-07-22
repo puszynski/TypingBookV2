@@ -1,7 +1,6 @@
-﻿@model TypingBook.ViewModels.Home.TypingViewModel
+﻿@model TypingBook.ViewModels.Typing.TypingViewModel
 @{
     var bookPages = @Html.Raw(Json.Serialize(Model.BookPages));
-    var isIntroduction = @ViewBag.IsIntroduction == true ? 1 : 0;
 }
 
 <h1 @*class="display-4"*@>
@@ -12,8 +11,8 @@
 </h6>
 
 <div class="statistic">
-    Correct typed: <span class="correctTyped">0</span>,
-    wrong typed: <span class="wrongTyped">0</span>
+    Correct typed: <span id="correctTyped">0</span>
+    wrong typed: <span id="wrongTyped">0</span>
     typed code: <span class="typedCode">0</span>
     code to type: <span class="codeToType">0</span>
 </div>
@@ -24,6 +23,6 @@
 
 <script>
 
-    typingBook(@Model.CurrentBookPage, @bookPages, @isIntroduction);
+    typingBook(@Model.CurrentBookPage, @bookPages, @Model.BookId);
 </script>
 
