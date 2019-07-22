@@ -27,8 +27,8 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
         $('.codeToType').html(book_content.charCodeAt(0));
 
         if (isSameChar(e.which, book_content.charCodeAt(0))) {
-            var decreasedValue = parseInt($(".correctTyped").text(), 10) + 1;
-            $('.correctTyped').html(decreasedValue);
+            var decreasedValue = parseInt($("#correctTyped").text(), 10) + 1;
+            $('#correctTyped').html(decreasedValue);
 
             updateBookPageStatusBar(pageLength);
 
@@ -46,8 +46,8 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
 
                 $('.progress-bar-correct').css({ 'width': '0%' });
                 $('.progress-bar-wrong').css({ 'width': '0%' });
-                $('.correctTyped').html('0');
-                $('.wrongTyped').html('0');
+                $('#correctTyped').html('0');
+                $('#wrongTyped').html('0');
 
                 if (bookPages.length <= nextPage) {                    
                         window.location.href = '@Url.Action("Index", "Book")'; 
@@ -59,8 +59,8 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
             }
         }
         else {
-            var increasedValue = parseInt($(".wrongTyped").text(), 10) + 1;
-            $('.wrongTyped').html(increasedValue);
+            var increasedValue = parseInt($("#wrongTyped").text(), 10) + 1;
+            $('#wrongTyped').html(increasedValue);
 
             //document.body.style.backgroundColor = "white";
             updateBookPageStatusBar(pageLength);
@@ -81,14 +81,14 @@ function isSameChar(typedCharCode, charToType) {
 
 
 function updateBookPageStatusBar(pageLength) {
-    var correctTyped = parseInt($(".correctTyped").text(), 10);
-    var wrongTyped = parseInt($(".wrongTyped").text(), 10);
+    var correctTyped = parseInt($("#correctTyped").text(), 10);
+    var wrongTyped = parseInt($("#wrongTyped").text(), 10);
 
     var correctPercent = correctTyped / (pageLength + wrongTyped) * 100;
     var wrongPercent = wrongTyped / (pageLength + wrongTyped) * 100;
 
-    $('.progress-bar-correct').css({ 'width': correctPercent + '%' });
-    $('.progress-bar-wrong').css({ 'width': wrongPercent + '%' });
+    $('#progress-bar-correct').css({ 'width': correctPercent + '%' });
+    $('#progress-bar-wrong').css({ 'width': wrongPercent + '%' });
 }
 
 
@@ -97,8 +97,8 @@ function updateBookPageStatusBar(pageLength) {
 function saveTypingResult(bookId, nextBookPage) {
     var url = '/Typing/SaveTypingResult';
 
-    var correctTyped = parseInt($(".correctTyped").text(), 10);
-    var wrongTyped = parseInt($(".wrongTyped").text(), 10);
+    var correctTyped = parseInt($("#correctTyped").text(), 10);
+    var wrongTyped = parseInt($("#wrongTyped").text(), 10);
 
     $.ajax({
         url: url,
