@@ -18,7 +18,7 @@ namespace TypingBook.Repositories
 
         public Book GetBookByID(int id)
         {
-            return _db.Books.Single(x => x.ID == id);
+            return _db.Books.Single(x => x.Id == id);
         }
 
         public async Task<Book> GetAsyncBookByID(int id)

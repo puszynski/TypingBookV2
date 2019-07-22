@@ -3,7 +3,7 @@ When add new book - genre is not saved in DB
 
 
 todo:
-- save progress to logged users
+- save progress to logged users -> MODIFY USER TABLE! => https://medium.com/@nativoplus/asp-net-core-identity-3-0-6018fc151b4
 - typingController as start - when not logged, standard start content; When logged - go to last page
 - book page changing by roll the bar(?) or ..
 - normal user / admin - when normal user add book as public - admin must approve it

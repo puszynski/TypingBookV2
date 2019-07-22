@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using TypingBook.Data;
 using TypingBook.Repositories;
 using TypingBook.Repositories.IReporitories;
+using TypingBook.Services;
+using TypingBook.Services.IServices;
 
 namespace TypingBook
 {
@@ -34,7 +37,7 @@ namespace TypingBook
             services.Configure<IdentityOptions>(options =>
             {
                 // custom passoward validation
-                options.Password.RequiredLength = 5;
+                options.Password.RequiredLength = 3;
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
@@ -51,20 +54,17 @@ namespace TypingBook
             // repositories
             services.AddScoped<IBookRepository, BookRepository>(); 
             services.AddScoped<IAgreementRepository, AgreementRepository>();
+            services.AddScoped<IUserDataRepository, UserDataRepository>();
 
-            // TO REMOVE
-            services
-                .AddSingleton<ISQLiteDapperRepository, SQLiteDapperRepository>();
+            // services
+            services.AddScoped<ITypingServices, TypingServices>();            
+            services.AddMvc().AddNewtonsoftJson();
+            services.AddMemoryCache(); // IMemoryCache store data in the memory of web server, in future set size/limit to cache => https://docs.microsoft.com/pl-pl/aspnet/core/performance/caching/memory?view=aspnetcore-2.2#use-setsize-size-and-sizelimit-to-limit-cache-size
 
-            services.AddMvc()
-                .AddNewtonsoftJson();
-
-            services
-                .AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -81,27 +81,16 @@ namespace TypingBook
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-
-            //app.UseRouting(routes =>
-            //{
-            //    routes.MapApplication();
-            //    routes.MapControllerRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
-
-            app.UseEndpoints(routes =>
-            {
-                routes.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRazorPages();
-            });
-
-            app.UseCookiePolicy();
-
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseEndpoints(routes =>
+            {
+                routes.MapRazorPages();
+                routes.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Typing}/{action=Index}/{id?}");
+            });
+            app.UseCookiePolicy();
         }
     }
 }
