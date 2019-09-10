@@ -7,6 +7,6 @@ todo:
 - typingController as start - when not logged, standard start content; When logged - go to last page
 - book page changing by roll the bar(?) or ..
 - normal user / admin - when normal user add book as public - admin must approve it
-- admin task - programs that can by run manualy by admin user (1) it will run thru all books and use "bookContentHelper.TransformeBookContent(model.Content)" and others methods to transorm actuall db data (e.g. when transform code logic will changed)
+- CREATE TASK SCHEDULE => https://docs.microsoft.com/pl-pl/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-2.2&tabs=visual-studio //// admin task - programs that can by run manualy by admin user (1) it will run thru all books and use "bookContentHelper.TransformeBookContent(model.Content)" and others methods to transorm actuall db data (e.g. when transform code logic will changed)
 
 ideas:
