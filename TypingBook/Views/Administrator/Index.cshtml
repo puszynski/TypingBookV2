@@ -12,7 +12,7 @@
         <tr>
             <td>@role.Id</td>
             <td>@role.Name</td>
-            <td i-role="@role.Id"></td> @*Data added via Tag Helpers (HtmlHelpers/RoleUsersHelpers.cs)*@
+            <td><async-roleusers i-role="@role.Id">tu</async-roleusers></td> @*Data added via Tag Helpers*@
             <td><a class="btn btn-sm btn-primary" asp-action="UpdateUserRole" asp-route-id="@role.Id">Update</a></td>
             <td>
                 <form asp-action="DeleteUserRole" asp-route-id="@role.Id" method="post">
