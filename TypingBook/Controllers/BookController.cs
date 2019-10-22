@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using TypingBook.Enums;
@@ -53,6 +54,7 @@ namespace TypingBook.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             var model = new BookRowViewModel();
@@ -60,6 +62,7 @@ namespace TypingBook.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(BookRowViewModel model)
         {
             if (!ModelState.IsValid)
@@ -84,6 +87,7 @@ namespace TypingBook.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(int id)
         {
             var sql = _bookRepository.GetBookByID(id);
@@ -107,6 +111,7 @@ namespace TypingBook.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Edit(BookRowViewModel model)
         {
             if (!ModelState.IsValid)
@@ -141,6 +146,7 @@ namespace TypingBook.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
