@@ -50,7 +50,7 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
                 $('#wrongTyped').html('0');
 
                 if (bookPages.length <= nextPage) {                    
-                        window.location.href = '@Url.Action("Index", "Book")'; 
+                        window.location.href = 'book'; //redirect when book ends
                 }
                 else {
                     document.getElementById('typed_content').innerHTML = '';

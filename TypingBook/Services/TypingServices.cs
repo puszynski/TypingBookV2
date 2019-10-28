@@ -33,7 +33,15 @@ namespace TypingBook.Services
             else
                 result = GetModelForLoggedUser(userId);
 
+            if (IsEndOfTheBook(result.CurrentBookPage, result.BookPages.Count))
+                return null;
+
             return result;
+        }
+
+        bool IsEndOfTheBook(int currentPage, int bookPages)
+        {
+            return currentPage == bookPages ? true : false;
         }
 
         TypingViewModel GetIntroductionModel()
