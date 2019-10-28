@@ -53,30 +53,22 @@ h1 {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+    
 }
 
+.container {
+    padding-top: 50px;
+}
 
 .typed_text {
     color: gray;
 }
 
-
 .blink_text {
     animation: 1s blinker linear infinite;
     -webkit-animation: 1s blinker linear infinite;
     -moz-animation: 1s blinker linear infinite;
-    color: black;
+    color: white;
 }
 @-moz-keyframes blinker {
     0% {

@@ -30,6 +30,9 @@ namespace TypingBook.Controllers
             var userId = GetLoggedUserId();
             
             result = _typingServices.GetTypingViewModel(userId, bookId, currentBookPage);
+
+            if (result == null)
+                return RedirectToAction("Index","Book");
             
             bool isAjaxCall = Request.Headers["x-requested-with"] == "XMLHttpRequest";
 
