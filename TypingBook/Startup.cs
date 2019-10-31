@@ -48,9 +48,9 @@ namespace TypingBook
                     Configuration.GetConnectionString("DefaultConnection")));
                         
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
+                //.AddDefaultUI(UIFramework.Bootstrap4) //changed after update to core 3.0 (from preview version)
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
 
             // repositories
             services.AddScoped<IBookRepository, BookRepository>(); 

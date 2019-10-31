@@ -9,7 +9,7 @@ namespace TypingBook.Controllers
         // Typing/Index is default route
         public string Index()
         {
-            return "Ops - that route is out of date!";
+            return "Ops - the route is out of date!";
         }
 
         public IActionResult Privacy()
