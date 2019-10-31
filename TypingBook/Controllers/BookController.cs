@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TypingBook.Enums;
@@ -26,17 +27,15 @@ namespace TypingBook.Controllers
 
             // todo - get loggged user
             //var user = User... if user == null ..... else ...
-
-
+            
             if (!string.IsNullOrWhiteSpace(bookOrAuthorSearchString))
                 sql = sql.Where(x => x.Title.Contains(bookOrAuthorSearchString)
                                 || x.Authors.Contains(bookOrAuthorSearchString));
 
             if (genreFilter.HasValue)
                 sql = sql.Where(x => (x.Genre & genreFilter) > 0);
-
-
-            var row = sql.Select(x => new BookRowViewModel
+            
+            var row = sql.ToList().Select(x => new BookRowViewModel
             {
                 ID = x.Id,
                 Title = x.Title,
@@ -53,7 +52,7 @@ namespace TypingBook.Controllers
             // TODO - if ajax load partial view like in Home/Index
             return View(model);
         }
-
+        
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
