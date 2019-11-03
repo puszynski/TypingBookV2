@@ -1,0 +1,9 @@
+﻿@model IEnumerable<Book>
+
+<h3>Only for testing - list of books creating by ViewComponent</h3>
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>@item.Title</li>
+    }
+</ul>

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,17 +47,23 @@ namespace TypingBook
                     Configuration.GetConnectionString("DefaultConnection")));
                         
             services.AddIdentity<IdentityUser, IdentityRole>()
-                //.AddDefaultUI(UIFramework.Bootstrap4) //changed after update to core 3.0 (from preview version)
                 .AddDefaultUI()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();// NEW ADD
+
+            //info:
+            //services.AddTransient - created each time they're requested from the service container. This lifetime works best for lightweight, stateless services
+            //services.AddScoped - once per client request (connection)
+            //services.AddSingleton - created the first time they're requested
 
             // repositories
             services.AddScoped<IBookRepository, BookRepository>(); 
-            services.AddScoped<IAgreementRepository, AgreementRepository>();
             services.AddScoped<IUserDataRepository, UserDataRepository>();
+            services.AddScoped<IAgreementRepository, AgreementRepository>();
 
             // services
-            services.AddScoped<ITypingServices, TypingServices>();            
+            services.AddScoped<IBookContentService, BookContentService>();
+            services.AddScoped<ITypingServices, TypingService>();            
             services.AddMvc().AddNewtonsoftJson();
             services.AddMemoryCache(); // IMemoryCache store data in the memory of web server, in future set size/limit to cache => https://docs.microsoft.com/pl-pl/aspnet/core/performance/caching/memory?view=aspnetcore-2.2#use-setsize-size-and-sizelimit-to-limit-cache-size
 

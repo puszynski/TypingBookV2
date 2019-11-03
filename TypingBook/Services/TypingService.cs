@@ -7,14 +7,14 @@ using TypingBook.ViewModels.Typing;
 
 namespace TypingBook.Services
 {
-    public class TypingServices : ITypingServices
+    public class TypingService : ITypingServices
     {
         readonly IBookRepository _bookRepository;
         readonly IUserDataRepository _userDataRepository;
         readonly TypingHelper _typingHelper;
         readonly UserDataHelper _userDataHelper;
 
-        public TypingServices(IBookRepository bookRepository, IUserDataRepository userDataRepository)
+        public TypingService(IBookRepository bookRepository, IUserDataRepository userDataRepository)
         {
             _bookRepository = bookRepository;
             _userDataRepository = userDataRepository;

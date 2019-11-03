@@ -8,8 +8,11 @@
         @Html.ValidationSummary()
     </p>
     <p>
-        @Html.LabelFor(x => x.Title)
-        @Html.EditorFor(x => x.Title)
+        @*@Html.LabelFor(x => x.Title)*@
+        <label asp-for="nameof(@Model.Title)" class="control-label"></label>
+        @*@Html.EditorFor(x => x.Title)*@
+        <input asp-for="nameof(@Model.Title)" class="form-control" />
+        <span asp-validation-for="nameof(@Model.Title)" class="text-danger"></span>
     </p>
     <p>
         @Html.LabelFor(x => x.Content)

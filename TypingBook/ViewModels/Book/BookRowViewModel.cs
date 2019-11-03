@@ -12,6 +12,7 @@ namespace TypingBook.ViewModels.Book
         public int ID { get; set; }
 
         [Required]
+        [StringLength(60, MinimumLength = 2)]
         [Display(Name = "Book Title")]
         public string Title { get; set; }
 
