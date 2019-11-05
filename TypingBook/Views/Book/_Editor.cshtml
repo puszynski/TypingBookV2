@@ -1,36 +1,51 @@
 ﻿@model TypingBook.ViewModels.Book.BookRowViewModel
 
-@Html.HiddenFor(x => x.ID)
+@*@Html.HiddenFor(x => x.ID)*@
+    
+    <h4></h4>
+    <hr/>
 
-@using (Html.BeginForm())
-{
-    <p>
-        @Html.ValidationSummary()
-    </p>
-    <p>
-        @*@Html.LabelFor(x => x.Title)*@
-        <label asp-for="nameof(@Model.Title)" class="control-label"></label>
-        @*@Html.EditorFor(x => x.Title)*@
-        <input asp-for="nameof(@Model.Title)" class="form-control" />
-        <span asp-validation-for="nameof(@Model.Title)" class="text-danger"></span>
-    </p>
-    <p>
-        @Html.LabelFor(x => x.Content)
-        @Html.TextAreaFor(x => x.Content)
-    </p>
-    <p>
-        @Html.LabelFor(x => x.Authors)
-        @Html.EditorFor(x => x.Authors)
-    </p>
-    <p>
-        @Html.LabelFor(x => x.Genre)
-        @Html.ListBoxFor(m => m.Genre, Model.GenreSelectListItem)
-    </p>
-    <p>
-        @Html.LabelFor(x => x.ReleaseDate)
-        @Html.EditorFor(x => x.ReleaseDate)
-    </p>
+    <div class="jumbotron">
+        <h1>Add new book</h1>
+        <p>Todo description - e.g. you can add new public book or privet...</p>
+    </div>
 
-    <input type="submit" value="Submit changes" />
-    <a asp-action="Index">Back to List</a>
-}
+
+    <div class="jumbotron">
+        <form asp-controller="Book" asp-action="Create" method="post">
+            <input name="nameof(@Model.ID)" type="hidden" value="<removed for brevity>">
+            @*<p>@Html.ValidationSummary()</p>*@
+            <div class="form-group">
+                @*@Html.LabelFor(x => x.Title)*@
+                @*@Html.EditorFor(x => x.Title)*@
+                <label asp-for="nameof(@Model.Title)" class="control-label"></label>
+                <input asp-for="nameof(@Model.Title)" class="form-control" />
+                <span asp-validation-for="nameof(@Model.Title)" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nameof(@Model.Content)" class="control-label"></label>
+                <input asp-for="nameof(@Model.Content)" class="form-control" />
+                <span asp-validation-for="nameof(@Model.Content)" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nameof(@Model.Authors)" class="control-label"></label>
+                <input asp-for="nameof(@Model.Authors)" class="form-control" />
+                <span asp-validation-for="nameof(@Model.Authors)" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nameof(@Model.Genre)" class="control-label"></label>
+                @*@Html.ListBoxFor(m => m.Genre, Model.GenreSelectListItem, "form-control")*@
+                <select asp-for="nameof(@Model.Genre)" asp-items="@Model.GenreSelectListItem" class="form-control"></select>
+                <span asp-validation-for="nameof(@Model.Genre)" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nameof(@Model.ReleaseDate)" class="control-label"></label>
+                <input asp-for="nameof(@Model.ReleaseDate)" class="form-control" />
+                <span asp-validation-for="nameof(@Model.ReleaseDate)" class="text-danger"></span>
+            </div>
+
+            <input type="submit" value="Submit changes" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </form>
+    </div>
+    
