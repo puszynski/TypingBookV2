@@ -1,0 +1,23 @@
+﻿@*NOT USED - ONLY TESTING RAZOR COMPONENTS*@
+@*https://docs.microsoft.com/pl-pl/aspnet/core/blazor/components?view=aspnetcore-3.0*@
+
+
+@using System.Globalization
+
+<h1 style="font-style:@_headingFontStyle">@_title</h1>
+ 
+
+<input id="useIndividualParams"
+       testInfo="@TestInfo"
+       isActive="@IsActive" />
+
+@code {
+    private string _headingFontStyle = "bold";
+    private string _title = "Reedit component - testing by jp";
+
+    [Parameter]
+    public string TestInfo { get; set; } = "fooo";
+
+    [Parameter]
+    public bool IsActive { get; set; } = true;
+}

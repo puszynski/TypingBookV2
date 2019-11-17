@@ -4,20 +4,26 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using TypingBook.Services.IServices;
 
 namespace TypingBook.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class AdministratorController : Controller
     {
         // TODO => https://www.yogihosting.com/aspnet-core-identity-roles/
         private RoleManager<IdentityRole> _roleManager;
         private UserManager<IdentityUser> _userManager;
+        private readonly IBookContentService _bookContentService;
 
-        public AdministratorController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public AdministratorController(
+            RoleManager<IdentityRole> roleManager, 
+            UserManager<IdentityUser> userManager,
+            IBookContentService bookContentService)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _bookContentService = bookContentService;
         }
 
         public IActionResult Index()
@@ -114,6 +120,18 @@ namespace TypingBook.Controllers
         {
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
+        }
+
+        [HttpPost]
+        public IActionResult ReeditBooksContent()
+        {
+            //TODO - run task
+            _bookContentService.ReeditBooksContent();
+
+            //Result - modal window with results?
+            TempData["ProcessMessage"] = "Email Sent Successfully. Test jp #1";
+            TempData["displayModal"] = "mainModal";
+            return RedirectToAction("Index");
         }
 
 

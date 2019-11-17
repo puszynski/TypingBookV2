@@ -9,9 +9,16 @@ namespace TypingBook.ViewModels.Book
 {
     public class BookRowViewModel
     {
+        public BookRowViewModel()
+        {
+            GenreSelectListItem = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
+        }
+
+
         public int ID { get; set; }
 
         [Required]
+        [StringLength(60, MinimumLength = 2)]
         [Display(Name = "Book Title")]
         public string Title { get; set; }
 
@@ -29,13 +36,7 @@ namespace TypingBook.ViewModels.Book
         [Display(Name = "Book Genre")]
         public List<int> Genre { get; set; }
 
-        public IEnumerable<SelectListItem> GenreSelectListItem
-        {
-            get
-            {
-                return CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
-            }
-        }
+        public IEnumerable<SelectListItem> GenreSelectListItem { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Relase Date")]

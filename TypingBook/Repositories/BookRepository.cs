@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TypingBook.Data;
 using TypingBook.Models;
@@ -29,6 +31,11 @@ namespace TypingBook.Repositories
         public IQueryable<Book> GetAllBooks()
         {
             return _db.Books;
+        }
+
+        public Task<List<Book>> GetAllBooksAsync()
+        {
+            return _db.Books.ToListAsync();
         }
 
         public void UpdateBook(Book model)

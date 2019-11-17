@@ -28,6 +28,7 @@ namespace TypingBook.Controllers
             // todo - get loggged user
             //var user = User... if user == null ..... else ...
             
+            //TODO FILTR NIE DZIAŁA ^^`
             if (!string.IsNullOrWhiteSpace(bookOrAuthorSearchString))
                 sql = sql.Where(x => x.Title.Contains(bookOrAuthorSearchString)
                                 || x.Authors.Contains(bookOrAuthorSearchString));

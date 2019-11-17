@@ -1,10 +1,13 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using TypingBook.Extensions;
 
 namespace TypingBook.Helpers
 {
+    [Obsolete("Use BookContentService")]
     public class BookContentHelper
     {
+        [Obsolete]
         public string TransformeBookContent(string input)
         {
             if (string.IsNullOrWhiteSpace(input))

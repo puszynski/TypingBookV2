@@ -4,34 +4,25 @@
     Layout = null;
 }
 
-<form>
-    Szukaj: <input type="text" id="book-search" name="bookOrCompanySearchString" />
-    Gatunek:
-    @Html.DropDownList("GenreFilter", Model.BookGenreSelectListItems)
-
-    @*
-        - same but prop in VM needed
-        @Html.DropDownListFor(x => x.Genre, Model.BookGenreSelectListItems)
-
-        - Alternative - Box list design, no prop in VM vs. prop needed
-        @Html.ListBox("GenreFilter", Model.BookGenreSelectListItems)
-        @Html.ListBoxFor(x => x.Genre, Model.BookGenreSelectListItems)
-    *@
-
-    <input type="submit" value="Refreash" /> | 
-    <a href="@Url.Action("Create")">Add New</a>
-</form>
-
+    <div class="jumbotron">
+        <form class="form-inline">
+            <input type="text" id="book-search" name="bookOrAuthorSearchString" placeholder="search by title or author" class="form-control w-25" />
+            @Html.DropDownList("GenreFilter", Model.BookGenreSelectListItems, new { @class = "form-control" })
+            <input type="submit" value="Apply filter" class="btn btn-secondary" />
+        </form>
+        <a href="@Url.Action("Create")" class="btn btn-primary btn-lg mt-5">Add New Book</a>
+    </div>
 
 @foreach (var item in Model)
 {
-    <h1 class="display-4">@item.Title</h1> 
-    <p>
-        by @item.Authors |
-        <a href="@Url.Action("Index", "Typing", new { bookId = item.ID })"><b>Type!</b></a> |
-        <a href="@Url.Action("Edit", new { id = item.ID })">Edit</a> |
-        <a href="@Url.Action("Delete", new { id = item.ID })">Delete</a>
-    </p>
-    <p>@item.Content</p>
-
+    <div class="jumbotron">
+        <h1 class="display-4">@item.Title</h1>
+        <p>by @item.Authors</p>
+            
+        <a href="@Url.Action("Index", "Typing", new { bookId = item.ID })" class="btn btn-primary btn-lg"><b>Type!</b></a>
+        <a href="@Url.Action("Edit", new { id = item.ID })" class="btn btn-secondary">Edit</a>
+        <a href="@Url.Action("Delete", new { id = item.ID })" class="btn btn-danger">Delete</a>
+        
+        <p>@item.Content</p>
+    </div>
 }
