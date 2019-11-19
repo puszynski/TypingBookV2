@@ -18,7 +18,6 @@ namespace TypingBook
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        private string _connectionString = null;
 
         public Startup(IConfiguration configuration)
         {            
@@ -43,20 +42,18 @@ namespace TypingBook
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             });
+            
 
+            //local DB
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("LocalDBConnection")));
 
+            //prod DB
+            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ProductionDBConnection"));
+            builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json      
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("LocalDBConnection")));
+                options.UseSqlServer(builder.ConnectionString));
 
-            //use secrets.json to add login and password to production connectionstring
-            var builder = new SqlConnectionStringBuilder(
-                Configuration.GetConnectionString("ProductionDBConnection"));
-            _connectionString = builder.ConnectionString;
-            //TODO - SWITCH LOCAL/PROD DB
-
-            builder.Password = Configuration["ProdDbPassword"];
-            _connectionString = builder.ConnectionString;
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI()
