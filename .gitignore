@@ -4,6 +4,8 @@
 # ignore a single (specyfic) file(JP add)
 TypingBookApp - Web Deploy.pubxml
 TypingBookApp - Web Deploy.pubxml.user
+appsettings.json
+appsettings.Development.json
 example.class
 
 
