@@ -68,7 +68,6 @@ namespace TypingBook
             // repositories
             services.AddScoped<IBookRepository, BookRepository>(); 
             services.AddScoped<IUserDataRepository, UserDataRepository>();
-            services.AddScoped<IAgreementRepository, AgreementRepository>();
 
             // services
             services.AddScoped<IBookContentService, BookContentService>();
