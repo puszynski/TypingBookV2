@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,12 +17,12 @@ namespace TypingBook
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
-        {
+        {            
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,15 +42,23 @@ namespace TypingBook
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             });
+            
 
+            //local DB
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("LocalDBConnection")));
+
+            //prod DB
+            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ProductionDBConnection"));
+            builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json      
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-                        
+                options.UseSqlServer(builder.ConnectionString));
+
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();// NEW ADD
+                .AddDefaultTokenProviders();
 
             //info:
             //services.AddTransient - created each time they're requested from the service container. This lifetime works best for lightweight, stateless services
@@ -70,7 +79,7 @@ namespace TypingBook
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
