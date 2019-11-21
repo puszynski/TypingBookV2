@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TypingBook.Data;
 
-namespace TypingBook.Data.Migrations
+namespace TypingBook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191119224236_InitialCreateAfterFixSeed")]
-    partial class InitialCreateAfterFixSeed
+    [Migration("20191121204110_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -259,7 +259,7 @@ namespace TypingBook.Data.Migrations
                             Content = "testContent",
                             Genre = 16,
                             Rate = 5,
-                            ReleaseDate = new DateTime(2019, 11, 19, 23, 42, 35, 23, DateTimeKind.Local).AddTicks(1206),
+                            ReleaseDate = new DateTime(2019, 11, 21, 21, 41, 8, 871, DateTimeKind.Local).AddTicks(7867),
                             Title = "testTitle"
                         });
                 });

@@ -6,19 +6,6 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Data\Migrations\20190615134215_AddUserIdToAgreement.cs" />
-    <Compile Remove="Data\Migrations\20190615134215_AddUserIdToAgreement.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190616070751_testMigrationToSeedAgreements.cs" />
-    <Compile Remove="Data\Migrations\20190616070751_testMigrationToSeedAgreements.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190616072807_SeedAgreements_noUserAssigned.cs" />
-    <Compile Remove="Data\Migrations\20190616072807_SeedAgreements_noUserAssigned.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190616074510_changeAgreementDescriptionLenghtTo100AndSeedAgreements.cs" />
-    <Compile Remove="Data\Migrations\20190616074510_changeAgreementDescriptionLenghtTo100AndSeedAgreements.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190618151514_AddUserData.cs" />
-    <Compile Remove="Data\Migrations\20190618151514_AddUserData.Designer.cs" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
