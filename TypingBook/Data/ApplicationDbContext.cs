@@ -34,6 +34,7 @@ namespace TypingBook.Data
                         ReleaseDate = DateTime.Now
                     }
                 );
+
         }
     }
 }

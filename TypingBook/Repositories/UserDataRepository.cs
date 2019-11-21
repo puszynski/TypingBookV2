@@ -19,7 +19,12 @@ namespace TypingBook.Repositories
 
         public UserData GetById(string id)
         {
-            return _db.UserData.Single(x => x.UserId == id);
+            var result = _db.UserData.SingleOrDefault(x => x.UserId == id);
+
+            if (result == null)
+                return Create(id);
+
+            return result;
         }
 
         public void UpdateById(UserData model)
@@ -35,6 +40,14 @@ namespace TypingBook.Repositories
         public void SaveChanges()
         {
             _db.SaveChanges();
+        }
+
+        private UserData Create(string id)
+        {
+            var newUserData = new UserData() { UserId = id };
+            _db.Add(newUserData);
+            SaveChanges();
+            return newUserData;
         }
     }
 }

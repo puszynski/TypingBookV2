@@ -33,6 +33,9 @@ namespace TypingBook.Services
             else
                 result = GetModelForLoggedUser(userId);
 
+            if (result == null)
+                result = GetIntroductionModel();
+
             if (IsEndOfTheBook(result.CurrentBookPage, result.BookPages.Count))
                 return null;
 
@@ -71,12 +74,15 @@ namespace TypingBook.Services
             var lastTypedBookId = _userDataHelper.GetLastBookId(userData.BookProgress);
             var lastTypedBookCurrentPage = _userDataHelper.GetLastCurrentBookPage(userData.BookProgress);
                                    
-            return GetTypingViewModelByBookId(lastTypedBookId.Value, lastTypedBookCurrentPage);
+            return GetTypingViewModelByBookId(lastTypedBookId, lastTypedBookCurrentPage);
         }
         
-        TypingViewModel GetTypingViewModelByBookId(int bookId, int? currentBookPage)
+        TypingViewModel GetTypingViewModelByBookId(int? bookId, int? currentBookPage)
         {
-            var model = _bookRepository.GetBookByID(bookId);
+            if (!bookId.HasValue)
+                return null;
+
+            var model = _bookRepository.GetBookByID(bookId.Value);
 
             return new TypingViewModel()
             {
