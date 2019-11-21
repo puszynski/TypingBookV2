@@ -5,7 +5,7 @@ using TypingBook.Enums;
 using TypingBook.Models;
 
 namespace TypingBook.Data
-{nude
+{
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -34,6 +34,7 @@ namespace TypingBook.Data
                         ReleaseDate = DateTime.Now
                     }
                 );
+
         }
     }
 }
