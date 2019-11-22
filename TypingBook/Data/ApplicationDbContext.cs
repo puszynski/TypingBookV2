@@ -21,19 +21,19 @@ namespace TypingBook.Data
             base.OnModelCreating(modelBuilder);
             
             // seed data
-            modelBuilder.Entity<Book>().HasData
-                (
-                    new Book
-                    {
-                        Id = 1,
-                        Title = "testTitle",
-                        Content = "testContent",
-                        Authors = "testAuthors",
-                        Genre = (int)EBookGenre.History,
-                        Rate = 5,
-                        ReleaseDate = DateTime.Now
-                    }
-                );
+            //modelBuilder.Entity<Book>().HasData
+            //    (
+            //        new Book
+            //        {
+            //            Id = 1,
+            //            Title = "testTitle",
+            //            Content = "testContent",
+            //            Authors = "testAuthors",
+            //            Genre = (int)EBookGenre.History,
+            //            Rate = 5,
+            //            ReleaseDate = DateTime.Now
+            //        }
+            //    );
 
         }
     }

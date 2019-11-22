@@ -33,6 +33,9 @@ namespace TypingBook.Helpers
 
         public Dictionary<int, int> DeserializeProgressBar(string input)
         {
+            if (string.IsNullOrEmpty(input))
+                return new Dictionary<int, int>(); 
+
             var result = new Dictionary<int, int>();
 
             var inputList = input.Split(' ');

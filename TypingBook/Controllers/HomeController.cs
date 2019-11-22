@@ -5,11 +5,10 @@ using TypingBook.Models;
 namespace TypingBook.Controllers
 {
     public class HomeController : BaseController
-    {   
-        // Typing/Index is default route
-        public string Index()
+    {
+        public IActionResult Index()
         {
-            return "Ops - the route is out of date!";
+            return RedirectToAction("Index", "Book", "");
         }
 
         public IActionResult Privacy()
