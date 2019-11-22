@@ -20,6 +20,8 @@ namespace TypingBook.Repositories
 
         public Book GetBookByID(int id)
         {
+            //what if you delete book => exeption in single ??
+
             return _db.Books.Single(x => x.Id == id);
         }
 
