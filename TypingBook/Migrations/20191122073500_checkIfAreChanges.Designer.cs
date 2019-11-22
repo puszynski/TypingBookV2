@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TypingBook.Data;
 
 namespace TypingBook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191122073500_checkIfAreChanges")]
+    partial class checkIfAreChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,6 +250,18 @@ namespace TypingBook.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Authors = "testAuthors",
+                            Content = "testContent",
+                            Genre = 16,
+                            Rate = 5,
+                            ReleaseDate = new DateTime(2019, 11, 22, 8, 34, 59, 405, DateTimeKind.Local).AddTicks(6885),
+                            Title = "testTitle"
+                        });
                 });
 
             modelBuilder.Entity("TypingBook.Models.UserData", b =>
