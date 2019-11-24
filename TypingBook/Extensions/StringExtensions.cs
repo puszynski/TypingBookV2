@@ -6,13 +6,10 @@ namespace TypingBook.Extensions
     {
         public static string RemoveSpacesFromBeginning(this string input)
         {
+            if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
             var result = input;
-
-            if (input == "")
-                return "";
-
-            if (input == " ")
-                return "";
 
             while (result[0].ToString() == " ")
                 result = result.Substring(1, result.Length - 1);
