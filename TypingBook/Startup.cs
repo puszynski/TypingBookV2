@@ -50,7 +50,7 @@ namespace TypingBook
 
             //prod DB
             var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ProductionDBConnection"));
-            builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json      
+            builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json (lovaly) or from settings(azure)     
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
 
@@ -85,17 +85,17 @@ namespace TypingBook
             app.UseDatabaseErrorPage();
             app.UseHsts();
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //    app.UseDatabaseErrorPage();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
