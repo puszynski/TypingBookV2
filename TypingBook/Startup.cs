@@ -42,7 +42,7 @@ namespace TypingBook
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             });
-            
+
 
             //local DB
             //services.AddDbContext<ApplicationDbContext>(options =>
@@ -53,6 +53,10 @@ namespace TypingBook
             builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json      
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
+
+            //only for test
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("ProductionDBConnection")));
 
 
             services.AddIdentity<IdentityUser, IdentityRole>()
@@ -80,17 +84,22 @@ namespace TypingBook
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //add for tests
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
+            app.UseHsts();
+
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseDatabaseErrorPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
