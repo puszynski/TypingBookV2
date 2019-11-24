@@ -54,11 +54,7 @@ namespace TypingBook
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
 
-            //only for test
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("ProductionDBConnection")));
-
-
+            
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
