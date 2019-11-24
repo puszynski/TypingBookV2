@@ -50,7 +50,7 @@ namespace TypingBook
 
             //prod DB
             var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ProductionDBConnection"));
-            builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json (lovaly) or from settings(azure)     
+            builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json (localy) or from azure settings     
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
 
