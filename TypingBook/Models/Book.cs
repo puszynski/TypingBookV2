@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TypingBook.Models.IModels;
 
 namespace TypingBook.Models
@@ -25,6 +28,18 @@ namespace TypingBook.Models
         public int? Genre { get; set; } // binary sum
 
         [DataType(DataType.Date)]
-        public DateTime? ReleaseDate { get; set; }        
+        public DateTime? ReleaseDate { get; set; }
+
+        [Required]
+        public DateTime AddDate { get; set; }
+                
+        [ForeignKey("IdentityUser")]
+        public string UserId { get; set; }
+        public IdentityUser User { get; set; }
+
+        public string License { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsVerified { get; set; }
     }
 }

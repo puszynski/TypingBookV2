@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TypingBook.Enums;
@@ -78,6 +78,9 @@ namespace TypingBook.Controllers
                 Genre = model.Genre.Sum(),
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
+                AddDate = DateTime.Now,
+                License = model.License,
+                IsVerified = false //if admin add true alse false
             };
 
             _bookRepository.CreateBook(sql);
@@ -105,7 +108,11 @@ namespace TypingBook.Controllers
                 Genre = sql.Genre.HasValue ? sql.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Authors = sql.Authors,
                 Rate = sql.Rate,
-                ReleaseDate = sql.ReleaseDate
+                ReleaseDate = sql.ReleaseDate,
+                AddDate = sql.AddDate,
+                IsVerified = sql.IsVerified,//if admin add - true?
+                License = sql.License,
+                UserId = sql.UserId
             };
             return View(model);
         }
@@ -132,6 +139,7 @@ namespace TypingBook.Controllers
             return RedirectToAction("Index");
         }
                 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
