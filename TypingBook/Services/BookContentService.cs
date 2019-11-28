@@ -9,6 +9,11 @@ namespace TypingBook.Services
     {
         private readonly IBookRepository _bookRepository;
 
+        public BookContentService()
+        {
+
+        }
+
         public BookContentService(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
@@ -24,7 +29,7 @@ namespace TypingBook.Services
             }
         }
 
-        string TransformeBookContent(string input)
+        public string TransformeBookContent(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return input;
