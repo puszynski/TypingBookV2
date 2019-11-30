@@ -7,5 +7,8 @@ namespace TypingBook.Controllers
     {
         protected string GetLoggedUserId() 
             => HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        protected bool IsLoggerdUserAdministrator()
+            => HttpContext.User.IsInRole("Administrator");
     }
 }

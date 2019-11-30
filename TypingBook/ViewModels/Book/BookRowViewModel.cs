@@ -41,5 +41,11 @@ namespace TypingBook.ViewModels.Book
         [DataType(DataType.Date)]
         [Display(Name = "Relase Date")]
         public DateTime? ReleaseDate { get; set; }
+
+
+        public DateTime AddDate { get; set; }
+        public string UserId { get; set; }
+        public string License { get; set; }
+        public bool IsVerified { get; set; }
     }
 }

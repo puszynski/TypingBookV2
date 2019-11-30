@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TypingBook.Enums;
@@ -8,6 +8,7 @@ using TypingBook.Extensions;
 using TypingBook.Helpers;
 using TypingBook.Models;
 using TypingBook.Repositories.IReporitories;
+using TypingBook.Services;
 using TypingBook.ViewModels.Book;
 
 namespace TypingBook.Controllers
@@ -23,11 +24,13 @@ namespace TypingBook.Controllers
 
         public IActionResult Index(string bookOrAuthorSearchString, int? genreFilter)
         {
-            var sql = _bookRepository.GetAllBooks();
+            IQueryable<Book> sql;
 
-            // todo - get loggged user
-            //var user = User... if user == null ..... else ...
-            
+            if (IsLoggerdUserAdministrator())
+                sql = _bookRepository.GetAllBooks();
+            else
+                sql = _bookRepository.GetAllBooks().Where(x => x.IsVerified == true);            
+
             //TODO FILTR NIE DZIAŁA ^^`
             if (!string.IsNullOrWhiteSpace(bookOrAuthorSearchString))
                 sql = sql.Where(x => x.Title.Contains(bookOrAuthorSearchString)
@@ -44,7 +47,10 @@ namespace TypingBook.Controllers
                 Authors = x.Authors,
                 Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Rate = x.Rate,
-                ReleaseDate = x.ReleaseDate
+                ReleaseDate = x.ReleaseDate,
+                AddDate = x.AddDate,
+                IsVerified = x.IsVerified,
+                License = x.License
             });
 
             var model = new BookViewModel(row);
@@ -68,16 +74,19 @@ namespace TypingBook.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var bookContentHelper = new BookContentHelper();
-            var enumConv = EnumBinarySumConverterHelper.GetInstance();
+            var bookService = new BookContentService();
 
             var sql = new Book
             {
                 Authors = model.Authors,
-                Content = bookContentHelper.TransformeBookContent(model.Content),
+                Content = bookService.TransformeBookContent(model.Content),
                 Genre = model.Genre.Sum(),
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
+                AddDate = DateTime.Now,
+                License = model.License,
+                IsVerified = IsLoggerdUserAdministrator() ? true : false,
+                UserId = GetLoggedUserId()
             };
 
             _bookRepository.CreateBook(sql);
@@ -88,8 +97,10 @@ namespace TypingBook.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int id) 
         {
+            // mozesz edytowac tylko swoje ksiazki chyba ze jestes adminem, to wszystkie
+            // jesli nie jestes uzytkownikiem - nic nie mozesz
             var sql = _bookRepository.GetBookByID(id);
 
             if (sql == null)
@@ -105,7 +116,11 @@ namespace TypingBook.Controllers
                 Genre = sql.Genre.HasValue ? sql.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Authors = sql.Authors,
                 Rate = sql.Rate,
-                ReleaseDate = sql.ReleaseDate
+                ReleaseDate = sql.ReleaseDate,
+                AddDate = sql.AddDate,
+                IsVerified = IsLoggerdUserAdministrator() ? true : sql.IsVerified,
+                License = sql.License,
+                UserId = sql.UserId
             };
             return View(model);
         }
@@ -119,8 +134,9 @@ namespace TypingBook.Controllers
 
             var sql = _bookRepository.GetBookByID(model.ID);
 
-            var bookContentHelper = new BookContentHelper();
-            sql.Content = bookContentHelper.TransformeBookContent(model.Content);
+            var bookService = new BookContentService();
+
+            sql.Content = bookService.TransformeBookContent(model.Content);
             sql.Authors = model.Authors;
             sql.ReleaseDate = model.ReleaseDate;
             sql.Title = model.Title;
@@ -132,6 +148,7 @@ namespace TypingBook.Controllers
             return RedirectToAction("Index");
         }
                 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
