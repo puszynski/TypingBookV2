@@ -165,7 +165,7 @@ namespace TypingBook.Controllers
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var book = await _bookRepository.GetAsyncBookByID(id);
             _bookRepository.RemoveBook(book);
