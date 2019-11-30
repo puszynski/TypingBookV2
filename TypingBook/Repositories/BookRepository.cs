@@ -20,9 +20,7 @@ namespace TypingBook.Repositories
 
         public Book GetBookByID(int id)
         {
-            //what if you delete book => exeption in single ??
-
-            return _db.Books.Single(x => x.Id == id);
+            return _db.Books.SingleOrDefault(x => x.Id == id);
         }
 
         public async Task<Book> GetAsyncBookByID(int id)
