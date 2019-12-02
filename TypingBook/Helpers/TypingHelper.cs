@@ -27,7 +27,7 @@ namespace TypingBook.Helpers
         /// </summary>
         public List<string> DivideBook(string bookContent)
         {
-            const int minAndMaxLenghtOfBothParts = 200;
+            const int minAndMaxLenghtOfBothParts = 100;//first it was 200
             var rest = bookContent;
             var firstPart = "";
             var secondPart = "";
@@ -47,7 +47,7 @@ namespace TypingBook.Helpers
                     secondPart = rest.Substring(0, rest.IndexOf(". ") + 1);
 
                     // todo
-                    if (secondPart.Length >= 200)
+                    if (secondPart.Length >= minAndMaxLenghtOfBothParts)
                     {
                         secondPart = rest.Substring(0, rest.IndexOf(" ") + 1); // narazie - awaryjnie gdy brak ". " rozdziela po spacji
                     }

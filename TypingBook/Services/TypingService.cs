@@ -94,8 +94,11 @@ namespace TypingBook.Services
             };
         }
 
-        public bool SaveBookProgress(int bookId, int nextBookPage, string userId)
+        public string SaveBookProgress(int bookId, int nextBookPage, string userId)
         {
+            if (bookId == 0)
+                return null; //no save for introduction
+
             var userData = _userDataRepository.GetById(userId);
 
             var bookProgress = _userDataHelper.DeserializeProgressBar(userData.BookProgress);
@@ -109,9 +112,9 @@ namespace TypingBook.Services
             }
             catch (System.Exception)
             {
-                return false;
+                return null;
             }
-            return true;
+            return userData.BookProgress;
         }
     }
 }
