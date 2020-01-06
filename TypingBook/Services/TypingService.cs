@@ -79,7 +79,7 @@ namespace TypingBook.Services
         
         TypingViewModel GetTypingViewModelByBookId(int? bookId, int? currentBookPage)
         {
-            if (!bookId.HasValue)
+            if (!bookId.HasValue || bookId.Value == 0)
                 return null;
 
             var model = _bookRepository.GetBookByID(bookId.Value);

@@ -79,7 +79,6 @@ function isSameChar(typedCharCode, charToType) {
         return false;
 }
 
-
 function updateBookPageStatusBar(pageLength) {
     var correctTyped = parseInt($("#correctTyped").text(), 10);
     var wrongTyped = parseInt($("#wrongTyped").text(), 10);
@@ -90,9 +89,6 @@ function updateBookPageStatusBar(pageLength) {
     $('#progress-bar-correct').css({ 'width': correctPercent + '%' });
     $('#progress-bar-wrong').css({ 'width': wrongPercent + '%' });
 }
-
-
-
 
 function saveTypingResult(bookId, nextBookPage) {
     var url = '/Typing/SaveTypingResult';
@@ -117,4 +113,20 @@ function saveTypingResult(bookId, nextBookPage) {
            console.log("Error while calling the /Typing/SaveTypingResult from site.js, function: saveTypingResult()");
         }
     });
+}
+
+function isCapslock(e) {
+    const IS_MAC = /Mac/.test(navigator.platform);
+
+    const charCode = e.charCode;
+    const shiftKey = e.shiftKey;
+
+    if (charCode >= 97 && charCode <= 122) {
+        capsLock = shiftKey;
+    } else if (charCode >= 65 && charCode <= 90
+        && !(shiftKey && IS_MAC)) {
+        capsLock = !shiftKey;
+    }
+
+    return capsLock;
 }
