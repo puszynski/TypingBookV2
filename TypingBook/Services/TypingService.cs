@@ -27,7 +27,7 @@ namespace TypingBook.Services
             var result = new TypingViewModel();
 
             if (bookId.HasValue)
-                result = GetTypingViewModelByBookId(bookId.Value, currentBookPage);
+                result = GetTypingViewModelByBookId(bookId.Value, currentBookPage, userId);
             else if (string.IsNullOrEmpty(userId))
                 result = GetIntroductionModel();
             else
@@ -74,15 +74,18 @@ namespace TypingBook.Services
             var lastTypedBookId = _userDataHelper.GetLastBookId(userData.BookProgress);
             var lastTypedBookCurrentPage = _userDataHelper.GetLastCurrentBookPage(userData.BookProgress);
                                    
-            return GetTypingViewModelByBookId(lastTypedBookId, lastTypedBookCurrentPage);
+            return GetTypingViewModelByBookId(lastTypedBookId, lastTypedBookCurrentPage, userId);
         }
         
-        TypingViewModel GetTypingViewModelByBookId(int? bookId, int? currentBookPage)
+        TypingViewModel GetTypingViewModelByBookId(int? bookId, int? currentBookPage, string userId)
         {
             if (!bookId.HasValue || bookId.Value == 0)
                 return null;
 
             var model = _bookRepository.GetBookByID(bookId.Value);
+
+            if (!currentBookPage.HasValue)
+                currentBookPage = TryGetCurrentBookPage(bookId.Value, userId);
 
             return new TypingViewModel()
             {
@@ -94,6 +97,13 @@ namespace TypingBook.Services
             };
         }
 
+        int? TryGetCurrentBookPage(int bookId, string userId)
+        {
+            var userBookProgress = _userDataRepository.GetById(userId).BookProgress;
+            var currentBookPage = _userDataHelper.GetCurrentBookPageByBookId(userBookProgress, bookId);
+            return currentBookPage;
+        }
+
         public string SaveBookProgress(int bookId, int nextBookPage, string userId)
         {
             if (bookId == 0)
@@ -103,8 +113,7 @@ namespace TypingBook.Services
 
             var bookProgress = _userDataHelper.DeserializeProgressBar(userData.BookProgress);
             bookProgress[bookId] = nextBookPage;
-
-            userData.BookProgress = _userDataHelper.SerializeProgressBar(bookProgress);
+            userData.BookProgress = _userDataHelper.SerializeProgressBar(bookProgress, bookId);
 
             try
             {

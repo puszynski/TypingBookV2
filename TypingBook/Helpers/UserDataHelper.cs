@@ -49,13 +49,34 @@ namespace TypingBook.Helpers
             return result;
         }
 
-        public string SerializeProgressBar(Dictionary<int, int> input)
+        public int? GetCurrentBookPageByBookId(string input, int bookId)
+        {
+            if (string.IsNullOrEmpty(input))
+                return null;
+
+            var bookPage = input
+                            .Split(' ')
+                            .Where(x => x.StartsWith(bookId.ToString()))
+                            .FirstOrDefault();
+
+            if (string.IsNullOrEmpty(bookPage))
+                return null;
+
+            return Int32.Parse(bookPage.Split(':')[1]);
+        }
+
+        public string SerializeProgressBar(Dictionary<int, int> input, int firstBookId)
         {
             var sb = new StringBuilder();
 
+            // todo firsy => add appemd first
+            var firstBookItem = input.First(x => x.Key == firstBookId);
+            sb.Append(firstBookItem.Key + ":" + firstBookItem.Value + " ");
+            input.Remove(firstBookId);
+
             foreach (var item in input)
             {
-                sb.Append(item.Key+":"+item.Value+" ");
+                sb.Append(item.Key + ":" + item.Value + " ");
             }
 
             return sb.ToString().TrimEnd();
