@@ -22,54 +22,58 @@ namespace TypingBook.Helpers
         #endregion
 
         #region DivideBook
-        /// <summary>
-        /// Book.Content przechowuje prawidłowo sforatowany string: zdania rozdzielone za pomocą ". " + brak podwójnych spacji. 
-        /// </summary>
         public List<string> DivideBook(string bookContent)
         {
-            const int minAndMaxLenghtOfBothParts = 100;//first it was 200
-            var rest = bookContent;
-            var firstPart = "";
-            var secondPart = "";
+            const int minAndMaxLenghtOfBothParts = 100;
+            var notDividedContent = bookContent;
+
+            var bookPagePartOne = string.Empty;
+            var bookPagePartTwo = string.Empty;
+
             var bookPages = new List<string>();
             var IsEnd = false;
 
-            while (rest != "")
+            while (!string.IsNullOrEmpty(notDividedContent))
             {
-                if (IsLastPart(rest))
-                    firstPart = rest.Substring(0, minAndMaxLenghtOfBothParts);
+                if (IsLastBookPage(notDividedContent))
+                    bookPagePartOne = notDividedContent.Substring(0, minAndMaxLenghtOfBothParts);
 
                 if (!IsEnd)
-                    rest = rest.Replace(firstPart, "");
+                    notDividedContent = notDividedContent.Replace(bookPagePartOne, "");
 
-                if (IsLastPart(rest, true))
+                if (IsLastBookPage(notDividedContent, true))
                 {
-                    secondPart = rest.Substring(0, rest.IndexOf(". ") + 1);
+                    bookPagePartTwo = notDividedContent.Substring(0, notDividedContent.IndexOf(". ") + 1);
 
                     // todo
-                    if (secondPart.Length >= minAndMaxLenghtOfBothParts)
-                    {
-                        secondPart = rest.Substring(0, rest.IndexOf(" ") + 1); // narazie - awaryjnie gdy brak ". " rozdziela po spacji
+                    if (bookPagePartTwo.Length >= minAndMaxLenghtOfBothParts)
+                    {                        
+                        bookPagePartTwo = notDividedContent.Substring(0, notDividedContent.IndexOf(" ") + 1); // narazie - awaryjnie gdy brak ". " rozdziela po spacji
                     }
                 }
 
                 if (!IsEnd)
                 {
-                    if (secondPart == "")
-                        rest = "";
+                    if (bookPagePartTwo == string.Empty)
+                        notDividedContent = string.Empty;
                     else
-                        rest = rest.Replace(secondPart, "").RemoveSpacesFromBeginning();
+                    {
+                        if (bookPagePartTwo == " ")
+                            notDividedContent = notDividedContent.RemoveSpacesFromBeginning();
+                        else
+                            notDividedContent = notDividedContent.Replace(bookPagePartTwo, "").RemoveSpacesFromBeginning();
+                    }
                 }
 
-                bookPages.Add(firstPart + secondPart);
-                firstPart = "";
-                secondPart = "";
+                bookPages.Add(bookPagePartOne + bookPagePartTwo);
+                bookPagePartOne = string.Empty;
+                bookPagePartTwo = string.Empty;
             }
+
             return bookPages;
 
 
-
-            bool IsLastPart(string input, bool IsSecondPart = false)
+            bool IsLastBookPage(string input, bool IsBookPagePartTwo = false)
             {
                 var result = input.Length > minAndMaxLenghtOfBothParts ? true : false;
 
@@ -77,12 +81,12 @@ namespace TypingBook.Helpers
                 {
                     IsEnd = true;
 
-                    if (IsSecondPart)
-                        secondPart = rest;
+                    if (IsBookPagePartTwo)
+                        bookPagePartTwo = notDividedContent;
                     else
-                        firstPart = rest;
+                        bookPagePartOne = notDividedContent;
 
-                    rest = "";
+                    notDividedContent = "";
                 }
                 return result;
             }
