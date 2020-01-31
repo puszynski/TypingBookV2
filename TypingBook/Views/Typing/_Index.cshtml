@@ -10,11 +10,15 @@
     <br />@Model.BookTitle.ToUpper() by @Model.BookAuthors
 </h6>
 
+<span class="badge badge-info">Info</span>
+
 <div class="statistic">
-    Correct typed: <span id="correctTyped">0</span>
-    wrong typed: <span id="wrongTyped">0</span>
-    typed code: <span class="typedCode">0</span>
-    code to type: <span class="codeToType">0</span>
+    <span id="correctTyped" class="badge badge-info">0</span>
+    <span id="wrongTyped" class="badge badge-danger">0</span>
+    <span id="wrongTyped" class="badge badge-secondary">
+        typed code: <span class="typedCode">0</span>
+        code to type: <span class="codeToType">0</span>
+    </span>
 </div>
 
 <a asp-action="Index">Back to List</a>
