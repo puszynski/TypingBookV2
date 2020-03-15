@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using TypingBook.Enums;
 using TypingBook.Helpers;
 
@@ -26,6 +27,31 @@ namespace TypingBook.ViewModels.Book
         [Display(Name = "Book Content")]
         public string Content { get; set; }
 
+        [Display(Name = "Book content before modyfications(display only)")]
+        public string ContentBeforeModification { get; set; }
+
+        [Display(Name = "Book content after formating(display only)")]
+        public string ContentFormated { get; set; }
+
+        public List<string> ContentInBookPages
+        {
+            get
+            {
+                try
+                {
+                    return JsonSerializer.Deserialize<List<string>>(Content);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }            
+            set
+            {
+                Content = JsonSerializer.Serialize(value);
+            }
+        }
+
         [Required]
         [Display(Name = "Book Authors")]
         public string Authors { get; set; }
@@ -41,8 +67,6 @@ namespace TypingBook.ViewModels.Book
         [DataType(DataType.Date)]
         [Display(Name = "Relase Date")]
         public DateTime? ReleaseDate { get; set; }
-
-
         public DateTime AddDate { get; set; }
         public string UserId { get; set; }
         public string License { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using TypingBook.Helpers;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
@@ -49,13 +50,14 @@ namespace TypingBook.Services
 
         TypingViewModel GetIntroductionModel()
         {
-            var introduction = "TypingBook is simple but smarth app that will rise yours quick and accuracy typing on keyboard and english words knowleadge - rewritng is Key here. Those skills will help you on many areas. But in the same time you can relax by typing your favorite books or use one of recomended. Skill up learn and take a fun! Switch to Light Layout if you prefer.<array> Use minimise option to size TypingWindow to minimum so you can e.g. watch movie in the same time.<arrow> You can type any book we have, but your progress will be not saved. Please log in to store your progress or just choose page manually.";
+            //todoChabgeToJSON
+            var introduction = "[\"TypingBook is simple but smarth app that will rise yours quick and accuracy typing on keyboard and english words knowleadge - rewritng is Key here.\",\"Those skills will help you on many areas. But in the same time you can relax by typing your favorite books or use one of recomended.\",\"Skill up learn and take a fun! Switch to Light Layout if you prefer.\\u003Carray\\u003E Use minimise option to size TypingWindow to minimum so you can e.g.\",\"watch movie in the same time.\\u003Carrow\\u003E You can type any book we have but your progress will be not saved. Please log in to store your progress or just choose page manually.\"]";
 
             return new TypingViewModel()
             {
                 BookAuthors = "Web author",
                 CurrentBookPage = 0,
-                BookPages = _typingHelper.DivideBook(introduction),
+                BookPages = JsonSerializer.Deserialize<List<string>>(introduction),
                 BookTitle = "Introduction",
                 BookId = 0
             };
@@ -86,12 +88,12 @@ namespace TypingBook.Services
 
             if (!currentBookPage.HasValue)
                 currentBookPage = TryGetCurrentBookPage(bookId.Value, userId);
-
+            
             return new TypingViewModel()
             {
                 BookAuthors = model.Authors,
                 CurrentBookPage = currentBookPage ?? 0,
-                BookPages = _typingHelper.DivideBook(model.Content),
+                BookPages = JsonSerializer.Deserialize<List<string>>(model.Content),
                 BookTitle = model.Title,
                 BookId = model.Id
             };

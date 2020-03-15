@@ -76,11 +76,27 @@ namespace TypingBook.Controllers
 
             var bookService = new BookContentService();
 
+            model.ContentBeforeModification = model.Content;
+            model.ContentFormated = bookService.FormateBookContent(model.Content);
+            model.Content = bookService.CreateBookPagesJSON(model.Content);
+
+            return RedirectToAction("ConfirmCreate", model); // dupa - nie mozna przekierowac POST`em
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public IActionResult ConfirmCreate(BookRowViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var bookService = new BookContentService();
+
             var sql = new Book
             {
                 Authors = model.Authors,
-                Content = bookService.TransformeBookContent(model.Content),
-                Genre = model.Genre.Sum(),
+                Content = model.Content,
+                Genre = model.Genre?.Sum(),
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
                 AddDate = DateTime.Now,
@@ -93,6 +109,7 @@ namespace TypingBook.Controllers
             _bookRepository.SaveChanges();
 
             return RedirectToAction("Index");
+
         }
 
         [HttpGet]
@@ -136,7 +153,7 @@ namespace TypingBook.Controllers
 
             var bookService = new BookContentService();
 
-            sql.Content = bookService.TransformeBookContent(model.Content);
+            sql.Content = bookService.FormateBookContent(model.Content);
             sql.Authors = model.Authors;
             sql.ReleaseDate = model.ReleaseDate;
             sql.Title = model.Title;
