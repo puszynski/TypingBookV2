@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TypingBook.Enums;
 using TypingBook.Extensions;
@@ -26,6 +28,7 @@ namespace TypingBook.Controllers
         {
             IQueryable<Book> sql;
 
+            //todo - IsPrivate + user
             if (IsLoggerdUserAdministrator())
                 sql = _bookRepository.GetAllBooks();
             else
@@ -43,7 +46,8 @@ namespace TypingBook.Controllers
             {
                 ID = x.Id,
                 Title = x.Title,
-                Content = x.Content.ShowOnly500Char(),
+                Description = x.Description,
+                //Content = x.Content.ShowOnly500Char(),
                 Authors = x.Authors,
                 Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Rate = x.Rate,
@@ -67,6 +71,8 @@ namespace TypingBook.Controllers
             return View(model);
         }
 
+        //zamiast GET => POST => POST przeładuj treść przyciskiem "załaduj / konwerttuj" ajaxem?
+
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public IActionResult Create(BookRowViewModel model)
@@ -79,18 +85,6 @@ namespace TypingBook.Controllers
             model.ContentBeforeModification = model.Content;
             model.ContentFormated = bookService.FormateBookContent(model.Content);
             model.Content = bookService.CreateBookPagesJSON(model.Content);
-
-            return RedirectToAction("ConfirmCreate", model); // dupa - nie mozna przekierowac POST`em
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public IActionResult ConfirmCreate(BookRowViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var bookService = new BookContentService();
 
             var sql = new Book
             {
@@ -113,11 +107,9 @@ namespace TypingBook.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]//todo - mozesz edytowac tylko swoje ksiazki chyba ze jestes adminem, to wszystkie - jesli nie jestes uzytkownikiem - nic nie mozesz
         public IActionResult Edit(int id) 
         {
-            // mozesz edytowac tylko swoje ksiazki chyba ze jestes adminem, to wszystkie
-            // jesli nie jestes uzytkownikiem - nic nie mozesz
             var sql = _bookRepository.GetBookByID(id);
 
             if (sql == null)
@@ -130,6 +122,7 @@ namespace TypingBook.Controllers
                 ID = sql.Id,
                 Title = sql.Title,
                 Content = sql.Content,
+                ContentInBookPages = JsonSerializer.Deserialize<List<string>>(sql.Content),//edytowanie nic nie da bo prześlesz i tak content
                 Genre = sql.Genre.HasValue ? sql.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Authors = sql.Authors,
                 Rate = sql.Rate,

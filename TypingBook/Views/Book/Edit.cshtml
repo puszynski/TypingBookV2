@@ -11,17 +11,18 @@
 
 
 <div class="jumbotron">
-    <form asp-controller="Book" asp-action="Create" method="post">
+    <form asp-controller="Book" asp-action="Edit" method="post">
         <input name="nameof(@Model.ID)" type="hidden" value="<removed for brevity>">
-        @*<p>@Html.ValidationSummary()</p>*@
         <div class="form-group">
-            @*@Html.LabelFor(x => x.Title)*@
-            @*@Html.EditorFor(x => x.Title)*@
             <label asp-for="nameof(@Model.Title)" class="control-label"></label>
             <input asp-for="nameof(@Model.Title)" class="form-control" />
             <span asp-validation-for="nameof(@Model.Title)" class="text-danger"></span>
         </div>
-
+        <div class="form-group">
+            <label asp-for="nameof(@Model.Description)" class="control-label"></label>
+            <textarea rows="5" asp-for="nameof(@Model.Description)" class="form-control"></textarea>
+            <span asp-validation-for="nameof(@Model.Description)" class="text-danger"></span>
+        </div>
         <div class="form-group">
             <label asp-for="nameof(@Model.Authors)" class="control-label"></label>
             <input asp-for="nameof(@Model.Authors)" class="form-control" />
@@ -30,7 +31,6 @@
 
         <div class="form-group">
             <label asp-for="nameof(@Model.Genre)" class="control-label"></label>
-            @*@Html.ListBoxFor(m => m.Genre, Model.GenreSelectListItem, "form-control")*@
             <select asp-for="nameof(@Model.Genre)" asp-items="@Model.GenreSelectListItem" class="form-control"></select>
             <span asp-validation-for="nameof(@Model.Genre)" class="text-danger"></span>
         </div>
@@ -54,12 +54,16 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Page @(counter++)</span>
                 </div>
-                @*<input type="text" class="form-control">*@
                 <textarea rows="2" asp-for="@bookPage" class="form-control"></textarea>
             </div>
         }
-        <span asp-validation-for="nameof(@Model.Content)" class="text-danger"></span>        
+        <span asp-validation-for="nameof(@Model.Content)" class="text-danger"></span>
         <input type="submit" value="Submit changes" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </form>
+    @*jak przesłać*@
+    @*@for (int i = 0; i < Model.ContentInBookPages.Count; i++)
+    {
+        @Html.HiddenFor(model => Model.ContentInBookPages[i])
+    }*@
 </div>

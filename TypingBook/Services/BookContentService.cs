@@ -97,11 +97,7 @@ namespace TypingBook.Services
                     }
                 }
 
-                bookPages.Add(bookPagePartOne + bookPagePartTwo);
-                if (bookPages.Count == 34)
-                {
-                    //testy
-                }
+                bookPages.Add(bookPagePartOne + bookPagePartTwo);                
                 bookPagePartOne = string.Empty;
                 bookPagePartTwo = string.Empty;
             }

@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191126212827_UpdateBookModel.cs" />
     <Compile Remove="Migrations\20191126212827_UpdateBookModel.Designer.cs" />
+    <Compile Remove="Migrations\20200315084930_addBookDescritpionAndIsPrivate.cs" />
+    <Compile Remove="Migrations\20200315084930_addBookDescritpionAndIsPrivate.Designer.cs" />
   </ItemGroup>
 
 

@@ -24,6 +24,11 @@ namespace TypingBook.ViewModels.Book
         public string Title { get; set; }
 
         [Required]
+        [StringLength(1000, MinimumLength = 10)]
+        [Display(Name = "Book Description")]
+        public string Description { get; set; }
+
+        [Required]
         [Display(Name = "Book Content")]
         public string Content { get; set; }
 
@@ -33,24 +38,7 @@ namespace TypingBook.ViewModels.Book
         [Display(Name = "Book content after formating(display only)")]
         public string ContentFormated { get; set; }
 
-        public List<string> ContentInBookPages
-        {
-            get
-            {
-                try
-                {
-                    return JsonSerializer.Deserialize<List<string>>(Content);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }            
-            set
-            {
-                Content = JsonSerializer.Serialize(value);
-            }
-        }
+        public List<string> ContentInBookPages { get; set; }
 
         [Required]
         [Display(Name = "Book Authors")]
