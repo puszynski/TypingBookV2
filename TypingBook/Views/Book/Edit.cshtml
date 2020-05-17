@@ -71,11 +71,9 @@
         <input type="submit" value="Submit changes" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 
-        @*TODO USE <form.... https://docs.microsoft.com/pl-pl/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-3.1
         @if (User.IsInRole("Administrator") && !string.IsNullOrEmpty(Model.ContentBeforeModification))
 	    {
-            <a asp-action="RebuildBookPages" asp-all-route-data=@Model method="post" class="btn btn-secondary">Rebuild book pages</a>	
-            //model="@Model" asp-route-returnurl="@ViewData["ReturnUrl"]"
-        }*@
+            <a asp-action="RebuildBookPages" asp-route-id="@Model.ID" class="btn btn-secondary">Rebuild book pages</a>
+        }
     </form>
 </div>

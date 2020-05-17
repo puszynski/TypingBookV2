@@ -107,29 +107,20 @@ namespace TypingBook.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult RebuildBookPages()
-        {
-            return null;
-        }
-
-        [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public IActionResult RebuildBookPages(BookRowViewModel model)
+        public IActionResult RebuildBookPages(int id)
         {
-            if (string.IsNullOrEmpty(model.ContentBeforeModification))
+            if (id == null)
                 return RedirectToAction("Index");
 
-            var sql = _bookRepository.GetBookByID(model.ID);
-            if (sql == null)
+            var book = _bookRepository.GetBookByID(id);
+            if (book == null && string.IsNullOrEmpty(book.ContentBeforeModifying))
                 return RedirectToAction("Index");
 
             var bookService = new BookContentService();
-            model.Content = bookService.CreateBookPagesJSON(model.Content);
+            book.Content = bookService.CreateBookPagesJSON(book.ContentBeforeModifying);
 
-            var testBackUrl = Request.Headers["Referer"];
-            var t2 = ViewData["ReturnUrl"];
-
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");//TODO REDIRECT TO RETRUN URL
         }
 
         [HttpGet]
