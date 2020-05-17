@@ -8,7 +8,7 @@ using TypingBook.Helpers;
 
 namespace TypingBook.ViewModels.Book
 {
-    public class BookRowViewModel
+    public class BookRowViewModel : BaseViewModel
     {
         public BookRowViewModel()
         {

@@ -86,6 +86,9 @@ namespace TypingBook.Services
 
             var model = _bookRepository.GetBookByID(bookId.Value);
 
+            if (model == null)
+                return null;//todo exception - book with id was deleted from database
+
             if (!currentBookPage.HasValue)
                 currentBookPage = TryGetCurrentBookPage(bookId.Value, userId);
             

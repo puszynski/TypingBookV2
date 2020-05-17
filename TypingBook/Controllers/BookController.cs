@@ -91,19 +91,45 @@ namespace TypingBook.Controllers
                 Authors = model.Authors,
                 Content = model.Content,
                 Genre = model.Genre?.Sum(),
+                Description = model.Description,
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
                 AddDate = DateTime.Now,
                 License = model.License,
                 IsVerified = IsLoggerdUserAdministrator() ? true : false,
-                UserId = GetLoggedUserId()
+                UserId = GetLoggedUserId(),
+                ContentBeforeModifying = model.ContentBeforeModification
             };
 
             _bookRepository.CreateBook(sql);
             _bookRepository.SaveChanges();
 
             return RedirectToAction("Index");
+        }
 
+        public IActionResult RebuildBookPages()
+        {
+            return null;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public IActionResult RebuildBookPages(BookRowViewModel model)
+        {
+            if (string.IsNullOrEmpty(model.ContentBeforeModification))
+                return RedirectToAction("Index");
+
+            var sql = _bookRepository.GetBookByID(model.ID);
+            if (sql == null)
+                return RedirectToAction("Index");
+
+            var bookService = new BookContentService();
+            model.Content = bookService.CreateBookPagesJSON(model.Content);
+
+            var testBackUrl = Request.Headers["Referer"];
+            var t2 = ViewData["ReturnUrl"];
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -130,7 +156,8 @@ namespace TypingBook.Controllers
                 AddDate = sql.AddDate,
                 IsVerified = IsLoggerdUserAdministrator() ? true : sql.IsVerified,
                 License = sql.License,
-                UserId = sql.UserId
+                UserId = sql.UserId,
+                ContentBeforeModification = sql.ContentBeforeModifying
             };
             return View(model);
         }

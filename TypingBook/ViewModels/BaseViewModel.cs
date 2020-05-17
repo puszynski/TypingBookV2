@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TypingBook.ViewModels
 {
@@ -13,5 +10,7 @@ namespace TypingBook.ViewModels
         public int CurrentPage { get; set; }
         public int TotalPage => (int)Math.Ceiling((decimal)TotalItems / ItemsPerPage);
         #endregion
+
+        public string backUrl { get; set; }
     }
 }
