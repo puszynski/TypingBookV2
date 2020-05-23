@@ -20,8 +20,12 @@
         <p>by @item.Authors</p>
             
         <a href="@Url.Action("Index", "Typing", new { bookId = item.ID })" class="btn btn-primary btn-lg"><b>Type!</b></a>
-        <a href="@Url.Action("Edit", new { id = item.ID })" class="btn btn-secondary">Edit</a>
-        <a href="@Url.Action("Delete", new { id = item.ID })" class="btn btn-danger">Delete</a>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("Edit", new { id = item.ID })" class="btn btn-secondary">Edit</a>
+            <a href="@Url.Action("Delete", new { id = item.ID })" class="btn btn-danger">Delete</a>
+        }
         
         <p>@item.Description</p>
     </div>

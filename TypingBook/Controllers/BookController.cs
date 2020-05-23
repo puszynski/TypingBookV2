@@ -83,7 +83,6 @@ namespace TypingBook.Controllers
             var bookService = new BookContentService();
 
             model.ContentBeforeModification = model.Content;
-            model.ContentFormated = bookService.FormateBookContent(model.Content);
             model.Content = bookService.CreateBookPagesJSON(model.Content);
 
             var sql = new Book
@@ -164,7 +163,7 @@ namespace TypingBook.Controllers
 
             var bookService = new BookContentService();
 
-            sql.Content = bookService.FormateBookContent(model.Content);
+            sql.Content = bookService.CreateBookPagesJSON(model.Content);
             sql.Authors = model.Authors;
             sql.ReleaseDate = model.ReleaseDate;
             sql.Title = model.Title;

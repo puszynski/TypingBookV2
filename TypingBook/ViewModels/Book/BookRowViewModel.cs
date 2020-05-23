@@ -33,10 +33,7 @@ namespace TypingBook.ViewModels.Book
         public string Content { get; set; }
 
         [Display(Name = "Book content before modyfications(display only)")]
-        public string ContentBeforeModification { get; set; }
-
-        [Display(Name = "Book content after formating(display only)")]
-        public string ContentFormated { get; set; }
+        public string ContentBeforeModification { get; set; }        
 
         public List<string> ContentInBookPages { get; set; }
 
