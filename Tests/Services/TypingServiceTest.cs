@@ -37,23 +37,5 @@ namespace Tests.Services
             Assert.AreEqual("3:77 10:12", result);
 
         }
-
-        [Test]
-        public void DivideBook()
-        {
-            //Arrange
-            var test = @"fooo ""hoho"" fooo";
-            var test2 = "fooo \u0022hoho\u0022 fooo";
-            var test3 = "fooo \"hoho\" fooo";
-
-
-            var bookContent = "";
-            var service = new BookContentService();
-
-            //Act
-
-            //Asser
-            //TODO SPR CZY ZGADZA SIE POCZATEK/KONIEC
-        }
     }
 }

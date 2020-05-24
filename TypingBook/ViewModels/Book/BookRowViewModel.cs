@@ -56,5 +56,6 @@ namespace TypingBook.ViewModels.Book
         public string UserId { get; set; }
         public string License { get; set; }
         public bool IsVerified { get; set; }
+        public int? UserLastTypedPage { get; set; }
     }
 }

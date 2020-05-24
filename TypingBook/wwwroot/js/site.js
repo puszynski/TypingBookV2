@@ -1,4 +1,8 @@
-﻿
+﻿// allow to use bootsrap tooltips
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 
 // create ajax links from, e.g.:  <a class="nav-link text-dark" asp-action="Index" asp-controller="Home" asp-route-id="123" data - target="body-container" id = "ajax_link" >Type</a >
 function ajaxLink() {

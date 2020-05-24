@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using TypingBook.Extensions;
@@ -15,6 +16,7 @@ namespace TypingBook.Services
         public BookPagesHandler(string bookContent)
         {
             _bookString = bookContent;
+            _bookPages = new List<string>();
         }
 
         public string Execute()
@@ -24,7 +26,9 @@ namespace TypingBook.Services
 
             ReplaceSelectedCharToEmpty();
             RemoveWhitespacesTabsNewLinesDoublespaces();
-            DivideBook();
+            DivideBookV2();
+            //DivideBook();
+            RemoveSpaceFromStartEndForEachPage();
             CreateBookPagesJSON();
 
             return _bookPagesJSON;
@@ -35,19 +39,54 @@ namespace TypingBook.Services
             var charsToReplece = new string[] 
             { 
                 ";", 
-                ",", 
-                "\r", 
-                "\t", 
-                "\n" 
+                ","
             };
 
             foreach (var charToReplace in charsToReplece)
-                _bookString.Replace(charToReplace, "");
+                _bookString = _bookString.Replace(charToReplace, "");
         }
 
         //TODO - DOUBLE SPACES SWITCH TO SINGLE SPACE, TABS AND OTHERS TO SINGLE SPACES - CHECK IT AND FIX!
-        void RemoveWhitespacesTabsNewLinesDoublespaces() => _bookString = Regex.Replace(_bookString, @"\s+", "");
+        void RemoveWhitespacesTabsNewLinesDoublespaces() => _bookString = Regex.Replace(_bookString, @"\s+", " ");
 
+        void DivideBookV2()
+        {
+            var bookContent = _bookString;
+
+            while (bookContent.Length > 0)
+            {
+                var lengthToDevide = FindPlaceToDevide(bookContent);
+
+                _bookPages.Add(bookContent.Substring(0, lengthToDevide));
+                bookContent = bookContent.Substring(lengthToDevide, bookContent.Length - lengthToDevide);
+            }
+        }
+
+        int FindPlaceToDevide(string input)
+        {
+            const int PAGE_TOO_LARGE = 300;
+
+            if (input.Length <= PAGE_TOO_LARGE)
+                return input.Length;
+
+            //take 3rd sentence
+            var result = input.IndexOf('.', input.IndexOf('.', input.IndexOf('.') + 1) + 1) + 1;
+
+            if (result > PAGE_TOO_LARGE)
+                //2nd
+                result = input.IndexOf('.', input.IndexOf('.') + 1) + 1;
+
+            if (result > PAGE_TOO_LARGE)
+                //1st
+                result = input.IndexOf('.') + 1;
+
+            if (result > PAGE_TOO_LARGE * 2)
+                throw new Exception($"Error: one of sentence is too large(More than {PAGE_TOO_LARGE * 2})");
+
+            return result;
+        }
+
+        [Obsolete]
         void DivideBook()
         {
             var bookContent = _bookString;
@@ -119,6 +158,20 @@ namespace TypingBook.Services
             }
         }
 
-        void CreateBookPagesJSON() => _bookPagesJSON = JsonSerializer.Serialize(_bookPages);
+        void RemoveSpaceFromStartEndForEachPage()
+        {
+            var result = new List<string>();
+
+            foreach (var bookPage in _bookPages)
+                result.Add(bookPage.Trim());
+
+            _bookPages = result;
+        }
+
+        void CreateBookPagesJSON()
+        {  
+            //additional encoder allow to use special characters e.g.: ą ź ć..
+            _bookPagesJSON = JsonSerializer.Serialize(_bookPages, typeof(List<string>), new JsonSerializerOptions() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(System.Text.Unicode.UnicodeRanges.All) });
+        }
     }
 }

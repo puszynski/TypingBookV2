@@ -72,8 +72,12 @@
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 
         @if (User.IsInRole("Administrator") && !string.IsNullOrEmpty(Model.ContentBeforeModification))
-	    {
-            <a asp-action="RebuildBookPages" asp-route-id="@Model.ID" class="btn btn-secondary">Rebuild book pages</a>
+        {
+            if (!Model.IsVerified)
+            {
+                <a asp-action="RebuildBookPages" asp-route-id="@Model.ID" class="btn btn-secondary">Rebuild book pages</a>
+            }
+            <a asp-action="VerifyBook" asp-route-id="@Model.ID" class="btn btn-secondary" data-toggle="tooltip" title="Verify books cant use option RebuildBookPages. Book pages are frozen. Only other data can be updated.">Verify book</a>
         }
     </form>
 </div>

@@ -17,11 +17,13 @@ namespace TypingBook.Controllers
 {
     public class BookController : BaseController
     {
-        readonly IBookRepository _bookRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly IUserDataRepository _userDataRepository;
 
-        public BookController(IBookRepository bookRepository)
+        public BookController(IBookRepository bookRepository, IUserDataRepository userDataRepository)
         {
             _bookRepository = bookRepository;
+            _userDataRepository = userDataRepository;
         }
 
         public IActionResult Index(string bookOrAuthorSearchString, int? genreFilter)
@@ -47,15 +49,22 @@ namespace TypingBook.Controllers
                 ID = x.Id,
                 Title = x.Title,
                 Description = x.Description,
-                //Content = x.Content.ShowOnly500Char(),
                 Authors = x.Authors,
                 Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Rate = x.Rate,
                 ReleaseDate = x.ReleaseDate,
                 AddDate = x.AddDate,
                 IsVerified = x.IsVerified,
-                License = x.License
+                License = x.License,
+                //UserLastTypedPage
             });
+
+            //todo show already typed pages
+            //var userId = GetLoggedUserId();
+            //if (userId != null)
+            //{
+            //    _userDataRepository.GetById() UserLastTypedPages(userId);
+            //}
 
             var model = new BookViewModel(row);
             model.BookGenreSelectListItems = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
@@ -95,7 +104,7 @@ namespace TypingBook.Controllers
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
                 AddDate = DateTime.Now,
                 License = model.License,
-                IsVerified = IsLoggerdUserAdministrator() ? true : false,
+                IsVerified = false,
                 UserId = GetLoggedUserId(),
                 ContentBeforeModifying = model.ContentBeforeModification
             };
@@ -113,11 +122,12 @@ namespace TypingBook.Controllers
                 return RedirectToAction("Index");
 
             var book = _bookRepository.GetBookByID(id);
-            if (book == null && string.IsNullOrEmpty(book.ContentBeforeModifying))
-                return RedirectToAction("Index");
+            if (book == null && string.IsNullOrEmpty(book.ContentBeforeModifying) && book.IsVerified)
+                return RedirectToAction("Index");//todo show info
 
             var bookService = new BookContentService();
             book.Content = bookService.CreateBookPagesJSON(book.ContentBeforeModifying);
+            _bookRepository.SaveChanges();
 
             return RedirectToAction("Index");//TODO REDIRECT TO RETRUN URL
         }
@@ -144,7 +154,7 @@ namespace TypingBook.Controllers
                 Rate = sql.Rate,
                 ReleaseDate = sql.ReleaseDate,
                 AddDate = sql.AddDate,
-                IsVerified = IsLoggerdUserAdministrator() ? true : sql.IsVerified,
+                IsVerified = sql.IsVerified,
                 License = sql.License,
                 UserId = sql.UserId,
                 ContentBeforeModification = sql.ContentBeforeModifying
