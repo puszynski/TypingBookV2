@@ -16,6 +16,13 @@
 @foreach (var item in Model)
 {
     <div class="jumbotron">
+        @if (item.UserLastTypedPage.HasValue)
+        {
+            <div class="alert alert-info">
+              <strong>In progress!</strong> Already typed <strong>@item.UserLastTypedPage</strong> book pages.
+            </div>
+        }
+
         <h1 class="display-4">@item.Title</h1>
         <p>by @item.Authors</p>
             

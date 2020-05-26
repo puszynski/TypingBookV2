@@ -20,6 +20,23 @@ namespace TypingBook.Helpers
             return Int32.Parse(bookID);
         }
 
+        public List<(int bookID, int userLastPage)> GetAllBooksCurrentPage(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return null;
+
+            var result = new List<(int bookID, int userLastPage)>();
+            var booksData = input.Split(' ');
+
+            foreach (var item in booksData)
+            {
+                var temp = (Int32.Parse(item.Split(':').First()), Int32.Parse(item.Split(':')[1]));
+                result.Add(temp);
+            }
+
+            return result;
+        }
+
         public int? GetLastCurrentBookPage(string input)
         {
             if (string.IsNullOrEmpty(input))

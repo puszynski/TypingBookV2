@@ -1,4 +1,5 @@
-﻿using TypingBook.Repositories.IReporitories;
+﻿using System.Linq;
+using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
 
 namespace TypingBook.Services
@@ -21,7 +22,7 @@ namespace TypingBook.Services
         {
             var books = _bookRepository.GetAllBooksAsync();
 
-            foreach (var item in books.Result)
+            foreach (var item in books.Result.Where(x => !x.IsVerified))
             {
                 var bph = new BookPagesHandler(item.Content);
                 item.Content = bph.Execute(); ;

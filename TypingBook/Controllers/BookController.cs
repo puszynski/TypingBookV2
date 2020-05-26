@@ -28,13 +28,8 @@ namespace TypingBook.Controllers
 
         public IActionResult Index(string bookOrAuthorSearchString, int? genreFilter)
         {
-            IQueryable<Book> sql;
-
-            //todo - IsPrivate + user
-            if (IsLoggerdUserAdministrator())
-                sql = _bookRepository.GetAllBooks();
-            else
-                sql = _bookRepository.GetAllBooks().Where(x => x.IsVerified == true);            
+            var userId = GetLoggedUserId();
+            var sql = GetBaseQuery(userId);            
 
             //TODO FILTR NIE DZIAŁA ^^`
             if (!string.IsNullOrWhiteSpace(bookOrAuthorSearchString))
@@ -44,35 +39,55 @@ namespace TypingBook.Controllers
             if (genreFilter.HasValue)
                 sql = sql.Where(x => (x.Genre & genreFilter) > 0);
             
-            var row = sql.ToList().Select(x => new BookRowViewModel
-            {
-                ID = x.Id,
-                Title = x.Title,
-                Description = x.Description,
-                Authors = x.Authors,
-                Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
-                Rate = x.Rate,
-                ReleaseDate = x.ReleaseDate,
-                AddDate = x.AddDate,
-                IsVerified = x.IsVerified,
-                License = x.License,
-                //UserLastTypedPage
-            });
+            var bookRowViewModels = sql
+                .ToList()
+                .Select(x => new BookRowViewModel
+                {
+                    ID = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    Authors = x.Authors,
+                    Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
+                    Rate = x.Rate,
+                    ReleaseDate = x.ReleaseDate,
+                    AddDate = x.AddDate,
+                    IsVerified = x.IsVerified,
+                    License = x.License
+                })
+                .ToList();
 
-            //todo show already typed pages
-            //var userId = GetLoggedUserId();
-            //if (userId != null)
-            //{
-            //    _userDataRepository.GetById() UserLastTypedPages(userId);
-            //}
+            AssignUserLastTypedPage(bookRowViewModels, userId);
 
-            var model = new BookViewModel(row);
+            var model = new BookViewModel(bookRowViewModels);
             model.BookGenreSelectListItems = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
 
             // TODO - if ajax load partial view like in Home/Index
             return View(model);
         }
-        
+
+        private IQueryable<Book> GetBaseQuery(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return _bookRepository.GetAllBooks().Where(x => x.IsVerified);
+
+            else if (IsLoggerdUserAdministrator())
+                return _bookRepository.GetAllBooks();
+
+            else
+                return _bookRepository.GetAllBooks().Where(x => x.IsVerified && !x.IsPrivate || x.UserId == userId);
+        }
+
+        private void AssignUserLastTypedPage(List<BookRowViewModel> bookRowViewModels, string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return;
+            
+            var userBooksInProgress = _userDataRepository.GetByIdUserLastTypedPages(userId);
+
+            foreach (var item in bookRowViewModels)
+                    item.UserLastTypedPage = userBooksInProgress.SingleOrDefault(x => x.bookID == item.ID).userLastPage;
+        }
+
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {

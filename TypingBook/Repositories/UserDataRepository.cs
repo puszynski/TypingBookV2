@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TypingBook.Data;
+using TypingBook.Helpers;
 using TypingBook.Models;
 using TypingBook.Repositories.IReporitories;
 
@@ -17,14 +19,22 @@ namespace TypingBook.Repositories
         }
 
 
-        public UserData GetById(string id)
+        public UserData GetById(string userID)
         {
-            var result = _db.UserData.SingleOrDefault(x => x.UserId == id);
+            var result = _db.UserData.SingleOrDefault(x => x.UserId == userID);
 
             if (result == null)
-                return Create(id);
+                return Create(userID);
 
             return result;
+        }
+
+        public List<(int bookID, int userLastPage)> GetByIdUserLastTypedPages(string userID)
+        {
+            var result = _db.UserData.SingleOrDefault(x => x.UserId == userID).BookProgress;
+            
+            var userDataHelper = new UserDataHelper();
+            return userDataHelper.GetAllBooksCurrentPage(result);
         }
 
         public void UpdateById(UserData model)
