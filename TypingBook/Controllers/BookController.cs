@@ -95,7 +95,6 @@ namespace TypingBook.Controllers
             return View(model);
         }
 
-        //zamiast GET => POST => POST przeładuj treść przyciskiem "załaduj / konwerttuj" ajaxem?
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]

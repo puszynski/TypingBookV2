@@ -57,7 +57,18 @@ namespace Tests.Services
 
             Assert.AreEqual("[\"Pięć Sześć\"]", result);
         }
-               
+
+        [Test]
+        public void TestingLongContentWithNoDots()
+        {
+            var bookContent = "Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo";
+
+            var handler = new BookPagesHandler(bookContent);
+            var result = handler.Execute();
+
+            Assert.AreEqual("[\"Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo\",\"foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo\"]", result);
+        }
+
         [Test]
         [Ignore("Ignore a test - only for debbuging")]
         public void TestingPagesCount()

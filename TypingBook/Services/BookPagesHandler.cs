@@ -69,8 +69,11 @@ namespace TypingBook.Services
             if (input.Length <= PAGE_TOO_LARGE)
                 return input.Length;
 
+            if (!input.Contains('.'))
+                return 300;
+
             //take 3rd sentence
-            var result = input.IndexOf('.', input.IndexOf('.', input.IndexOf('.') + 1) + 1) + 1;
+            var result = input.IndexOf('.', input.IndexOf('.', input.IndexOf('.') + 1) + 1) + 1; //jak nie ma kropki to sie zapętla!
 
             if (result > PAGE_TOO_LARGE)
                 //2nd

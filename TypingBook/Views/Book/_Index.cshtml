@@ -16,7 +16,7 @@
 @foreach (var item in Model)
 {
     <div class="jumbotron">
-        @if (item.UserLastTypedPage.HasValue)
+        @if (item.UserLastTypedPage > 0)
         {
             <div class="alert alert-info">
               <strong>In progress!</strong> Already typed <strong>@item.UserLastTypedPage</strong> book pages.
