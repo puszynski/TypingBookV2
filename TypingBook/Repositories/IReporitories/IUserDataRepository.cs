@@ -7,11 +7,12 @@ namespace TypingBook.Repositories.IReporitories
 {
     public interface IUserDataRepository
     {
-        UserData GetById(string id);
-
-        List<(int bookID, int userLastPage)> GetByIdUserLastTypedPages(string userID);
-
+        UserData GetById(string userId);
+        List<(int bookID, int userLastPage)> GetByIdUserLastTypedPages(string userId);
         void UpdateById(UserData model);
+        string GetStatisticsByUserId(string userId);
+
+        void UpateStatisticsByUserId(string userId, string statistics);
 
         void SaveChanges();
         Task SaveAsync();

@@ -71,7 +71,8 @@ namespace TypingBook
 
             // services
             services.AddScoped<IBookContentService, BookContentService>();
-            services.AddScoped<ITypingServices, TypingService>();            
+            services.AddScoped<ITypingServices, TypingService>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
             services.AddMvc().AddNewtonsoftJson();
             services.AddMemoryCache(); // IMemoryCache store data in the memory of web server, in future set size/limit to cache => https://docs.microsoft.com/pl-pl/aspnet/core/performance/caching/memory?view=aspnetcore-2.2#use-setsize-size-and-sizelimit-to-limit-cache-size
 

@@ -37,20 +37,20 @@ namespace TypingBook.Repositories
             return userDataHelper.GetAllBooksCurrentPage(result);
         }
 
-        public void UpdateById(UserData model)
+        public string GetStatisticsByUserId(string userId) => _db.UserData.SingleOrDefault(x => x.UserId == userId).Statistics;
+        public void UpateStatisticsByUserId(string userId, string statistics)
         {
-            _db.Update(model);
+            var model = GetById(userId);
+            model.Statistics = statistics;
+            UpdateById(model);
         }
+        
+        public void UpdateById(UserData model) => _db.Update(model);
 
-        public async Task SaveAsync()
-        {
-            await _db.SaveChangesAsync();
-        }
 
-        public void SaveChanges()
-        {
-            _db.SaveChanges();
-        }
+        public async Task SaveAsync() => await _db.SaveChangesAsync();
+
+        public void SaveChanges() => _db.SaveChanges();
 
         private UserData Create(string id)
         {
