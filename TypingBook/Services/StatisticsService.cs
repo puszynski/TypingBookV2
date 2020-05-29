@@ -25,7 +25,7 @@ namespace TypingBook.Services
             var stringData = _userDataRepository.GetStatisticsByUserId(userId);
             List<(DateTime month, int typedCrrect, int typedWrong, int secondsOfTyping)> userData;
 
-            var actuallMonthDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var actuallMonthDate = new DateTime(DateTime.UtcNow.Year, DateTime.Now.Month, 1);
 
             if (string.IsNullOrEmpty(stringData))
                 userData = new List<(DateTime month, int typedCorrect, int typedWrong, int secondsOfTyping)>

@@ -116,7 +116,7 @@ namespace TypingBook.Controllers
                 Description = model.Description,
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
-                AddDate = DateTime.Now,
+                AddDate = DateTime.UtcNow,
                 License = model.License,
                 IsVerified = false,
                 UserId = GetLoggedUserId(),

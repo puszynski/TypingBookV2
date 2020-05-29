@@ -1,0 +1,1 @@
+﻿DateTime.UtcNow - use as base in all app, in future - convert to local when needed
