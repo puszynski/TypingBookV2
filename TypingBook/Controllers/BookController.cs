@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TypingBook.Enums;
 using TypingBook.Extensions;
@@ -15,21 +17,19 @@ namespace TypingBook.Controllers
 {
     public class BookController : BaseController
     {
-        readonly IBookRepository _bookRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly IUserDataRepository _userDataRepository;
 
-        public BookController(IBookRepository bookRepository)
+        public BookController(IBookRepository bookRepository, IUserDataRepository userDataRepository)
         {
             _bookRepository = bookRepository;
+            _userDataRepository = userDataRepository;
         }
 
         public IActionResult Index(string bookOrAuthorSearchString, int? genreFilter)
         {
-            IQueryable<Book> sql;
-
-            if (IsLoggerdUserAdministrator())
-                sql = _bookRepository.GetAllBooks();
-            else
-                sql = _bookRepository.GetAllBooks().Where(x => x.IsVerified == true);            
+            var userId = GetLoggedUserId();
+            var sql = GetBaseQuery(userId);            
 
             //TODO FILTR NIE DZIAŁA ^^`
             if (!string.IsNullOrWhiteSpace(bookOrAuthorSearchString))
@@ -39,33 +39,62 @@ namespace TypingBook.Controllers
             if (genreFilter.HasValue)
                 sql = sql.Where(x => (x.Genre & genreFilter) > 0);
             
-            var row = sql.ToList().Select(x => new BookRowViewModel
-            {
-                ID = x.Id,
-                Title = x.Title,
-                Content = x.Content.ShowOnly500Char(),
-                Authors = x.Authors,
-                Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
-                Rate = x.Rate,
-                ReleaseDate = x.ReleaseDate,
-                AddDate = x.AddDate,
-                IsVerified = x.IsVerified,
-                License = x.License
-            });
+            var bookRowViewModels = sql
+                .ToList()
+                .Select(x => new BookRowViewModel
+                {
+                    ID = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    Authors = x.Authors,
+                    Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
+                    Rate = x.Rate,
+                    ReleaseDate = x.ReleaseDate,
+                    AddDate = x.AddDate,
+                    IsVerified = x.IsVerified,
+                    License = x.License
+                })
+                .ToList();
 
-            var model = new BookViewModel(row);
+            AssignUserLastTypedPage(bookRowViewModels, userId);
+
+            var model = new BookViewModel(bookRowViewModels);
             model.BookGenreSelectListItems = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
 
             // TODO - if ajax load partial view like in Home/Index
             return View(model);
         }
-        
+
+        private IQueryable<Book> GetBaseQuery(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return _bookRepository.GetAllBooks().Where(x => x.IsVerified);
+
+            else if (IsLoggerdUserAdministrator())
+                return _bookRepository.GetAllBooks();
+
+            else
+                return _bookRepository.GetAllBooks().Where(x => x.IsVerified && !x.IsPrivate || x.UserId == userId);
+        }
+
+        private void AssignUserLastTypedPage(List<BookRowViewModel> bookRowViewModels, string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return;
+            
+            var userBooksInProgress = _userDataRepository.GetByIdUserLastTypedPages(userId);
+
+            foreach (var item in bookRowViewModels)
+                    item.UserLastTypedPage = userBooksInProgress.SingleOrDefault(x => x.bookID == item.ID).userLastPage;
+        }
+
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             var model = new BookRowViewModel();
             return View(model);
         }
+
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
@@ -76,17 +105,22 @@ namespace TypingBook.Controllers
 
             var bookService = new BookContentService();
 
+            model.ContentBeforeModification = model.Content;
+            model.Content = bookService.CreateBookPagesJSON(model.Content);
+
             var sql = new Book
             {
                 Authors = model.Authors,
-                Content = bookService.TransformeBookContent(model.Content),
-                Genre = model.Genre.Sum(),
+                Content = model.Content,
+                Genre = model.Genre?.Sum(),
+                Description = model.Description,
                 Title = model.Title,
                 ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
-                AddDate = DateTime.Now,
+                AddDate = DateTime.UtcNow,
                 License = model.License,
-                IsVerified = IsLoggerdUserAdministrator() ? true : false,
-                UserId = GetLoggedUserId()
+                IsVerified = false,
+                UserId = GetLoggedUserId(),
+                ContentBeforeModifying = model.ContentBeforeModification
             };
 
             _bookRepository.CreateBook(sql);
@@ -95,12 +129,27 @@ namespace TypingBook.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
         [Authorize(Roles = "Administrator")]
+        public IActionResult RebuildBookPages(int id)
+        {
+            if (id == null)
+                return RedirectToAction("Index");
+
+            var book = _bookRepository.GetBookByID(id);
+            if (book == null && string.IsNullOrEmpty(book.ContentBeforeModifying) && book.IsVerified)
+                return RedirectToAction("Index");//todo show info
+
+            var bookService = new BookContentService();
+            book.Content = bookService.CreateBookPagesJSON(book.ContentBeforeModifying);
+            _bookRepository.SaveChanges();
+
+            return RedirectToAction("Index");//TODO REDIRECT TO RETRUN URL
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]//todo - mozesz edytowac tylko swoje ksiazki chyba ze jestes adminem, to wszystkie - jesli nie jestes uzytkownikiem - nic nie mozesz
         public IActionResult Edit(int id) 
         {
-            // mozesz edytowac tylko swoje ksiazki chyba ze jestes adminem, to wszystkie
-            // jesli nie jestes uzytkownikiem - nic nie mozesz
             var sql = _bookRepository.GetBookByID(id);
 
             if (sql == null)
@@ -113,14 +162,16 @@ namespace TypingBook.Controllers
                 ID = sql.Id,
                 Title = sql.Title,
                 Content = sql.Content,
+                ContentInBookPages = JsonSerializer.Deserialize<List<string>>(sql.Content),//edytowanie nic nie da bo prześlesz i tak content
                 Genre = sql.Genre.HasValue ? sql.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
                 Authors = sql.Authors,
                 Rate = sql.Rate,
                 ReleaseDate = sql.ReleaseDate,
                 AddDate = sql.AddDate,
-                IsVerified = IsLoggerdUserAdministrator() ? true : sql.IsVerified,
+                IsVerified = sql.IsVerified,
                 License = sql.License,
-                UserId = sql.UserId
+                UserId = sql.UserId,
+                ContentBeforeModification = sql.ContentBeforeModifying
             };
             return View(model);
         }
@@ -136,7 +187,7 @@ namespace TypingBook.Controllers
 
             var bookService = new BookContentService();
 
-            sql.Content = bookService.TransformeBookContent(model.Content);
+            sql.Content = bookService.CreateBookPagesJSON(model.Content);
             sql.Authors = model.Authors;
             sql.ReleaseDate = model.ReleaseDate;
             sql.Title = model.Title;

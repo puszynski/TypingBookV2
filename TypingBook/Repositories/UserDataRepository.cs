@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TypingBook.Data;
+using TypingBook.Helpers;
 using TypingBook.Models;
 using TypingBook.Repositories.IReporitories;
 
@@ -17,30 +19,38 @@ namespace TypingBook.Repositories
         }
 
 
-        public UserData GetById(string id)
+        public UserData GetById(string userID)
         {
-            var result = _db.UserData.SingleOrDefault(x => x.UserId == id);
+            var result = _db.UserData.SingleOrDefault(x => x.UserId == userID);
 
             if (result == null)
-                return Create(id);
+                return Create(userID);
 
             return result;
         }
 
-        public void UpdateById(UserData model)
+        public List<(int bookID, int userLastPage)> GetByIdUserLastTypedPages(string userID)
         {
-            _db.Update(model);
+            var result = _db.UserData.SingleOrDefault(x => x.UserId == userID).BookProgress;
+            
+            var userDataHelper = new UserDataHelper();
+            return userDataHelper.GetAllBooksCurrentPage(result);
         }
 
-        public async Task SaveAsync()
+        public string GetStatisticsByUserId(string userId) => _db.UserData.SingleOrDefault(x => x.UserId == userId).Statistics;
+        public void UpateStatisticsByUserId(string userId, string statistics)
         {
-            await _db.SaveChangesAsync();
+            var model = GetById(userId);
+            model.Statistics = statistics;
+            UpdateById(model);
         }
+        
+        public void UpdateById(UserData model) => _db.Update(model);
 
-        public void SaveChanges()
-        {
-            _db.SaveChanges();
-        }
+
+        public async Task SaveAsync() => await _db.SaveChangesAsync();
+
+        public void SaveChanges() => _db.SaveChanges();
 
         private UserData Create(string id)
         {

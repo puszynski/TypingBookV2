@@ -16,13 +16,24 @@
 @foreach (var item in Model)
 {
     <div class="jumbotron">
+        @if (item.UserLastTypedPage > 0)
+        {
+            <div class="alert alert-info">
+              <strong>In progress!</strong> Already typed <strong>@item.UserLastTypedPage</strong> book pages.
+            </div>
+        }
+
         <h1 class="display-4">@item.Title</h1>
         <p>by @item.Authors</p>
             
         <a href="@Url.Action("Index", "Typing", new { bookId = item.ID })" class="btn btn-primary btn-lg"><b>Type!</b></a>
-        <a href="@Url.Action("Edit", new { id = item.ID })" class="btn btn-secondary">Edit</a>
-        <a href="@Url.Action("Delete", new { id = item.ID })" class="btn btn-danger">Delete</a>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("Edit", new { id = item.ID })" class="btn btn-secondary">Edit</a>
+            <a href="@Url.Action("Delete", new { id = item.ID })" class="btn btn-danger">Delete</a>
+        }
         
-        <p>@item.Content</p>
+        <p>@item.Description</p>
     </div>
 }

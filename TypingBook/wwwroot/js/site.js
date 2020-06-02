@@ -1,4 +1,8 @@
-﻿
+﻿// allow to use bootsrap tooltips
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 
 // create ajax links from, e.g.:  <a class="nav-link text-dark" asp-action="Index" asp-controller="Home" asp-route-id="123" data - target="body-container" id = "ajax_link" >Type</a >
 function ajaxLink() {
@@ -110,7 +114,29 @@ function saveTypingResult(bookId, nextBookPage) {
         //    console.log("Data has been sended successfully.");  
         //},
         error: function () {
-           console.log("Error while calling the /Typing/SaveTypingResult from site.js, function: saveTypingResult()");
+           console.log("Error while calling the /Typing/SaveTypingResult from site.js, js function: saveTypingResult()");
+        }
+    });
+
+    saveStatistics();
+}
+
+function saveStatistics() {
+    var correctTyped = parseInt($("#correctTyped").text(), 10);
+    var wrongTyped = parseInt($("#wrongTyped").text(), 10);
+    //todo time
+
+    $.ajax({
+        url: '/Statistics/SaveData',
+        data: {
+            typedCorrect: correctTyped,
+            typedWrong: wrongTyped,
+            secondsOfTyping: 10
+        },
+        type: 'POST',
+        datatype: 'json',
+        error: function () {
+            console.log("Error while calling the /Statistics/SaveData from site.js, js function: saveStatistics()");
         }
     });
 }

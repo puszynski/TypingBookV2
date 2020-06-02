@@ -15,5 +15,7 @@ namespace TypingBook.Enums
         Documentary = 128,
         Comedy = 256,
         War = 512,
+        Article = 1024,
+        FairyTales = 2048,
     }        
 }

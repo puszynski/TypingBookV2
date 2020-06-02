@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using TypingBook.Enums;
 using TypingBook.Helpers;
 
 namespace TypingBook.ViewModels.Book
 {
-    public class BookRowViewModel
+    public class BookRowViewModel : BaseViewModel
     {
         public BookRowViewModel()
         {
@@ -23,8 +24,18 @@ namespace TypingBook.ViewModels.Book
         public string Title { get; set; }
 
         [Required]
+        [StringLength(1000, MinimumLength = 10)]
+        [Display(Name = "Book Description")]
+        public string Description { get; set; }
+
+        [Required]
         [Display(Name = "Book Content")]
         public string Content { get; set; }
+
+        [Display(Name = "Book content before modyfications(display only)")]
+        public string ContentBeforeModification { get; set; }        
+
+        public List<string> ContentInBookPages { get; set; }
 
         [Required]
         [Display(Name = "Book Authors")]
@@ -41,11 +52,10 @@ namespace TypingBook.ViewModels.Book
         [DataType(DataType.Date)]
         [Display(Name = "Relase Date")]
         public DateTime? ReleaseDate { get; set; }
-
-
         public DateTime AddDate { get; set; }
         public string UserId { get; set; }
         public string License { get; set; }
         public bool IsVerified { get; set; }
+        public int UserLastTypedPage { get; set; }
     }
 }

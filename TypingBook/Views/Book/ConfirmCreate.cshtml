@@ -1,4 +1,4 @@
-﻿@model TypingBook.ViewModels.Book.BookRowViewModel
+@model TypingBook.ViewModels.Book.BookRowViewModel
 @{
     ViewData["Title"] = "Edit Book";
     var counter = 1;
@@ -11,16 +11,19 @@
 
 
 <div class="jumbotron">
-    <form asp-controller="Book" asp-action="Edit" method="post">
+    <form asp-controller="Book" asp-action="Create" method="post">
         <input name="nameof(@Model.ID)" type="hidden" value="<removed for brevity>">
+        @*<p>@Html.ValidationSummary()</p>*@
         <div class="form-group">
+            @*@Html.LabelFor(x => x.Title)*@
+            @*@Html.EditorFor(x => x.Title)*@
             <label asp-for="nameof(@Model.Title)" class="control-label"></label>
             <input asp-for="nameof(@Model.Title)" class="form-control" />
             <span asp-validation-for="nameof(@Model.Title)" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="nameof(@Model.Description)" class="control-label"></label>
-            <textarea rows="5" asp-for="nameof(@Model.Description)" class="form-control"></textarea>
+            <input asp-for="nameof(@Model.Description)" class="form-control" />
             <span asp-validation-for="nameof(@Model.Description)" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -31,6 +34,7 @@
 
         <div class="form-group">
             <label asp-for="nameof(@Model.Genre)" class="control-label"></label>
+            @*@Html.ListBoxFor(m => m.Genre, Model.GenreSelectListItem, "form-control")*@
             <select asp-for="nameof(@Model.Genre)" asp-items="@Model.GenreSelectListItem" class="form-control"></select>
             <span asp-validation-for="nameof(@Model.Genre)" class="text-danger"></span>
         </div>
@@ -48,36 +52,27 @@
         </div>
 
         <label asp-for="nameof(@Model.Content)" class="control-label"></label>
-        <span asp-validation-for="nameof(@Model.Content)" class="text-danger"></span>
         @foreach (var bookPage in Model.ContentInBookPages)
         {
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Page @(counter++)</span>
                 </div>
+                @*<input type="text" class="form-control">*@
                 <textarea rows="2" asp-for="@bookPage" class="form-control"></textarea>
             </div>
         }
 
-        @if (User.IsInRole("Administrator") && !string.IsNullOrEmpty(Model.ContentBeforeModification))
+        @if (User.IsInRole("Administrator"))
         {
             <div class="form-group">
                 <label asp-for="nameof(@Model.ContentBeforeModification)" class="control-label"></label>
-                <textarea rows="5" asp-for="nameof(@Model.ContentBeforeModification)" class="form-control" disabled="disabled"></textarea>
-                <span asp-validation-for="nameof(@Model.ContentBeforeModification)" class="text-danger"></span>
+                <textarea rows="15" asp-for="nameof(@Model.ContentBeforeModification)" class="form-control"></textarea>
             </div>
         }
 
-        <input type="submit" value="Submit changes" class="btn btn-primary" />
+        <span asp-validation-for="nameof(@Model.Content)" class="text-danger"></span>
+        <input type="submit" value="Confirm" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-
-        @if (User.IsInRole("Administrator") && !string.IsNullOrEmpty(Model.ContentBeforeModification))
-        {
-            if (!Model.IsVerified)
-            {
-                <a asp-action="RebuildBookPages" asp-route-id="@Model.ID" class="btn btn-secondary">Rebuild book pages</a>
-            }
-            <a asp-action="VerifyBook" asp-route-id="@Model.ID" class="btn btn-secondary" data-toggle="tooltip" title="Verify books cant use option RebuildBookPages. Book pages are frozen. Only other data can be updated.">Verify book</a>
-        }
     </form>
 </div>

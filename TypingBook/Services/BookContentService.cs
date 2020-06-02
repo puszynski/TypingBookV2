@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using TypingBook.Extensions;
+﻿using System.Linq;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
 
@@ -23,25 +22,17 @@ namespace TypingBook.Services
         {
             var books = _bookRepository.GetAllBooksAsync();
 
-            foreach (var item in books.Result)
+            foreach (var item in books.Result.Where(x => !x.IsVerified))
             {
-                item.Content = TransformeBookContent(item.Content);
+                var bph = new BookPagesHandler(item.Content);
+                item.Content = bph.Execute(); ;
             }
         }
 
-        public string TransformeBookContent(string input)
+        public string CreateBookPagesJSON(string bookContent)
         {
-            if (string.IsNullOrWhiteSpace(input))
-                return input;
-
-            // replace special char
-            var charsToReplece = new char[] { ' ', ';', ',', '\r', '\t', '\n' };
-            var result = input.Replace(charsToReplece, ' ');
-
-            // replace any kind of whitespace (e.g. tabs, newlines, {doublespaces??} etc.)
-            result = Regex.Replace(result, @"\s+", " ");
-
-            return result;
+            var bph = new BookPagesHandler(bookContent);
+            return bph.Execute();
         }
     }
 }
