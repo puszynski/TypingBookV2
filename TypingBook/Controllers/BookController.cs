@@ -161,6 +161,7 @@ namespace TypingBook.Controllers
             {
                 ID = sql.Id,
                 Title = sql.Title,
+                Description = sql.Description,
                 Content = sql.Content,
                 ContentInBookPages = JsonSerializer.Deserialize<List<string>>(sql.Content),//edytowanie nic nie da bo prześlesz i tak content
                 Genre = sql.Genre.HasValue ? sql.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
