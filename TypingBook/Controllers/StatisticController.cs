@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using TypingBook.Services.IServices;
+using TypingBook.ViewModels.Statistic;
 
 namespace TypingBook.Controllers
 {
-    public class StatisticsController : BaseController
+    public class StatisticController : BaseController
     {
-        private readonly IStatisticsService _statisticsService;
+        private readonly IStatisticService _statisticsService;
 
-        public StatisticsController(IStatisticsService statisticsService) 
+        public StatisticController(IStatisticService statisticsService)
             => (_statisticsService) = (statisticsService);
 
         public IActionResult Index()
@@ -17,8 +19,10 @@ namespace TypingBook.Controllers
             if (string.IsNullOrEmpty(userId))
                 return NotFound();
 
-            var userData = _statisticsService.GetUserDataById(userId);
-            return View(userData);
+            var userData = _statisticsService.GetUserDataById(userId).First();
+            var model = new StatisticViewModel() { TypedCorrect = userData.Item2, TypedWrong = userData.Item3 };
+
+            return View(model);
         }
 
         [HttpPost]

@@ -124,14 +124,16 @@ function saveTypingResult(bookId, nextBookPage) {
 function saveStatistics() {
     var correctTyped = parseInt($("#correctTyped").text(), 10);
     var wrongTyped = parseInt($("#wrongTyped").text(), 10);
+    var startDate = parseDate($("#startTypingPage").text(), 10);
+    var endDate = new Date();
     //todo time
 
     $.ajax({
-        url: '/Statistics/SaveData',
+        url: '/Statistic/SaveData',
         data: {
             typedCorrect: correctTyped,
             typedWrong: wrongTyped,
-            secondsOfTyping: 10
+            secondsOfTyping: endDate - startDate
         },
         type: 'POST',
         datatype: 'json',

@@ -1,0 +1,58 @@
+﻿@model TypingBook.ViewModels.Statistic.StatisticViewModel
+
+@{
+    ViewData["Title"] = "_Index";
+}
+
+<h1>Statistic</h1>
+
+<div class="col-sm-4">
+    <div id="container"></div>
+</div>
+
+
+<script>
+    Highcharts.chart('container', {
+        chart: {
+            backgroundColor: '#222'
+        },
+        title: {
+            text: 'Actual month',
+            align: 'center',
+            color: 'white',
+            verticalAlign: 'middle',
+            y: 60,
+            style: {
+                color: '#FFFFFF',
+                fontWeight: 'bold',
+                fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+            }
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%'],
+                size: '110%'
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Actual month',
+            innerSize: '50%',
+            data: [
+                ['Correct', @Model.TypedCorrect],
+                ['Wrong', @Model.TypedWrong]
+            ]
+        }]
+    });
+</script>
+

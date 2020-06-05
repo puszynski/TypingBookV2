@@ -7,16 +7,16 @@ using TypingBook.Services.IServices;
 
 namespace TypingBook.Services
 {
-    public class StatisticsService : IStatisticService
+    public class StatisticService : IStatisticService
     {
         private readonly IUserDataRepository _userDataRepository;
 
-        public StatisticsService(IUserDataRepository userDataRepository) 
+        public StatisticService(IUserDataRepository userDataRepository)
             => (_userDataRepository) = (userDataRepository);
 
         public List<(DateTime month, int typedCrrect, int typedWrong, int secondsOfTyping)> GetUserDataById(string userId)
         {
-            var stringData = _userDataRepository.GetStatisticsByUserId(userId);            
+            var stringData = _userDataRepository.GetStatisticsByUserId(userId);
             return JsonConvert.DeserializeObject<List<(DateTime month, int typedCrrect, int typedWrong, int secondsOfTyping)>>(stringData);
         }
 
@@ -37,8 +37,8 @@ namespace TypingBook.Services
 
             var userDataRow = userData.FindIndex(x => x.month == actuallMonthDate);
             var selectedDataRow = userData.Single(x => x.month == actuallMonthDate);
-            
-            userData[userDataRow] = (actuallMonthDate, 
+
+            userData[userDataRow] = (actuallMonthDate,
                                      selectedDataRow.typedCrrect + typedCorrect,
                                      selectedDataRow.typedWrong + typedWrong,
                                      selectedDataRow.secondsOfTyping + secondsOfTyping);
