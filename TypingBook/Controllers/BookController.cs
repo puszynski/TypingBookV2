@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,10 +17,12 @@ namespace TypingBook.Controllers
     public class BookController : BaseController
     {
         readonly IBookRepository _bookRepository;
+        readonly ILogger _logger;
 
-        public BookController(IBookRepository bookRepository)
+        public BookController(IBookRepository bookRepository, ILogger<BookController> logger)
         {
             _bookRepository = bookRepository;
+            _logger = logger;
         }
 
         public IActionResult Index(string bookOrAuthorSearchString, int? genreFilter)
@@ -74,23 +77,31 @@ namespace TypingBook.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var bookService = new BookContentService();
-
-            var sql = new Book
+            try
             {
-                Authors = model.Authors,
-                Content = bookService.TransformeBookContent(model.Content),
-                Genre = model.Genre.Sum(),
-                Title = model.Title,
-                ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
-                AddDate = DateTime.Now,
-                License = model.License,
-                IsVerified = IsLoggerdUserAdministrator() ? true : false,
-                UserId = GetLoggedUserId()
-            };
+                var bookService = new BookContentService();
 
-            _bookRepository.CreateBook(sql);
-            _bookRepository.SaveChanges();
+                var sql = new Book
+                {
+                    Authors = model.Authors,
+                    Content = bookService.TransformeBookContent(model.Content),
+                    Genre = model.Genre.Sum(),
+                    Title = model.Title,
+                    ReleaseDate = model.ReleaseDate.HasValue ? model.ReleaseDate : null,
+                    AddDate = DateTime.Now,
+                    License = model.License,
+                    IsVerified = IsLoggerdUserAdministrator() ? true : false,
+                    UserId = GetLoggedUserId()
+                };
+
+                _bookRepository.CreateBook(sql);
+                _bookRepository.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("ERROR => BookController/Create => " + ex);
+            }
+            
 
             return RedirectToAction("Index");
         }

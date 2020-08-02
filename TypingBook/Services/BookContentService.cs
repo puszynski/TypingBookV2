@@ -14,10 +14,7 @@ namespace TypingBook.Services
 
         }
 
-        public BookContentService(IBookRepository bookRepository)
-        {
-            _bookRepository = bookRepository;
-        }
+        public BookContentService(IBookRepository bookRepository) => _bookRepository = bookRepository;
 
         public void ReeditBooksContent()
         {

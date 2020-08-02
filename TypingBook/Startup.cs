@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TypingBook.Data;
 using TypingBook.Repositories;
 using TypingBook.Repositories.IReporitories;
@@ -78,12 +79,14 @@ namespace TypingBook
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public static void Configure(IApplicationBuilder app, IHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IHostEnvironment env, ILoggerFactory loggerFactory)
         {
             //add for tests
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
             app.UseHsts();
+
+            loggerFactory.AddFile("Logs/mylog-{Date}.txt");
 
             if (env.IsDevelopment())
             {
