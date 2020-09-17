@@ -47,7 +47,13 @@
             <span asp-validation-for="nameof(@Model.License)" class="text-danger"></span>
         </div>
 
-        <label asp-for="nameof(@Model.Content)" class="control-label"></label>
+        <div class="form-group">
+            <label asp-for="nameof(@Model.Content)" class="control-label"></label>
+            <textarea rows="5" asp-for="nameof(@Model.Content)" class="form-control"></textarea>
+            <span asp-validation-for="nameof(@Model.Content)" class="text-danger"></span>
+        </div>
+
+        <label asp-for="nameof(@Model.Content)" class="control-label"></label>(in pages)
         <span asp-validation-for="nameof(@Model.Content)" class="text-danger"></span>
         @foreach (var bookPage in Model.ContentInBookPages)
         {
@@ -77,7 +83,7 @@
             {
                 <a asp-action="RebuildBookPages" asp-route-id="@Model.ID" class="btn btn-secondary">Rebuild book pages</a>
             }
-            <a asp-action="VerifyBook" asp-route-id="@Model.ID" class="btn btn-secondary" data-toggle="tooltip" title="Verify books cant use option RebuildBookPages. Book pages are frozen. Only other data can be updated.">Verify book</a>
+            <a asp-action="VerifyBook" asp-route-id="@Model.ID" method="post" class="btn btn-secondary" data-toggle="tooltip" title="Verify books cant use option RebuildBookPages. Book pages are frozen. Only other data can be updated.">Verify book</a>
         }
     </form>
 </div>
