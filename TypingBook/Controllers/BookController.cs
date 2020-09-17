@@ -224,5 +224,13 @@ namespace TypingBook.Controllers
             await _bookRepository.SaveAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> VerifyBook(int id)
+        {
+            var book = await _bookRepository.GetAsyncBookByID(id);
+            book.IsVerified = true;
+            await _bookRepository.SaveAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
