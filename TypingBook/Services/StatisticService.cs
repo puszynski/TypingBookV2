@@ -20,8 +20,10 @@ namespace TypingBook.Services
             return JsonConvert.DeserializeObject<List<(DateTime month, int typedCrrect, int typedWrong, int secondsOfTyping)>>(stringData);
         }
 
-        public void SaveDataByUserId(string userId, int typedCorrect, int typedWrong, int secondsOfTyping)
+        public void SaveDataByUserId(string userId, int typedCorrect, int typedWrong, int millisecondsOfTyping)
         {
+            var secondsOfTyping = (int)TimeSpan.FromMilliseconds(millisecondsOfTyping).TotalSeconds;
+
             var stringData = _userDataRepository.GetStatisticsByUserId(userId);
             List<(DateTime month, int typedCrrect, int typedWrong, int secondsOfTyping)> userData;
 
