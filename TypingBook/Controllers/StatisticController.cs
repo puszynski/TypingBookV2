@@ -26,14 +26,14 @@ namespace TypingBook.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveData(int typedCorrect, int typedWrong, int secondsOfTyping)
+        public IActionResult SaveData(int typedCorrect, int typedWrong, int millisecondsOfTyping)
         {
             var userId = GetLoggedUserId();
 
             if (string.IsNullOrEmpty(userId))
                 return NotFound();
 
-            _statisticsService.SaveDataByUserId(userId, typedCorrect, typedWrong, secondsOfTyping);
+            _statisticsService.SaveDataByUserId(userId, typedCorrect, typedWrong, millisecondsOfTyping);
 
             return Ok();
         }

@@ -1,8 +1,7 @@
-﻿// allow to use bootsrap tooltips
-$(document).ready(function(){
+﻿// allow to use bootsrap tooltips - throw console error on some pages..
+$(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
-
 
 // create ajax links from, e.g.:  <a class="nav-link text-dark" asp-action="Index" asp-controller="Home" asp-route-id="123" data - target="body-container" id = "ajax_link" >Type</a >
 function ajaxLink() {
@@ -22,7 +21,7 @@ function ajaxLink() {
 function typingBook(currentBookPage, bookPagesJson, bookId) {
     document.onkeypress = function (e) {
         e = e || window.event;
-
+        
         var book_content = document.getElementById('book_content').textContent;
         pageLength = bookPagesJson[currentBookPage].length;
 
@@ -47,6 +46,7 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
                 var nextPage = ++currentBookPage;
 
                 saveTypingResult(bookId, nextPage);
+                startDate();
 
                 $('.progress-bar-correct').css({ 'width': '0%' });
                 $('.progress-bar-wrong').css({ 'width': '0%' });
@@ -121,19 +121,24 @@ function saveTypingResult(bookId, nextBookPage) {
     saveStatistics();
 }
 
+function setStartTime() {
+    var start = new Date().getTime();
+    document.getElementById("startTypingPage").innerHTML = start;
+}
+
 function saveStatistics() {
     var correctTyped = parseInt($("#correctTyped").text(), 10);
     var wrongTyped = parseInt($("#wrongTyped").text(), 10);
-    var startDate = parseDate($("#startTypingPage").text(), 10);
-    var endDate = new Date();
-    //todo time
+
+    var startDate = $("#startTypingPage").text();
+    var endDate = new Date().getTime();
 
     $.ajax({
         url: '/Statistic/SaveData',
         data: {
             typedCorrect: correctTyped,
             typedWrong: wrongTyped,
-            secondsOfTyping: endDate - startDate
+            millisecondsOfTyping: endDate - startDate
         },
         type: 'POST',
         datatype: 'json',
