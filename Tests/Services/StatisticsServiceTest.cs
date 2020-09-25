@@ -37,7 +37,7 @@ namespace Tests.Services
         // https://rubikscode.net/2018/04/16/implementing-and-testing-repository-pattern-using-entity-framework/
         public void SaveDataByUserIdTest()
         {
-            var statisticsService = new StatisticsService(_userDataRepository);
+            var statisticsService = new StatisticService(_userDataRepository);
             statisticsService.SaveDataByUserId("", 100, 20, 10);
 
             //Assert.AreEqual(mockUserData, result);
@@ -46,7 +46,7 @@ namespace Tests.Services
         [Test]
         public void GetUserDataByIdTest()
         {
-            var statisticsService = new StatisticsService(_userDataRepository);
+            var statisticsService = new StatisticService(_userDataRepository);
             var result = statisticsService.GetUserDataById("");
 
             var mockUserData = new List<(DateTime month, int typedCrrect, int typedWrong, int secondsOfTyping)>
