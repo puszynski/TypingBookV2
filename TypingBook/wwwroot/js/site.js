@@ -21,17 +21,19 @@ function ajaxLink() {
 function typingBook(currentBookPage, bookPagesJson, bookId) {
     document.onkeypress = function (e) {
         e = e || window.event;
-        
+                
         var book_content = document.getElementById('book_content').textContent;
         pageLength = bookPagesJson[currentBookPage].length;
 
         //only for dev porpuse:
-        $('.typedCode').html(e.keyCode);
-        $('.codeToType').html(book_content.charCodeAt(0));
+            $('.typedCode').html(e.keyCode);
+            $('.codeToType').html(book_content.charCodeAt(0));
 
         if (isSameChar(e.which, book_content.charCodeAt(0))) {
             var decreasedValue = parseInt($("#correctTyped").text(), 10) + 1;
             $('#correctTyped').html(decreasedValue);
+
+            updateTotalMilliseconds();
 
             updateBookPageStatusBar(pageLength);
 
@@ -45,8 +47,8 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
                 var bookPages = bookPagesJson;
                 var nextPage = ++currentBookPage;
 
+                displaySummaryAlert();
                 saveTypingResult(bookId, nextPage);
-                startDate();
 
                 $('.progress-bar-correct').css({ 'width': '0%' });
                 $('.progress-bar-wrong').css({ 'width': '0%' });
@@ -72,11 +74,34 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
     };
 }
 
+
+function updateTotalMilliseconds() {
+    var startTimeMilliseconds = document.getElementById('startTime').innerHTML;
+    var endTimeMilliseconds = new Date().getTime();
+    var milliseconds = parseInt(endTimeMilliseconds) - parseInt(startTimeMilliseconds);
+    var total = parseInt(document.getElementById('totalMilliseconds').innerHTML);
+
+    var limitMilliseconds = 2000;
+
+    if (milliseconds > limitMilliseconds ) {
+        milliseconds = limitMilliseconds;
+    }
+
+    document.getElementById('totalMilliseconds').innerHTML = total + milliseconds;
+    document.getElementById('startTime').innerHTML = endTimeMilliseconds;
+}
+
+function setStartTime() {
+    var start = new Date().getTime();
+    document.getElementById("startTime").innerHTML = start;
+}
+
+
 function isSameChar(typedCharCode, charToType) {
     if (typedCharCode == charToType) {
         return true;
     }
-    else if (charToType > 8200 /*charToType == 8217 || charToType == 8211 || charToType == 8220 || charToType = 8221*/) {
+    else if (charToType > 8200) { ignore 
         return true;
     }
     else
@@ -111,7 +136,7 @@ function saveTypingResult(bookId, nextBookPage) {
         type: 'POST',
         datatype: 'json',
         //success: function () {
-        //    console.log("Data has been sended successfully.");  
+        //    console.log("Data has been sended successfully to '/Typing/SaveTypingResult'.");
         //},
         error: function () {
            console.log("Error while calling the /Typing/SaveTypingResult from site.js, js function: saveTypingResult()");
@@ -121,24 +146,45 @@ function saveTypingResult(bookId, nextBookPage) {
     saveStatistics();
 }
 
-function setStartTime() {
-    var start = new Date().getTime();
-    document.getElementById("startTypingPage").innerHTML = start;
+function displaySummaryAlert() {
+    //TODO create new alert and add info about correct typed/wrong + time in seconds
+    var timeIcon = "<svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 1\6\" class=\"bi bi - stopwatch\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <path fill-rule=\"evenodd\" d=\"M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07A7.001 7.001 0 0 1 8 16 7 7 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5zM8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3zm0 2.1a.5.5 0 0 1 .5.5V9a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1 0-1h3V5.6a.5.5 0 0 1 .5-.5z\" /></svg >";
+    var correctIcon = "<svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi - check\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <path fill-rule=\"evenodd\" d=\"M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z\" /></svg >";
+    var wrongIcon = "<svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi - x\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <path fill-rule=\"evenodd\" d=\"M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z\" /></svg >";
+
+    var correctTyped = parseInt($("#correctTyped").text(), 10);
+    var wrongTyped = parseInt($("#wrongTyped").text(), 10);
+
+    var typedTimeInMiliseconds = parseInt($("#totalMilliseconds").text(), 10);
+    var typedTimeInSeconds = typedTimeInMiliseconds / 1000;
+
+    var message = timeIcon + typedTimeInSeconds + correctIcon + correctTyped + wrongIcon + wrongTyped;
+
+    var element = document.getElementById("alterPlaceholder");
+    element.innerHTML = message;
+
+    //unhide
+    $('#alterPlaceholder').fadeIn('fast');
+    
+    //hide
+    var timeInMiliseconds = 3000;
+    setTimeout(function () {
+        $('#alterPlaceholder').fadeOut('slow');
+    }, timeInMiliseconds);
 }
 
 function saveStatistics() {
     var correctTyped = parseInt($("#correctTyped").text(), 10);
     var wrongTyped = parseInt($("#wrongTyped").text(), 10);
 
-    var startDate = $("#startTypingPage").text();
-    var endDate = new Date().getTime();
+    var time = $("#totalMilliseconds").text();
 
     $.ajax({
         url: '/Statistic/SaveData',
         data: {
             typedCorrect: correctTyped,
             typedWrong: wrongTyped,
-            millisecondsOfTyping: endDate - startDate
+            millisecondsOfTyping: time
         },
         type: 'POST',
         datatype: 'json',
