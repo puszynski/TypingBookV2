@@ -3,9 +3,7 @@
     var bookPages = @Html.Raw(Json.Serialize(Model.BookPages));
 }
 
-<div id="alterPlaceholder"></div>
-
-<h1 @*class="display-4"*@>
+<h1>
     <span class="typed_text" id="typed_content"></span><span class="blink_text">|</span><span id="book_content">@Model.BookPages[@Model.CurrentBookPage]</span>
 </h1>
 <h6 class="text-muted">
