@@ -3,6 +3,8 @@
     var bookPages = @Html.Raw(Json.Serialize(Model.BookPages));
 }
 
+<div id="alterPlaceholder"></div>
+
 <h1 @*class="display-4"*@>
     <span class="typed_text" id="typed_content"></span><span class="blink_text">|</span><span id="book_content">@Model.BookPages[@Model.CurrentBookPage]</span>
 </h1>
@@ -18,13 +20,14 @@
         typed code: <span class="typedCode">0</span>
         code to type: <span class="codeToType">0</span>
     </span>
-    <span id="startTypingPage"></span>
+    <span id="startTime"></span>
+    <span id="totalMilliseconds">0</span>
 </div>
 
 <script src="~/js/site.js" asp-append-version="true"></script>
 
 <script>
-    typingBook(@Model.CurrentBookPage, @bookPages, @Model.BookId);
     setStartTime();
+    typingBook(@Model.CurrentBookPage, @bookPages, @Model.BookId);
 </script>
 

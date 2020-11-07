@@ -21,7 +21,7 @@ function ajaxLink() {
 function typingBook(currentBookPage, bookPagesJson, bookId) {
     document.onkeypress = function (e) {
         e = e || window.event;
-        
+                
         var book_content = document.getElementById('book_content').textContent;
         pageLength = bookPagesJson[currentBookPage].length;
 
@@ -32,6 +32,8 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
         if (isSameChar(e.which, book_content.charCodeAt(0))) {
             var decreasedValue = parseInt($("#correctTyped").text(), 10) + 1;
             $('#correctTyped').html(decreasedValue);
+
+            updateTotalMilliseconds();
 
             updateBookPageStatusBar(pageLength);
 
@@ -45,8 +47,8 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
                 var bookPages = bookPagesJson;
                 var nextPage = ++currentBookPage;
 
+                displaySummaryAlert();
                 saveTypingResult(bookId, nextPage);
-                startDate();
 
                 $('.progress-bar-correct').css({ 'width': '0%' });
                 $('.progress-bar-wrong').css({ 'width': '0%' });
@@ -71,6 +73,29 @@ function typingBook(currentBookPage, bookPagesJson, bookId) {
         }
     };
 }
+
+
+function updateTotalMilliseconds() {
+    var startTimeMilliseconds = document.getElementById('startTime').innerHTML;
+    var endTimeMilliseconds = new Date().getTime();
+    var milliseconds = parseInt(endTimeMilliseconds) - parseInt(startTimeMilliseconds);
+    var total = parseInt(document.getElementById('totalMilliseconds').innerHTML);
+
+    var limitMilliseconds = 10000;
+
+    if (milliseconds > limitMilliseconds ) {
+        milliseconds = limitMilliseconds;
+    }
+
+    document.getElementById('totalMilliseconds').innerHTML = total + milliseconds;
+    document.getElementById('startTime').innerHTML = endTimeMilliseconds;
+}
+
+function setStartTime() {
+    var start = new Date().getTime();
+    document.getElementById("startTime").innerHTML = start;
+}
+
 
 function isSameChar(typedCharCode, charToType) {
     if (typedCharCode == charToType) {
@@ -111,7 +136,7 @@ function saveTypingResult(bookId, nextBookPage) {
         type: 'POST',
         datatype: 'json',
         //success: function () {
-        //    console.log("Data has been sended successfully.");  
+        //    console.log("Data has been sended successfully to '/Typing/SaveTypingResult'.");
         //},
         error: function () {
            console.log("Error while calling the /Typing/SaveTypingResult from site.js, js function: saveTypingResult()");
@@ -121,24 +146,27 @@ function saveTypingResult(bookId, nextBookPage) {
     saveStatistics();
 }
 
-function setStartTime() {
-    var start = new Date().getTime();
-    document.getElementById("startTypingPage").innerHTML = start;
+function displaySummaryAlert() {
+    //TODO create new alert and add info about correct typed/wrong + time in seconds
+    document.getElementById("alterPlaceholder").innerHTML = ''; // clean other elements
+
+    var newElement = document.createElement("div");
+    newElement.appendChild(document.createTextNode("Foo"));
+    document.getElementById("alterPlaceholder").appendChild(newElement);
 }
 
 function saveStatistics() {
     var correctTyped = parseInt($("#correctTyped").text(), 10);
     var wrongTyped = parseInt($("#wrongTyped").text(), 10);
 
-    var startDate = $("#startTypingPage").text();
-    var endDate = new Date().getTime();
+    var time = $("#totalMilliseconds").text();
 
     $.ajax({
         url: '/Statistic/SaveData',
         data: {
             typedCorrect: correctTyped,
             typedWrong: wrongTyped,
-            millisecondsOfTyping: endDate - startDate
+            millisecondsOfTyping: time
         },
         type: 'POST',
         datatype: 'json',
