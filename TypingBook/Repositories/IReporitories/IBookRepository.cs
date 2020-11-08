@@ -10,6 +10,7 @@ namespace TypingBook.Repositories.IReporitories
         Book GetBookByID(int id);
         Task<Book> GetAsyncBookByID(int id);
         IQueryable<Book> GetAllBooks();
+        IQueryable<Book> GetAllBooksAvailableForUser(string userId, bool isLoggerdUserAdministrator);
         Task<List<Book>> GetAllBooksAsync();
         void UpdateBook(Book model);
         void CreateBook(Book model);

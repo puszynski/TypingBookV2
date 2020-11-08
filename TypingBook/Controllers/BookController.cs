@@ -5,96 +5,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using TypingBook.Enums;
 using TypingBook.Extensions;
 using TypingBook.Helpers;
 using TypingBook.Models;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services;
 using TypingBook.ViewModels.Book;
+using TypingBook.ViewModelsBuilders.Book;
 
 namespace TypingBook.Controllers
 {
     public class BookController : BaseController
     {
-        private readonly IBookRepository _bookRepository;
-        private readonly IUserDataRepository _userDataRepository;
+        readonly IBookRepository _bookRepository;
+        readonly IUserDataRepository _userDataRepository;
 
         public BookController(IBookRepository bookRepository, IUserDataRepository userDataRepository)
-        {
-            _bookRepository = bookRepository;
-            _userDataRepository = userDataRepository;
-        }
+            => (_bookRepository, _userDataRepository) = (bookRepository, userDataRepository);
 
+        [HttpGet]
         public IActionResult Index(string bookOrAuthorSearchString, int? genreFilter)
         {
-            var userId = GetLoggedUserId();
-            var sql = GetBaseQuery(userId);            
-
-            //TODO FILTR NIE DZIAŁA ^^`
-            if (!string.IsNullOrWhiteSpace(bookOrAuthorSearchString))
-                sql = sql.Where(x => x.Title.Contains(bookOrAuthorSearchString)
-                                || x.Authors.Contains(bookOrAuthorSearchString));
-
-            if (genreFilter.HasValue)
-                sql = sql.Where(x => (x.Genre & genreFilter) > 0);
-            
-            var bookRowViewModels = sql
-                .ToList()
-                .Select(x => new BookRowViewModel
-                {
-                    ID = x.Id,
-                    Title = x.Title,
-                    Description = x.Description,
-                    Authors = x.Authors,
-                    Genre = x.Genre.HasValue ? x.Genre.Value.ConvertEnumSumToIntArray().ToList() : null,
-                    Rate = x.Rate,
-                    ReleaseDate = x.ReleaseDate,
-                    AddDate = x.AddDate,
-                    IsVerified = x.IsVerified,
-                    License = x.License
-                })
-                .ToList();
-
-            AssignUserLastTypedPage(bookRowViewModels, userId);
-
-            var model = new BookViewModel(bookRowViewModels);
-            model.BookGenreSelectListItems = CreateSelectListItemHelper.GetInstance().GetSelectListItems<EBookGenre>();
+            var bookViewModelBuilder = new BookViewModelBuilder(_bookRepository,
+                                                                _userDataRepository,
+                                                                GetLoggedUserId(),
+                                                                IsLoggerdUserAdministrator(),
+                                                                bookOrAuthorSearchString,
+                                                                genreFilter);
 
             // TODO - if ajax load partial view like in Home/Index
-            return View(model);
-        }
+            return View(bookViewModelBuilder.Build());            
+        }                
 
-        private IQueryable<Book> GetBaseQuery(string userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-                return _bookRepository.GetAllBooks().Where(x => x.IsVerified);
-
-            else if (IsLoggerdUserAdministrator())
-                return _bookRepository.GetAllBooks();
-
-            else
-                return _bookRepository.GetAllBooks().Where(x => x.IsVerified && !x.IsPrivate || x.UserId == userId);
-        }
-
-        private void AssignUserLastTypedPage(List<BookRowViewModel> bookRowViewModels, string userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-                return;
-            
-            var userBooksInProgress = _userDataRepository.GetByIdUserLastTypedPages(userId);
-
-            foreach (var item in bookRowViewModels)
-                    item.UserLastTypedPage = userBooksInProgress.SingleOrDefault(x => x.bookID == item.ID).userLastPage;
-        }
-
+        [HttpGet]
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             var model = new BookRowViewModel();
             return View(model);
         }
-
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
@@ -129,6 +78,7 @@ namespace TypingBook.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         [Authorize(Roles = "Administrator")]
         public IActionResult RebuildBookPages(int id)
         {
@@ -225,6 +175,7 @@ namespace TypingBook.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public async Task<IActionResult> VerifyBook(int id)
         {
             var book = await _bookRepository.GetAsyncBookByID(id);
