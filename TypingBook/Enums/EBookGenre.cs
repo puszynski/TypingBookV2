@@ -5,6 +5,7 @@ namespace TypingBook.Enums
     [Flags]
     public enum EBookGenre
     { 
+        All = 0,
         SciFi = 1,
         Horror = 2,
         Action = 4,

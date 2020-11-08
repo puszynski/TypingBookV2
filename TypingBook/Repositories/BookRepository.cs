@@ -33,6 +33,18 @@ namespace TypingBook.Repositories
             return _db.Books;
         }
 
+        public IQueryable<Book> GetAllBooksAvailableForUser(string userId, bool isLoggerdUserAdministrator)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return GetAllBooks().Where(x => x.IsVerified);
+
+            else if (isLoggerdUserAdministrator)
+                return GetAllBooks();
+
+            else
+                return GetAllBooks().Where(x => x.IsVerified && !x.IsPrivate || x.UserId == userId);
+        }
+
         public Task<List<Book>> GetAllBooksAsync()
         {
             return _db.Books.ToListAsync();
