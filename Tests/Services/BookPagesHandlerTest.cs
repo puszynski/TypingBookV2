@@ -66,19 +66,7 @@ namespace Tests.Services
             var handler = new BookPagesHandler(bookContent);
             var result = handler.Execute();
 
-            Assert.AreEqual("[\"Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo\",\"foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo\"]", result);
-        }
-
-        [Test]
-        [Ignore("Ignore a test - only for debbuging")]
-        public void TestingPagesCount()
-        {
-            var bookContent = MockEntity.BookContentBeforeModifying();
-
-            var handler = new BookPagesHandler(bookContent);
-            var result = handler.Execute();
-
-            Assert.AreEqual("[\"Pięć Sześć\"]", result);
+            Assert.AreEqual("[\"Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo\",\"FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo foooo Foooooooooooo FOooooooooooo\",\"foooo Foooooooooooo FOooooooooooo foooo\"]", result);
         }
     }
 }

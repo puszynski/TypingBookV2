@@ -55,7 +55,16 @@ namespace TypingBook.Controllers
             var bookService = new BookContentService();
 
             model.ContentBeforeModification = model.Content;
-            model.Content = bookService.CreateBookPagesJSON(model.Content);
+
+            try
+            {
+                model.Content = bookService.CreateBookPagesJSON(model.Content);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;                
+                return View(model);
+            }
 
             var sql = new Book
             {

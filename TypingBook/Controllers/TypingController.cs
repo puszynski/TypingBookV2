@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Caching.Memory;
+using System.Configuration;
+using TypingBook.Data;
 using TypingBook.Repositories.IReporitories;
 using TypingBook.Services.IServices;
 using TypingBook.ViewModels.Typing;
@@ -41,8 +44,8 @@ namespace TypingBook.Controllers
             else
                 return View(result);
         }
-        
-        
+
+
         [HttpPost]
         [Authorize]
         public IActionResult SaveTypingResult(int bookId, int nextBookPage, int correctTyped, int wrongTyped)//bookId pokazuje jakby currentPage+1, nextBookPage jest undifined..
