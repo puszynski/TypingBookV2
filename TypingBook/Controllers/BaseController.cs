@@ -10,5 +10,11 @@ namespace TypingBook.Controllers
 
         protected bool IsLoggerdUserAdministrator()
             => HttpContext.User.IsInRole("Administrator");
+
+        protected string ErrorMessage
+        {
+            get { return (string)TempData["ErrorMessage"]; }
+            set { TempData["ErrorMessage"] = value; }
+        }
     }
 }

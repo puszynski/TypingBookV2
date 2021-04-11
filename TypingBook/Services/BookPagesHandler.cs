@@ -12,6 +12,7 @@ namespace TypingBook.Services
         private string _bookString;
         private List<string> _bookPages;
         private string _bookPagesJSON;
+        const int PAGE_TOO_LARGE = 250; //warning! Unit tests depends on it
 
         public BookPagesHandler(string bookContent)
         {
@@ -27,7 +28,6 @@ namespace TypingBook.Services
             ReplaceSelectedCharToEmpty();
             RemoveWhitespacesTabsNewLinesDoublespaces();
             DivideBookV2();
-            //DivideBook();
             RemoveSpaceFromStartEndForEachPage();
             CreateBookPagesJSON();
 
@@ -63,16 +63,14 @@ namespace TypingBook.Services
         }
 
         int FindPlaceToDevide(string input)
-        {
-            const int PAGE_TOO_LARGE = 300;
-
+        {    
             if (input.Length <= PAGE_TOO_LARGE)
                 return input.Length;
 
             if (!input.Contains('.'))
-                return 300;
+                return SetAfterFirstSpaceOrCut();
 
-            //take 3rd sentence
+            //take count after 3rd sentence
             var result = input.IndexOf('.', input.IndexOf('.', input.IndexOf('.') + 1) + 1) + 1; //jak nie ma kropki to sie zapętla!
 
             if (result > PAGE_TOO_LARGE)
@@ -84,12 +82,24 @@ namespace TypingBook.Services
                 result = input.IndexOf('.') + 1;
 
             if (result > PAGE_TOO_LARGE * 2)
-                throw new Exception($"Error: one of sentence is too large(More than {PAGE_TOO_LARGE * 2})");
+                result = SetAfterFirstSpaceOrCut();
 
             return result;
-        }
 
-        [Obsolete]
+            int SetAfterFirstSpaceOrCut()
+            {
+                var cutInput = input.Substring(PAGE_TOO_LARGE, input.Length - PAGE_TOO_LARGE);
+                var tempResult = cutInput.IndexOf(' '); 
+
+                if (tempResult != null && tempResult <=  PAGE_TOO_LARGE * 2)
+                    return PAGE_TOO_LARGE + tempResult;
+                else
+                    return PAGE_TOO_LARGE;
+            }
+        }
+        
+
+        [Obsolete("Use DivideBookV2()")]
         void DivideBook()
         {
             var bookContent = _bookString;
@@ -117,7 +127,7 @@ namespace TypingBook.Services
                     // todo
                     if (bookPagePartTwo.Length >= minAndMaxLenghtOfBothParts)
                     {
-                        bookPagePartTwo = notDividedContent.Substring(0, notDividedContent.IndexOf(" ") + 1); // narazie - awaryjnie gdy brak ". " rozdziela po spacji
+                        bookPagePartTwo = notDividedContent.Substring(0, notDividedContent.IndexOf(" ") + 1);
                     }
                 }
 

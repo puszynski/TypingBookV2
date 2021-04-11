@@ -35,8 +35,16 @@
         <partial name="_MainMenuPartial" />
     </header>
 
-
     <div class="container body-container">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="alert alert-danger" role="alert">@Html.Raw(@TempData["ErrorMessage"].ToString())</div>
+                </div>
+            </div>
+        }
+
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()

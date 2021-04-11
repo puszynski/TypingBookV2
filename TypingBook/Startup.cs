@@ -44,17 +44,23 @@ namespace TypingBook
             });
 
 
-            //local DB
+            //local DB (old option - no password in secrets.json
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("LocalDBConnection")));
 
-            //prod DB
-            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ProductionDBConnection"));
-            builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json (localy) or from azure settings     
+            //local DB
+            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("LocalDBConnection"));
+            builder.Password = Configuration["LocalDbPassword"]; ///add pass to connenstionstring from secrets.json (localy) or from azure settings     
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
 
-            
+            //prod DB
+            //var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ProductionDBConnection"));
+            //builder.Password = Configuration["ProdDbPassword"]; ///add pass to connenstionstring from secrets.json (localy) or from azure settings     
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(builder.ConnectionString));
+
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
 using TypingBook.Models;
 
 namespace TypingBook.Controllers
@@ -8,6 +10,13 @@ namespace TypingBook.Controllers
     {
         public IActionResult Index()
         {
+            var fooTxt = "   1,  2,3 ,4,  5,6   ";
+            var t = Regex.Replace(fooTxt, @"\s+", "");
+            var t1 = t.Split(',').Select(int.Parse).ToList();
+
+            //var t2 = fooTxt.Trim();
+            var t22 = fooTxt.Split(new char[] { ',', ';' }).Select(x => int.Parse(x)).ToList();
+
             return RedirectToAction("Index", "Book", "");
         }
 
