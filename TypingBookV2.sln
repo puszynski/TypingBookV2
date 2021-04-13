@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.28531.58
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypingBook", "TypingBook\TypingBook.csproj", "{2F12F59D-7667-48DA-A4FE-06848CAEFC53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D5C4C43F-E439-4A16-A2CD-829592E87295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{D5C4C43F-E439-4A16-A2CD-829592E87295}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypingBookBlazorApp", "TypingBookBlazorApp\TypingBookBlazorApp.csproj", "{53C82EE2-B8EC-4D32-A5EC-CEBB9D7341F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypingBookLibrary", "TypingBookLibrary\TypingBookLibrary.csproj", "{F6E4DC4A-CDF5-4FC1-987B-511441DF23DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{D5C4C43F-E439-4A16-A2CD-829592E87295}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5C4C43F-E439-4A16-A2CD-829592E87295}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5C4C43F-E439-4A16-A2CD-829592E87295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53C82EE2-B8EC-4D32-A5EC-CEBB9D7341F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53C82EE2-B8EC-4D32-A5EC-CEBB9D7341F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53C82EE2-B8EC-4D32-A5EC-CEBB9D7341F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53C82EE2-B8EC-4D32-A5EC-CEBB9D7341F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6E4DC4A-CDF5-4FC1-987B-511441DF23DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E4DC4A-CDF5-4FC1-987B-511441DF23DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E4DC4A-CDF5-4FC1-987B-511441DF23DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E4DC4A-CDF5-4FC1-987B-511441DF23DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

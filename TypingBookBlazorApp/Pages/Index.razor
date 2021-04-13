@@ -1,0 +1,41 @@
+﻿@page "/"
+@using TypingBookBlazorApp.Services
+@using TypingBookBlazorApp.ViewModels
+@inject TypingService TypingService
+
+<h1>hi.</h1>
+
+<h1>@typed [@currentChar] @toBeTyped</h1>
+
+<button class="btn btn-primary" @onclick="TypedWithSuccess">Type success</button>
+
+@code {
+    private TypingViewModel model;
+
+    private string actuallPage;
+    private int actuallChar;
+
+    private string typed;
+    private char currentChar;
+    private string toBeTyped;
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await TypingService.Get();
+        actuallPage = model.BookPages[model.CurrentBookPage];
+        actuallChar = 0;
+
+        typed = "";
+        currentChar = actuallPage[actuallChar];
+        toBeTyped = actuallPage.Substring(actuallChar + 1, actuallPage.Length - 1);
+    }
+
+    async Task TypedWithSuccess()
+    {
+        actuallChar++;
+
+        typed = actuallPage.Substring(0, actuallChar);
+        currentChar = actuallPage[actuallChar];
+        toBeTyped = actuallPage.Substring(actuallChar + 1, actuallPage.Length - actuallChar - 1);
+    }
+}
