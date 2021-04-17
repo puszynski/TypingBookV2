@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,11 +26,30 @@ namespace TypingBookBlazorApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<IdentityOptions>(options =>
+            {
+                // custom passoward validation
+                options.Password.RequiredLength = 3;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+            });
+
+            //todo
+            //services.AddAuthentication().AddFacebook(facebookOptions =>
+            //{
+            //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+            //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            //});
+
+            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("LocalDBConnection"));
+            builder.Password = Configuration["LocalDbPassword"]; ///add pass to connenstionstring from secrets.json (localy) or from azure settings     
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                options.UseSqlServer(builder.ConnectionString));
+                        
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
