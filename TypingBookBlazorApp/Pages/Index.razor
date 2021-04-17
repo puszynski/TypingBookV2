@@ -2,40 +2,78 @@
 @using TypingBookBlazorApp.Services
 @using TypingBookBlazorApp.ViewModels
 @inject TypingService TypingService
+@inject IJSRuntime _jsRuntime
 
-<h1>hi.</h1>
+<h1><span class="typed">@typed</span><span class="blink@(isWrongTyped ? "Red" : "White")">@currentChar</span>@toBeTyped</h1>
 
-<h1>@typed [@currentChar] @toBeTyped</h1>
-
-<button class="btn btn-primary" @onclick="TypedWithSuccess">Type success</button>
 
 @code {
     private TypingViewModel model;
 
-    private string actuallPage;
     private int actuallChar;
+    private string actuallPageText;
 
     private string typed;
     private char currentChar;
     private string toBeTyped;
 
+    private bool isWrongTyped = false;
+
     protected override async Task OnInitializedAsync()
     {
         model = await TypingService.Get();
-        actuallPage = model.BookPages[model.CurrentBookPage];
-        actuallChar = 0;
+        await SwitchBookPage(model.CurrentBookPage);
+    }
 
-        typed = "";
-        currentChar = actuallPage[actuallChar];
-        toBeTyped = actuallPage.Substring(actuallChar + 1, actuallPage.Length - 1);
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await _jsRuntime.InvokeAsync<object>("initializeFromCSharp", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public async ValueTask CSharpOnKeyDown(char key)
+    {
+        if (key == currentChar)
+            await TypedWithSuccess();
+        else
+            await TypedWrong();
     }
 
     async Task TypedWithSuccess()
     {
         actuallChar++;
 
-        typed = actuallPage.Substring(0, actuallChar);
-        currentChar = actuallPage[actuallChar];
-        toBeTyped = actuallPage.Substring(actuallChar + 1, actuallPage.Length - actuallChar - 1);
+        typed = actuallPageText.Substring(0, actuallChar);
+        currentChar = actuallPageText[actuallChar];
+        toBeTyped = actuallPageText.Substring(actuallChar + 1, actuallPageText.Length - actuallChar - 1);
+
+        isWrongTyped = false;
+
+        if (!toBeTyped.Any())
+        {
+            model.CurrentBookPage++;
+            await SwitchBookPage(model.CurrentBookPage);
+        }
+
+        StateHasChanged();
+    }
+
+    async Task TypedWrong()
+    {
+        //todo add class="wrongTyped" but how to make it to allow writing + get red wrong typed chars in past..
+        isWrongTyped = true;
+
+        StateHasChanged();
+    }
+
+    async Task SwitchBookPage(int page)
+    {
+        actuallPageText = model.BookPages[model.CurrentBookPage];
+        actuallChar = 0;
+
+        typed = "";
+        currentChar = actuallPageText[actuallChar];
+        toBeTyped = actuallPageText.Substring(actuallChar + 1, actuallPageText.Length - 1);
     }
 }

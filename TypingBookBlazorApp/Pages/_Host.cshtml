@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TypingBookBlazorApp</title>
     <base href="~/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
 </head>
 <body>
@@ -33,18 +32,13 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script>
-
-        //todo
         // triggered from CSharp page
         function initializeFromCSharp(instance) {
-            window.onkeydown = e => {
-                //console.info(e);
-                return window.theInstance.invokeMethodAsync('CSharpOnKeyDown', e.keyCode);
-            };
+            window.theInstance = instance;
 
-            window.onkeyup = e => {
-                //console.info(e);
-                return window.theInstance.invokeMethodAsync('CSharpOnKeyUp', e.keyCode);
+            window.onkeydown = e => {
+                console.info(e);
+                return window.theInstance.invokeMethodAsync('CSharpOnKeyDown', e.key);
             };
         }
     </script>
