@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TypingBookBlazorApp.Areas.Identity;
 using TypingBookBlazorApp.Data;
+using TypingBookBlazorApp.Data.Repositories;
 using TypingBookBlazorApp.Services;
 
 namespace TypingBookBlazorApp
@@ -50,11 +51,13 @@ namespace TypingBookBlazorApp
                         
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddHttpContextAccessor();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<TypingService>();
+            services.AddScoped<BookRepository>();
+            services.AddScoped<TypingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

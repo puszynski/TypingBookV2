@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TypingBookBlazorApp.Data.Interfaces
 {
-    interface IId
+    public interface IId
     {
         int Id { get; set; }
     }

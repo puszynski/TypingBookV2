@@ -32,7 +32,7 @@ namespace Tests.Services
         public void SaveBookProgressTest()
         { 
             var service = new TypingService(_bookRepository, _userDataRepository);
-            var result = service.SaveBookProgress(3, 77, "guid");//CHYBA JEST ŹLE - DO POPRAWY SERWIS
+            var result = service.SaveBookProgress(3, 77, "guid");
 
             Assert.AreEqual("3:77 10:12", result);
 

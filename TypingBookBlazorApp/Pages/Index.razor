@@ -3,6 +3,8 @@
 @using TypingBookBlazorApp.ViewModels
 @inject TypingService TypingService
 @inject IJSRuntime _jsRuntime
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor _httpContextAccessor
 
 <h1><span class="typed">@typed</span><span class="blink@(isWrongTyped ? "Red" : "White")">@currentChar</span>@toBeTyped</h1>
 
@@ -21,7 +23,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        model = await TypingService.Get();
+        //check if it will get logged user!
+        var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+        model = await TypingService.GetAsync(userId);
+
         await SwitchBookPage(model.CurrentBookPage);
     }
 

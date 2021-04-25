@@ -51,7 +51,7 @@ namespace TypingBookBlazorApp.Data
         public string License { get; set; }
 
         [DefaultValue(false)]
-        public bool IsVerified { get; set; }
+        public bool IsVerified { get; set; }// only !IsPrivate can be verified and then are public
 
         public bool IsPrivate { get; set; } = false;
     }
